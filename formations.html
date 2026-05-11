@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catalogue des formations IA — AIFormation</title>
+  <meta name="description" content="Découvrez toutes nos formations IA : ChatGPT, automatisation, business, développement. Choisissez votre parcours et maîtrisez l'intelligence artificielle." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .filter-bar {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+      justify-content: center;
+    }
+    .filter-btn {
+      padding: 0.5rem 1.2rem;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: transparent;
+      color: var(--gray-light);
+      transition: var(--transition);
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+    .bundle-card {
+      background: linear-gradient(135deg, rgba(108,99,255,0.15) 0%, rgba(0,212,255,0.08) 100%);
+      border: 1px solid rgba(108,99,255,0.35);
+      border-radius: var(--radius-xl);
+      padding: 3rem;
+      text-align: center;
+      margin-top: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .bundle-card::before {
+      content: '⭐ MEILLEURE OFFRE';
+      position: absolute;
+      top: 1rem; right: -2rem;
+      background: var(--gradient);
+      color: white;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.4rem 3rem;
+      transform: rotate(45deg);
+      letter-spacing: 0.08em;
+    }
+    .bundle-price-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+      flex-wrap: wrap;
+    }
+    .bundle-includes {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 2rem 0;
+    }
+    .bundle-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.88rem;
+      color: var(--gray-light);
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">AI<span>Formation</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html#formations">Formations</a></li>
+        <li><a href="formations.html" style="color:var(--white)">Catalogue</a></li>
+        <li><a href="index.html#temoignages">Témoignages</a></li>
+        <li><a href="index.html#faq">FAQ</a></li>
+        <li><a href="a-propos.html">À propos</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="index.html#formations" class="btn btn-primary btn-sm">Commencer →</a>
+      </div>
+      <button class="nav-toggle"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="page-hero-bg">
+    <div class="page-hero-orb page-hero-orb-1"></div>
+    <div class="page-hero-orb page-hero-orb-2"></div>
+  </div>
+  <div class="container">
+    <div class="page-hero-content">
+      <div class="section-label">Catalogue complet</div>
+      <h1>Toutes nos <span class="gradient-text">formations IA</span></h1>
+      <p>4 formations conçues pour vous donner des compétences concrètes et immédiatement applicables. Du débutant à l'expert.</p>
+      <div style="margin-top:1.5rem;display:inline-flex;align-items:center;gap:0.8rem;background:rgba(255,107,107,0.1);border:1px solid rgba(255,107,107,0.3);padding:0.6rem 1.4rem;border-radius:100px;font-size:0.85rem;">
+        🔥 Offre limitée : <strong style="color:#FF6B6B;">-40%</strong> · Se termine dans&nbsp;<span id="countdown" style="font-weight:700;color:#FF6B6B;">--h --m --s</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">Toutes</button>
+      <button class="filter-btn" data-filter="debutant">Débutant</button>
+      <button class="filter-btn" data-filter="intermediaire">Intermédiaire</button>
+      <button class="filter-btn" data-filter="business">Business</button>
+      <button class="filter-btn" data-filter="tech">Tech</button>
+    </div>
+
+    <div class="courses-grid" id="courses-container">
+
+      <div class="course-card animate-on-scroll" data-level="debutant" data-category="business">
+        <div class="course-thumbnail" style="background:linear-gradient(135deg,#1a1040 0%,#2d1b69 100%);">
+          <div class="course-emoji">🤖</div>
+          <span class="course-badge bestseller">⭐ Bestseller</span>
+        </div>
+        <div class="course-body">
+          <div class="course-meta">
+            <span>🎬 42 vidéos</span>
+            <span>⏱️ 12h</span>
+            <span>📶 Tous niveaux</span>
+          </div>
+          <h3>Maîtriser ChatGPT & les LLMs</h3>
+          <p>Devenez expert en prompting et exploitez tout le potentiel des IA génératives pour booster votre productivité et créer du contenu de qualité professionnelle.</p>
+          <div class="course-tags">
+            <span class="tag">ChatGPT</span><span class="tag">Prompting</span><span class="tag">Productivité</span><span class="tag">GPT-4</span>
+          </div>
+          <div class="course-footer">
+            <div class="course-price">
+              <span class="price-current">197€</span>
+              <span class="price-old">329€</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.5rem;">
+              <div class="course-rating"><span class="stars">★★★★★</span><span>4.9 (312)</span></div>
+              <a href="formations/chatgpt.html" class="btn btn-primary btn-sm">Découvrir →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-card animate-on-scroll animate-delay-1" data-level="intermediaire" data-category="tech">
+        <div class="course-thumbnail" style="background:linear-gradient(135deg,#0c2340 0%,#0a3d62 100%);">
+          <div class="course-emoji">⚡</div>
+          <span class="course-badge new">🆕 Nouveau</span>
+        </div>
+        <div class="course-body">
+          <div class="course-meta">
+            <span>🎬 58 vidéos</span>
+            <span>⏱️ 18h</span>
+            <span>📶 Intermédiaire</span>
+          </div>
+          <h3>Automatisation IA avec n8n & Make</h3>
+          <p>Construisez des workflows automatisés puissants sans coder. Connectez vos outils, automatisez vos processus et créez des systèmes qui travaillent à votre place.</p>
+          <div class="course-tags">
+            <span class="tag">n8n</span><span class="tag">Make</span><span class="tag">Zapier</span><span class="tag">API</span>
+          </div>
+          <div class="course-footer">
+            <div class="course-price">
+              <span class="price-current">297€</span>
+              <span class="price-old">497€</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.5rem;">
+              <div class="course-rating"><span class="stars">★★★★★</span><span>4.8 (186)</span></div>
+              <a href="formations/automatisation.html" class="btn btn-primary btn-sm">Découvrir →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-card animate-on-scroll animate-delay-2" data-level="debutant" data-category="business">
+        <div class="course-thumbnail" style="background:linear-gradient(135deg,#1a2c1a 0%,#14532d 100%);">
+          <div class="course-emoji">💼</div>
+          <span class="course-badge" style="background:#10B981;">🏆 Premium</span>
+        </div>
+        <div class="course-body">
+          <div class="course-meta">
+            <span>🎬 76 vidéos</span>
+            <span>⏱️ 24h</span>
+            <span>📶 Tous niveaux</span>
+          </div>
+          <h3>Lancer son Business avec l'IA</h3>
+          <p>De l'idée au revenu en 90 jours. Créez des offres de service IA, des produits digitaux, et développez une activité rentable grâce aux outils d'IA.</p>
+          <div class="course-tags">
+            <span class="tag">Business</span><span class="tag">Freelance</span><span class="tag">Marketing</span><span class="tag">Revenus</span>
+          </div>
+          <div class="course-footer">
+            <div class="course-price">
+              <span class="price-current">497€</span>
+              <span class="price-old">797€</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.5rem;">
+              <div class="course-rating"><span class="stars">★★★★★</span><span>4.9 (234)</span></div>
+              <a href="formations/business.html" class="btn btn-primary btn-sm">Découvrir →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-card animate-on-scroll animate-delay-3" data-level="intermediaire" data-category="tech">
+        <div class="course-thumbnail" style="background:linear-gradient(135deg,#1a0c2c 0%,#3b0764 100%);">
+          <div class="course-emoji">💻</div>
+          <span class="course-badge" style="background:var(--primary);">🔥 Populaire</span>
+        </div>
+        <div class="course-body">
+          <div class="course-meta">
+            <span>🎬 64 vidéos</span>
+            <span>⏱️ 20h</span>
+            <span>📶 Intermédiaire</span>
+          </div>
+          <h3>IA pour Développeurs</h3>
+          <p>Intégrez les APIs OpenAI, Anthropic et Hugging Face dans vos apps. Construisez chatbots, agents IA et applications LLM en production.</p>
+          <div class="course-tags">
+            <span class="tag">Python</span><span class="tag">API OpenAI</span><span class="tag">LangChain</span><span class="tag">RAG</span>
+          </div>
+          <div class="course-footer">
+            <div class="course-price">
+              <span class="price-current">397€</span>
+              <span class="price-old">647€</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.5rem;">
+              <div class="course-rating"><span class="stars">★★★★★</span><span>4.8 (158)</span></div>
+              <a href="formations/developpeur.html" class="btn btn-primary btn-sm">Découvrir →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bundle / Pack complet -->
+    <div class="bundle-card animate-on-scroll">
+      <div class="section-label">Pack complet</div>
+      <h2>Accès illimité à <span class="gradient-text">toutes les formations</span></h2>
+      <p style="color:var(--gray-light);max-width:580px;margin:1rem auto;">4 formations complètes, accès à vie, communauté privée, sessions live mensuelles. Le pack idéal pour une transformation complète.</p>
+      <div class="bundle-price-row">
+        <div>
+          <span style="font-size:3rem;font-weight:900;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">897€</span>
+          <span style="font-size:1.1rem;color:var(--gray);text-decoration:line-through;margin-left:0.5rem;">2 270€</span>
+        </div>
+        <span class="badge badge-warning">Économisez 1 373€</span>
+      </div>
+      <div class="bundle-includes">
+        <div class="bundle-item">✅ Formation ChatGPT (197€)</div>
+        <div class="bundle-item">✅ Formation Automatisation (297€)</div>
+        <div class="bundle-item">✅ Formation Business IA (497€)</div>
+        <div class="bundle-item">✅ Formation Dev IA (397€)</div>
+        <div class="bundle-item">✅ Communauté Discord VIP</div>
+        <div class="bundle-item">✅ Sessions live mensuelles</div>
+        <div class="bundle-item">✅ Mises à jour à vie</div>
+        <div class="bundle-item">✅ Garantie 30 jours</div>
+      </div>
+      <button
+        class="btn btn-primary btn-lg"
+        data-buy
+        data-buy-title="Pack Complet — Toutes les formations IA"
+        data-buy-price="897€"
+        data-buy-old="2 270€"
+      >
+        Obtenir le Pack Complet →
+      </button>
+      <p style="font-size:0.78rem;color:var(--gray);margin-top:1rem;">🔒 Paiement sécurisé · Remboursement 30j garanti · Accès immédiat</p>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding-top:0;">
+      <p>© 2025 AIFormation. Tous droits réservés.</p>
+      <div style="display:flex;gap:1.5rem;">
+        <a href="index.html" style="color:var(--gray-light);font-size:0.85rem;">Accueil</a>
+        <a href="a-propos.html" style="color:var(--gray-light);font-size:0.85rem;">À propos</a>
+        <a href="contact.html" style="color:var(--gray-light);font-size:0.85rem;">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="payment-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('payment-modal')">✕</button>
+    <h3>Finaliser votre achat</h3>
+    <p class="modal-subtitle" id="modal-course-title"></p>
+    <div class="payment-summary">
+      <div class="summary-row"><span>Formation</span><span id="modal-summary-price"></span></div>
+      <div class="summary-row"><span>Réduction</span><span style="color:#10B981;">Appliquée ✓</span></div>
+      <div class="summary-row total"><span>Total</span><span id="modal-price"></span></div>
+    </div>
+    <form id="payment-form">
+      <div class="form-group">
+        <label class="form-label">Nom sur la carte</label>
+        <input type="text" id="card-name" class="form-input" placeholder="Jean Dupont" required />
+      </div>
+      <div class="stripe-card">
+        <div class="stripe-card-header">
+          <span class="stripe-label">Numéro de carte</span>
+          <div class="card-brands"><div class="card-brand visa">VISA</div><div class="card-brand mc">MC</div></div>
+        </div>
+        <input type="text" id="card-number" class="stripe-input" placeholder="4242 4242 4242 4242" maxlength="19" />
+      </div>
+      <div class="stripe-row">
+        <div class="stripe-card">
+          <div class="stripe-label" style="font-size:0.75rem;margin-bottom:0.5rem;">Expiration</div>
+          <input type="text" id="card-expiry" class="stripe-input" placeholder="MM/AA" maxlength="5" />
+        </div>
+        <div class="stripe-card">
+          <div class="stripe-label" style="font-size:0.75rem;margin-bottom:0.5rem;">CVC</div>
+          <input type="text" id="card-cvc" class="stripe-input" placeholder="123" maxlength="3" />
+        </div>
+      </div>
+      <button type="submit" id="pay-btn" class="btn btn-primary w-full" style="justify-content:center;margin-top:1.2rem;">🔒 Payer maintenant</button>
+    </form>
+    <div class="payment-secure">🔒 Paiement sécurisé · Stripe · Remboursement 30j</div>
+  </div>
+</div>
+<div class="modal-overlay" id="success-modal">
+  <div class="modal modal-success">
+    <button class="modal-close" onclick="closeModal('success-modal')">✕</button>
+    <div class="success-icon">🎉</div>
+    <h3>Paiement confirmé !</h3>
+    <p style="color:var(--gray-light);margin:1rem 0;">Accès envoyé par email. Bienvenue dans la communauté AIFormation !</p>
+    <button onclick="closeModal('success-modal')" class="btn btn-primary w-full" style="justify-content:center;">Commencer →</button>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script src="js/payment.js"></script>
+<script>
+  // Filter logic
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      document.querySelectorAll('.course-card').forEach(card => {
+        if (filter === 'all' || card.dataset.level === filter || card.dataset.category === filter) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>
