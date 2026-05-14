@@ -211,6 +211,12 @@
       "skillPath": "skills/programmatic-seo/SKILL.md",
       "computedHash": "0bbdcbacfbe46fd78d774041ee49afd313505bb435b775dc246f4b8e6981d797"
     },
+    "prompt-master": {
+      "source": "nidhinjs/prompt-master",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "bd604eaa9a60c79d4461573804644730770cb1df6165bf98a1f5dbf35e3501f3"
+    },
     "receiving-code-review": {
       "source": "obra/superpowers",
       "sourceType": "github",
