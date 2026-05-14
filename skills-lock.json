@@ -283,6 +283,48 @@
       "skillPath": "skills/paywalls/SKILL.md",
       "computedHash": "1f0b8d15770d2e7737b818408dc5877b2eadc4cab072cdfb3529349ab059815f"
     },
+    "pi-planning-with-files": {
+      "source": "OthmanAdi/planning-with-files",
+      "sourceType": "github",
+      "skillPath": ".pi/skills/planning-with-files/SKILL.md",
+      "computedHash": "7b4f8bde0a183ef4cfe93aa80180760e5de0d15c5756d3d5e38ea9e06708132b"
+    },
+    "planning-with-files": {
+      "source": "OthmanAdi/planning-with-files",
+      "sourceType": "github",
+      "skillPath": "skills/planning-with-files/SKILL.md",
+      "computedHash": "bdd73f7761eb1a64d0b8e094b9d63067b256c3e146c0d2bab0afc627cedd5f56"
+    },
+    "planning-with-files-ar": {
+      "source": "OthmanAdi/planning-with-files",
+      "sourceType": "github",
+      "skillPath": "skills/planning-with-files-ar/SKILL.md",
+      "computedHash": "bdf79d6cc2c415222e4b59e5f3498b8be8ac9f5866aa2b6a238fb2896f36a9cd"
+    },
+    "planning-with-files-de": {
+      "source": "OthmanAdi/planning-with-files",
+      "sourceType": "github",
+      "skillPath": "skills/planning-with-files-de/SKILL.md",
+      "computedHash": "1871ef65196ffb195b04243281cafdcaabffd8ba0d213d5f32fac60589ac3a4e"
+    },
+    "planning-with-files-es": {
+      "source": "OthmanAdi/planning-with-files",
+      "sourceType": "github",
+      "skillPath": "skills/planning-with-files-es/SKILL.md",
+      "computedHash": "dc6b172527a8d32f000b1efe269a917150b22cb35aa061ddbba6b2ff6d91395d"
+    },
+    "planning-with-files-zh": {
+      "source": "OthmanAdi/planning-with-files",
+      "sourceType": "github",
+      "skillPath": "skills/planning-with-files-zh/SKILL.md",
+      "computedHash": "e815421884eb93af513a82c1df4a1de2587a3f593553042b6f095a53009bbfad"
+    },
+    "planning-with-files-zht": {
+      "source": "OthmanAdi/planning-with-files",
+      "sourceType": "github",
+      "skillPath": "skills/planning-with-files-zht/SKILL.md",
+      "computedHash": "f03adb3eaa7c293a79fbbb35a935bc66493ccd3d549844f6c68ac523be1aeb66"
+    },
     "popups": {
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
