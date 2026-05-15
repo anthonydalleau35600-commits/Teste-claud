@@ -3,12 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Le Strike Bowling Redon - 8 pistes de bowling, lasergame, billards, bar, arcade et anniversaires. Réservez votre soirée au 02 99 71 59 51." />
+  <meta name="description" content="Le Strike Bowling Redon — Complexe de loisirs : 8 pistes de bowling, laser game, billards, arcade, bar et événements privés. Réservez au 02 99 71 59 51." />
   <meta name="theme-color" content="#0b0d17" />
-  <title>Le Strike Bowling Redon — Bowling, Lasergame, Billards & Bar</title>
+  <meta property="og:title" content="Le Strike Bowling Redon — Bowling, Laser Game, Arcade & Bar" />
+  <meta property="og:description" content="Le complexe de loisirs N°1 à Redon. Bowling, laser game, billards, arcade, anniversaires et soirées privées." />
+  <meta property="og:type" content="website" />
+  <title>Le Strike Bowling Redon — Complexe de loisirs · Bowling · Laser Game · Arcade</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -17,37 +21,52 @@
   <!-- LOADER -->
   <div id="loader" aria-hidden="true">
     <div class="loader-pin"></div>
-    <p>Chargement…</p>
+    <p>Le Strike Redon</p>
+  </div>
+
+  <!-- TOP STRIP -->
+  <div class="topstrip">
+    <div class="container topstrip__inner">
+      <span>🎳 Nouveau ! Découvrez nos soirées <strong>Cosmic Bowling</strong> tous les vendredis dès 21h</span>
+      <a href="#reserver">Réserver →</a>
+    </div>
   </div>
 
   <!-- NAVBAR -->
   <header class="nav" id="nav">
     <div class="container nav__inner">
-      <a href="#hero" class="brand" aria-label="Le Strike Bowling Redon">
+      <a href="#hero" class="brand" aria-label="Le Strike Bowling Redon — Accueil">
         <span class="brand__logo" aria-hidden="true">
-          <svg viewBox="0 0 32 32" width="32" height="32">
-            <circle cx="16" cy="16" r="14" fill="url(#g1)"/>
-            <circle cx="11" cy="13" r="1.6" fill="#0b0d17"/>
-            <circle cx="16" cy="11" r="1.6" fill="#0b0d17"/>
-            <circle cx="21" cy="13" r="1.6" fill="#0b0d17"/>
+          <svg viewBox="0 0 48 48" width="40" height="40">
             <defs>
-              <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+              <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
                 <stop offset="0%" stop-color="#ff3d7f"/>
+                <stop offset="50%" stop-color="#a855f7"/>
                 <stop offset="100%" stop-color="#7c3aed"/>
               </linearGradient>
+              <radialGradient id="logoShine" cx="0.35" cy="0.3">
+                <stop offset="0%" stop-color="rgba(255,255,255,0.55)"/>
+                <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+              </radialGradient>
             </defs>
+            <circle cx="24" cy="24" r="21" fill="url(#logoGrad)"/>
+            <circle cx="24" cy="24" r="21" fill="url(#logoShine)"/>
+            <circle cx="17" cy="20" r="2.2" fill="#0b0d17"/>
+            <circle cx="24" cy="16" r="2.2" fill="#0b0d17"/>
+            <circle cx="31" cy="20" r="2.2" fill="#0b0d17"/>
+            <path d="M32 28 L37 24 L34 31 L39 29 L31 39 L33 32 L29 34 Z" fill="#facc15" stroke="#0b0d17" stroke-width="0.6" stroke-linejoin="round"/>
           </svg>
         </span>
-        <span class="brand__text">Le <strong>Strike</strong> Redon</span>
+        <span class="brand__text">Le <strong>Strike</strong><span class="brand__sub">Bowling Redon</span></span>
       </a>
 
       <nav class="nav__links" id="navLinks">
         <a href="#activites">Activités</a>
+        <a href="#evenements">Événements</a>
         <a href="#tarifs">Tarifs</a>
         <a href="#horaires">Horaires</a>
-        <a href="#anniversaires">Anniversaires</a>
-        <a href="#galerie">Galerie</a>
-        <a href="#contact">Contact</a>
+        <a href="#avis">Avis</a>
+        <a href="tel:+33299715951" class="nav__phone">📞 02 99 71 59 51</a>
         <a href="#reserver" class="btn btn--neon nav__cta">Réserver</a>
       </nav>
 
@@ -59,49 +78,54 @@
 
   <!-- HERO -->
   <section id="hero" class="hero">
-    <div class="hero__glow"></div>
+    <div class="hero__bg" aria-hidden="true">
+      <img src="https://images.unsplash.com/photo-1538511841329-9d63b29eea88?w=1920&q=80&auto=format&fit=crop" alt="" />
+      <div class="hero__bg-overlay"></div>
+      <div class="hero__bg-grid"></div>
+    </div>
+
     <div class="container hero__inner">
-      <div class="hero__copy" data-reveal>
-        <span class="eyebrow">★ Bowling · Lasergame · Billards · Bar</span>
+      <div class="hero__copy">
+        <span class="eyebrow eyebrow--light">★ Complexe de loisirs · Redon (35)</span>
         <h1 class="hero__title">
-          Faites <span class="grad">tomber</span> les quilles<br/>
-          à Redon
+          Le terrain de jeu<br/>
+          <span class="grad">de toute la famille</span>
         </h1>
         <p class="hero__lead">
-          8 pistes de bowling, lasergame, billards, salle d'arcade et un bar
-          convivial. L'endroit parfait pour vos soirées entre amis, vos
-          anniversaires et vos événements d'entreprise.
+          8 pistes de bowling, une arène laser game, des billards, une salle d'arcade
+          et un bar convivial. <strong>Plus qu'un bowling : un vrai complexe de loisirs</strong>
+          à seulement quelques minutes du centre-ville.
         </p>
+
         <div class="hero__cta">
-          <a href="#reserver" class="btn btn--neon">Réserver une piste</a>
-          <a href="#activites" class="btn btn--ghost">Voir les activités →</a>
+          <a href="#reserver" class="btn btn--neon btn--lg">
+            <span>Réserver une piste</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="tel:+33299715951" class="btn btn--ghost btn--lg">
+            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M6.6 10.8a15.2 15.2 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.2 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .6 3.6 1 1 0 0 1-.2 1l-2.3 2.2Z"/></svg>
+            02 99 71 59 51
+          </a>
         </div>
 
-        <div class="hero__stats">
-          <div class="stat"><span class="stat__num" data-count="8">0</span><span class="stat__label">Pistes</span></div>
-          <div class="stat"><span class="stat__num" data-count="5" data-suffix="+">0</span><span class="stat__label">Activités</span></div>
-          <div class="stat"><span class="stat__num" data-count="100" data-suffix="%">0</span><span class="stat__label">Fun</span></div>
-        </div>
-      </div>
-
-      <div class="hero__visual" aria-hidden="true">
-        <div class="lane">
-          <div class="lane__floor"></div>
-          <div class="pins">
-            <div class="pin pin--1"><div class="pin__body"></div></div>
-            <div class="pin pin--2"><div class="pin__body"></div></div>
-            <div class="pin pin--3"><div class="pin__body"></div></div>
-            <div class="pin pin--4"><div class="pin__body"></div></div>
-            <div class="pin pin--5"><div class="pin__body"></div></div>
-            <div class="pin pin--6"><div class="pin__body"></div></div>
+        <div class="hero__trust">
+          <div class="rating">
+            <div class="rating__stars">★★★★<span class="rating__half">★</span></div>
+            <div><strong>4,5/5</strong> · plus de 320 avis Google</div>
           </div>
-          <div class="ball"></div>
         </div>
       </div>
     </div>
-    <a href="#activites" class="hero__scroll" aria-label="Faire défiler">
-      <span></span>
-    </a>
+
+    <!-- Highlights strip -->
+    <div class="hero__strip">
+      <div class="container hero__strip-inner">
+        <div class="hl"><span class="hl__num">8</span><span class="hl__label">Pistes de bowling</span></div>
+        <div class="hl"><span class="hl__num">6</span><span class="hl__label">Activités sous le même toit</span></div>
+        <div class="hl"><span class="hl__num">7j/7</span><span class="hl__label">Pendant les vacances</span></div>
+        <div class="hl"><span class="hl__num">320+</span><span class="hl__label">Avis clients ★ 4,5</span></div>
+      </div>
+    </div>
   </section>
 
   <!-- ACTIVITES -->
@@ -109,82 +133,170 @@
     <div class="container">
       <header class="section__head" data-reveal>
         <span class="eyebrow">Nos activités</span>
-        <h2>Tout pour <span class="grad">s'amuser</span> sous un même toit</h2>
-        <p>Choisissez votre prochaine partie. Survolez les cartes pour découvrir les détails.</p>
+        <h2>Un seul lieu,<br/><span class="grad">six expériences</span></h2>
+        <p>De la partie en famille aux soirées entre amis : choisissez votre prochaine aventure.</p>
       </header>
 
       <div class="grid grid--activities">
-        <article class="card card--activity" data-reveal>
-          <div class="card__icon">
-            <svg viewBox="0 0 64 64" width="48" height="48"><circle cx="32" cy="32" r="28" fill="url(#bg1)"/><circle cx="22" cy="24" r="3" fill="#0b0d17"/><circle cx="32" cy="20" r="3" fill="#0b0d17"/><circle cx="42" cy="24" r="3" fill="#0b0d17"/><defs><linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ff3d7f"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs></svg>
+
+        <article class="actcard actcard--lg" data-reveal>
+          <div class="actcard__media">
+            <img src="https://images.unsplash.com/photo-1538511841329-9d63b29eea88?w=1200&q=80&auto=format&fit=crop" alt="Pistes de bowling sous lumière néon" loading="lazy" />
           </div>
-          <h3>Bowling</h3>
-          <p>8 pistes flambant neuves avec écrans tactiles, rampes pour enfants et ambiance lumière noire les soirs de week-end.</p>
-          <ul class="tags"><li>Strike</li><li>Famille</li><li>Compétitif</li></ul>
+          <div class="actcard__content">
+            <span class="actcard__tag">★ Phare du complexe</span>
+            <h3>Bowling — 8 pistes</h3>
+            <p>Pistes professionnelles avec écrans tactiles, animations lumineuses et rampes adaptées aux enfants. Tournois entre amis ou parties familiales : tout le monde s'éclate.</p>
+            <ul class="features">
+              <li>✓ Cosmic Bowling le vendredi</li>
+              <li>✓ Rampes enfants disponibles</li>
+              <li>✓ Écrans interactifs sur chaque piste</li>
+            </ul>
+            <a href="#reserver" class="actcard__cta">Réserver une piste →</a>
+          </div>
         </article>
 
-        <article class="card card--activity" data-reveal>
-          <div class="card__icon">
-            <svg viewBox="0 0 64 64" width="48" height="48"><path d="M14 14 L50 14 L46 28 L18 28 Z" fill="#22d3ee"/><rect x="28" y="28" width="8" height="22" fill="#22d3ee"/><circle cx="32" cy="14" r="4" fill="#ff3d7f"/></svg>
+        <article class="actcard" data-reveal>
+          <div class="actcard__media">
+            <img src="https://images.unsplash.com/photo-1574897773801-79e44b34a82d?w=900&q=80&auto=format&fit=crop" alt="Salle laser game" loading="lazy" onerror="this.style.opacity=0" />
           </div>
-          <h3>Lasergame</h3>
-          <p>Plongez dans une arène immersive et affrontez vos amis dans des parties intenses. Idéal en équipe !</p>
-          <ul class="tags"><li>Adrénaline</li><li>Équipe</li></ul>
+          <div class="actcard__content">
+            <span class="actcard__tag">★ Sensation forte</span>
+            <h3>Laser Game</h3>
+            <p>Plongez dans une arène immersive et affrontez vos amis dans des parties intenses jusqu'à 20 joueurs.</p>
+            <a href="#reserver" class="actcard__cta">Tester l'arène →</a>
+          </div>
         </article>
 
-        <article class="card card--activity" data-reveal>
-          <div class="card__icon">
-            <svg viewBox="0 0 64 64" width="48" height="48"><rect x="8" y="22" width="48" height="22" rx="3" fill="#10b981"/><circle cx="20" cy="33" r="3" fill="#fff"/><circle cx="44" cy="33" r="3" fill="#facc15"/></svg>
+        <article class="actcard" data-reveal>
+          <div class="actcard__media">
+            <img src="https://images.unsplash.com/photo-1615722440048-da4fd9202223?w=900&q=80&auto=format&fit=crop" alt="Tables de billard américain" loading="lazy" onerror="this.style.opacity=0" />
           </div>
-          <h3>Billards</h3>
-          <p>Plusieurs tables de billard américain pour des parties tranquilles, queues et craie fournies.</p>
-          <ul class="tags"><li>Détente</li><li>Précision</li></ul>
+          <div class="actcard__content">
+            <span class="actcard__tag">Détente</span>
+            <h3>Billards</h3>
+            <p>Plusieurs tables de billard américain. Queues et craie fournies, ambiance bar à proximité.</p>
+            <a href="#reserver" class="actcard__cta">Réserver une table →</a>
+          </div>
         </article>
 
-        <article class="card card--activity" data-reveal>
-          <div class="card__icon">
-            <svg viewBox="0 0 64 64" width="48" height="48"><rect x="14" y="10" width="36" height="44" rx="6" fill="#7c3aed"/><rect x="20" y="16" width="24" height="14" fill="#0b0d17"/><circle cx="26" cy="40" r="3" fill="#ff3d7f"/><circle cx="38" cy="40" r="3" fill="#22d3ee"/></svg>
+        <article class="actcard" data-reveal>
+          <div class="actcard__media">
+            <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?w=900&q=80&auto=format&fit=crop" alt="Salle d'arcade" loading="lazy" onerror="this.style.opacity=0" />
           </div>
-          <h3>Salle d'arcade</h3>
-          <p>Bornes rétro et nouveautés, air hockey, jeux de tir… De quoi prolonger la soirée.</p>
-          <ul class="tags"><li>Rétro</li><li>Multijoueur</li></ul>
+          <div class="actcard__content">
+            <span class="actcard__tag">Rétro & nouveautés</span>
+            <h3>Salle d'arcade</h3>
+            <p>Bornes rétro, jeux de tir, air hockey, simulateurs : de quoi prolonger la soirée et défier vos amis.</p>
+            <a href="#activites" class="actcard__cta">Découvrir →</a>
+          </div>
         </article>
 
-        <article class="card card--activity" data-reveal>
-          <div class="card__icon">
-            <svg viewBox="0 0 64 64" width="48" height="48"><path d="M16 20 L48 20 L42 44 L22 44 Z" fill="#facc15"/><rect x="30" y="44" width="4" height="8" fill="#facc15"/><rect x="22" y="52" width="20" height="3" fill="#facc15"/></svg>
+        <article class="actcard" data-reveal>
+          <div class="actcard__media">
+            <img src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=900&q=80&auto=format&fit=crop" alt="Bar cocktails" loading="lazy" onerror="this.style.opacity=0" />
           </div>
-          <h3>Bar</h3>
-          <p>Cocktails, bières pression et softs. Le QG idéal entre deux parties pour souffler avec les copains.</p>
-          <ul class="tags"><li>Cocktails</li><li>Bières</li></ul>
+          <div class="actcard__content">
+            <span class="actcard__tag">Convivialité</span>
+            <h3>Le Bar</h3>
+            <p>Cocktails signature, bières pression et softs. Le QG idéal entre deux parties pour souffler avec les copains.</p>
+            <a href="#activites" class="actcard__cta">Voir la carte →</a>
+          </div>
         </article>
 
-        <article class="card card--activity" data-reveal>
-          <div class="card__icon">
-            <svg viewBox="0 0 64 64" width="48" height="48"><circle cx="32" cy="32" r="20" fill="#ff3d7f"/><path d="M22 28 L42 28 L38 42 L26 42 Z" fill="#0b0d17"/><circle cx="32" cy="20" r="6" fill="#facc15"/></svg>
+        <article class="actcard" data-reveal>
+          <div class="actcard__media">
+            <img src="https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?w=900&q=80&auto=format&fit=crop" alt="Aire de jeux extérieure pour enfants" loading="lazy" onerror="this.style.opacity=0" />
           </div>
-          <h3>Aire de jeux enfants</h3>
-          <p>Espace plein air sécurisé pour que les plus jeunes se défoulent pendant que les grands jouent.</p>
-          <ul class="tags"><li>Famille</li><li>Plein air</li></ul>
+          <div class="actcard__content">
+            <span class="actcard__tag">Familles</span>
+            <h3>Aire de jeux enfants</h3>
+            <p>Espace plein air sécurisé pour que les plus jeunes se défoulent pendant que les grands jouent.</p>
+            <a href="#activites" class="actcard__cta">En savoir plus →</a>
+          </div>
         </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- EVENEMENTS -->
+  <section id="evenements" class="section section--alt">
+    <div class="container">
+      <header class="section__head" data-reveal>
+        <span class="eyebrow">Événements privés</span>
+        <h2>Faites de votre événement<br/><span class="grad">un moment inoubliable</span></h2>
+        <p>Anniversaires, EVG/EVJF, séminaires, fêtes de classe… On organise tout pour vous.</p>
+      </header>
+
+      <div class="events">
+
+        <article class="event" data-reveal>
+          <div class="event__media">
+            <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=900&q=80&auto=format&fit=crop" alt="Anniversaire enfants" loading="lazy" />
+            <span class="event__price">Dès 16,50 € / enfant</span>
+          </div>
+          <div class="event__body">
+            <h3>🎂 Anniversaires enfants</h3>
+            <p>Bowling, activité bonus, gâteau et boissons — un anniversaire clé en main qui marquera les esprits.</p>
+            <a href="#anniversaires" class="actcard__cta">Configurer ma formule →</a>
+          </div>
+        </article>
+
+        <article class="event" data-reveal>
+          <div class="event__media">
+            <img src="https://images.unsplash.com/photo-1543007630-9710e4a00a20?w=900&q=80&auto=format&fit=crop" alt="EVJF entre amies" loading="lazy" />
+            <span class="event__price">Sur devis</span>
+          </div>
+          <div class="event__body">
+            <h3>👰 EVG / EVJF</h3>
+            <p>Une soirée 100% personnalisée : bowling, laser game, billards, cocktails — pour célébrer en grand.</p>
+            <a href="#contact" class="actcard__cta">Demander un devis →</a>
+          </div>
+        </article>
+
+        <article class="event" data-reveal>
+          <div class="event__media">
+            <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=900&q=80&auto=format&fit=crop" alt="Séminaire d'entreprise" loading="lazy" />
+            <span class="event__price">Privatisation possible</span>
+          </div>
+          <div class="event__body">
+            <h3>💼 Séminaires & teambuildings</h3>
+            <p>Renforcez la cohésion de vos équipes dans un cadre détendu. Salle privatisable, restauration sur place.</p>
+            <a href="#contact" class="actcard__cta">Organiser mon séminaire →</a>
+          </div>
+        </article>
+
+        <article class="event" data-reveal>
+          <div class="event__media">
+            <img src="https://images.unsplash.com/photo-1496337589254-7e19d01cec44?w=900&q=80&auto=format&fit=crop" alt="Fête de classe étudiants" loading="lazy" />
+            <span class="event__price">Tarifs groupe</span>
+          </div>
+          <div class="event__body">
+            <h3>🎓 Fêtes de classe & associations</h3>
+            <p>Groupes scolaires, étudiants, associations : tarifs préférentiels dès 10 personnes (réservation conseillée).</p>
+            <a href="#contact" class="actcard__cta">Réserver pour mon groupe →</a>
+          </div>
+        </article>
+
       </div>
     </div>
   </section>
 
   <!-- TARIFS -->
-  <section id="tarifs" class="section section--alt">
+  <section id="tarifs" class="section">
     <div class="container">
       <header class="section__head" data-reveal>
         <span class="eyebrow">Tarifs</span>
-        <h2>Des prix <span class="grad">accessibles</span> pour tous</h2>
-        <p>Choisissez votre formule. Les tarifs s'affichent en direct selon l'option sélectionnée.</p>
+        <h2>Des prix <span class="grad">tout doux</span></h2>
+        <p>Choisissez votre activité. Les tarifs s'affichent en direct.</p>
       </header>
 
       <div class="pricing" data-reveal>
         <div class="pricing__toggle" role="tablist">
-          <button class="ptab is-active" data-tab="bowling" role="tab" aria-selected="true">Bowling</button>
-          <button class="ptab" data-tab="laser" role="tab" aria-selected="false">Lasergame</button>
-          <button class="ptab" data-tab="billard" role="tab" aria-selected="false">Billard</button>
+          <button class="ptab is-active" data-tab="bowling" role="tab" aria-selected="true">🎳 Bowling</button>
+          <button class="ptab" data-tab="laser" role="tab" aria-selected="false">🔫 Laser Game</button>
+          <button class="ptab" data-tab="billard" role="tab" aria-selected="false">🎱 Billard</button>
         </div>
 
         <div class="pricing__cards">
@@ -194,7 +306,7 @@
             <p class="price"><span class="price__main">5,50</span><span class="price__suffix">€/pers.</span></p>
             <ul>
               <li>1 partie de bowling</li>
-              <li>Location de chaussures incluse</li>
+              <li>Location chaussures incluse</li>
               <li>Tous les âges</li>
             </ul>
             <a href="#reserver" class="btn btn--neon btn--block">Réserver</a>
@@ -206,18 +318,18 @@
             <ul>
               <li>1 partie pour 4 joueurs</li>
               <li>Rampes enfant disponibles</li>
-              <li>Boissons softs offertes*</li>
+              <li>Softs offerts*</li>
             </ul>
             <a href="#reserver" class="btn btn--ghost btn--block">Réserver</a>
           </article>
 
           <article class="price-card" data-tab-target="bowling">
-            <h3>Happy hour</h3>
+            <h3>Happy Hour</h3>
             <p class="price"><span class="price__main">3,50</span><span class="price__suffix">€/pers.</span></p>
             <ul>
-              <li>Du mercredi 14h-18h</li>
+              <li>Mercredi 14h–18h</li>
               <li>Hors vacances scolaires</li>
-              <li>Location chaussures incluse</li>
+              <li>Chaussures incluses</li>
             </ul>
             <a href="#reserver" class="btn btn--ghost btn--block">Réserver</a>
           </article>
@@ -240,7 +352,7 @@
           <article class="price-card hidden" data-tab-target="laser">
             <h3>Privatisation</h3>
             <p class="price"><span class="price__main">Sur</span><span class="price__suffix">devis</span></p>
-            <ul><li>Arène privée</li><li>Format anniversaire / EVG</li><li>Snacks possibles</li></ul>
+            <ul><li>Arène privée</li><li>EVG / EVJF / Anniv'</li><li>Snacks possibles</li></ul>
             <a href="#contact" class="btn btn--ghost btn--block">Nous contacter</a>
           </article>
 
@@ -266,13 +378,18 @@
   </section>
 
   <!-- HORAIRES -->
-  <section id="horaires" class="section">
+  <section id="horaires" class="section section--alt">
     <div class="container">
       <header class="section__head" data-reveal>
         <span class="eyebrow">Horaires</span>
         <h2>Quand venir <span class="grad">jouer</span> ?</h2>
-        <p>Basculez entre les périodes pour voir nos horaires d'ouverture.</p>
+        <p>Basculez entre les périodes pour voir nos horaires.</p>
       </header>
+
+      <div class="status-card" id="statusCard" data-reveal>
+        <span class="dot"></span>
+        <span id="statusText">Vérification du statut…</span>
+      </div>
 
       <div class="schedule" data-reveal>
         <div class="schedule__toggle" role="tablist">
@@ -302,21 +419,16 @@
 
         <p class="schedule__note">⚠️ Les horaires peuvent varier selon l'affluence — pensez à appeler le <a href="tel:+33299715951">02 99 71 59 51</a>.</p>
       </div>
-
-      <div class="status-card" id="statusCard" data-reveal>
-        <span class="dot"></span>
-        <span id="statusText">Vérification du statut…</span>
-      </div>
     </div>
   </section>
 
   <!-- ANNIVERSAIRES -->
-  <section id="anniversaires" class="section section--alt">
+  <section id="anniversaires" class="section">
     <div class="container">
       <header class="section__head" data-reveal>
         <span class="eyebrow">Anniversaires</span>
-        <h2>Le <span class="grad">meilleur</span> anniversaire de l'année</h2>
-        <p>Composez votre formule et obtenez une estimation instantanée.</p>
+        <h2>Composez le <span class="grad">meilleur</span> anniversaire</h2>
+        <p>Configurez votre formule et obtenez une estimation instantanée.</p>
       </header>
 
       <div class="birthday" data-reveal>
@@ -327,17 +439,17 @@
           </label>
 
           <fieldset class="field">
-            <legend>Activité supplémentaire</legend>
-            <label class="chip"><input type="radio" name="extra" value="laser" checked /><span>Lasergame</span></label>
+            <legend>Activité bonus</legend>
+            <label class="chip"><input type="radio" name="extra" value="laser" checked /><span>Laser Game</span></label>
             <label class="chip"><input type="radio" name="extra" value="billard" /><span>Billard</span></label>
             <label class="chip"><input type="radio" name="extra" value="arcade" /><span>Arcade</span></label>
           </fieldset>
 
           <fieldset class="field">
             <legend>Options</legend>
-            <label class="chip"><input type="checkbox" id="optCake" checked /><span>Gâteau d'anniversaire</span></label>
-            <label class="chip"><input type="checkbox" id="optDrinks" checked /><span>Boissons illimitées</span></label>
-            <label class="chip"><input type="checkbox" id="optGift" /><span>Cadeau souvenir</span></label>
+            <label class="chip"><input type="checkbox" id="optCake" checked /><span>🎂 Gâteau</span></label>
+            <label class="chip"><input type="checkbox" id="optDrinks" checked /><span>🥤 Boissons</span></label>
+            <label class="chip"><input type="checkbox" id="optGift" /><span>🎁 Cadeau souvenir</span></label>
           </fieldset>
         </div>
 
@@ -352,38 +464,117 @@
     </div>
   </section>
 
+  <!-- TESTIMONIALS -->
+  <section id="avis" class="section section--alt section--testimonials">
+    <div class="container">
+      <header class="section__head" data-reveal>
+        <span class="eyebrow">Avis clients</span>
+        <h2>Ils ont <span class="grad">adoré</span> leur soirée</h2>
+        <div class="reviews-summary">
+          <div class="rating__stars rating__stars--lg">★★★★<span class="rating__half">★</span></div>
+          <p><strong>4,5/5</strong> · plus de 320 avis Google vérifiés</p>
+        </div>
+      </header>
+
+      <div class="reviews" data-reveal>
+        <div class="reviews__track" id="reviewsTrack">
+
+          <article class="review">
+            <div class="review__stars">★★★★★</div>
+            <p class="review__text">« Super accueil, ambiance top et tarifs raisonnables. Les enfants ont adoré et nous on s'est régalés. À refaire sans hésiter ! »</p>
+            <div class="review__author">
+              <span class="avatar" style="background:linear-gradient(135deg,#ff3d7f,#7c3aed)">JM</span>
+              <div><strong>Julie M.</strong><span>Famille · Anniversaire</span></div>
+            </div>
+          </article>
+
+          <article class="review">
+            <div class="review__stars">★★★★★</div>
+            <p class="review__text">« On a privatisé pour notre EVG, c'était parfait : bowling, laser game et cocktails au bar. La nouvelle équipe gère ! »</p>
+            <div class="review__author">
+              <span class="avatar" style="background:linear-gradient(135deg,#22d3ee,#7c3aed)">TL</span>
+              <div><strong>Thomas L.</strong><span>EVG · 12 personnes</span></div>
+            </div>
+          </article>
+
+          <article class="review">
+            <div class="review__stars">★★★★★</div>
+            <p class="review__text">« Le Cosmic Bowling du vendredi soir, c'est l'ambiance parfaite. Lumières, musique, on s'est cru en boîte… mais avec des quilles ! »</p>
+            <div class="review__author">
+              <span class="avatar" style="background:linear-gradient(135deg,#facc15,#ff3d7f)">CD</span>
+              <div><strong>Camille D.</strong><span>Soirée entre amis</span></div>
+            </div>
+          </article>
+
+          <article class="review">
+            <div class="review__stars">★★★★<span class="rating__half">★</span></div>
+            <p class="review__text">« Très bon accueil et personnel sympa. Lieu propre et bien tenu. Idéal pour les anniversaires d'enfants, mes garçons s'éclatent à chaque fois. »</p>
+            <div class="review__author">
+              <span class="avatar" style="background:linear-gradient(135deg,#10b981,#22d3ee)">SR</span>
+              <div><strong>Sophie R.</strong><span>Anniversaire enfant · 8 ans</span></div>
+            </div>
+          </article>
+
+          <article class="review">
+            <div class="review__stars">★★★★★</div>
+            <p class="review__text">« On y vient en équipe pour nos afterworks, l'endroit est top et le bar est sympa. Idéal pour décompresser entre collègues. »</p>
+            <div class="review__author">
+              <span class="avatar" style="background:linear-gradient(135deg,#7c3aed,#ff3d7f)">AB</span>
+              <div><strong>Alexandre B.</strong><span>Afterwork entreprise</span></div>
+            </div>
+          </article>
+
+          <article class="review">
+            <div class="review__stars">★★★★★</div>
+            <p class="review__text">« Mes ados et leurs copains adorent venir ici. Bowling, arcade et laser game enchaînés — la soirée passe trop vite ! »</p>
+            <div class="review__author">
+              <span class="avatar" style="background:linear-gradient(135deg,#ff3d7f,#facc15)">MP</span>
+              <div><strong>Marie P.</strong><span>Famille · Ados</span></div>
+            </div>
+          </article>
+
+        </div>
+
+        <div class="reviews__controls">
+          <button class="rctrl" id="reviewsPrev" aria-label="Avis précédent">←</button>
+          <button class="rctrl" id="reviewsNext" aria-label="Avis suivant">→</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- GALERIE -->
   <section id="galerie" class="section">
     <div class="container">
       <header class="section__head" data-reveal>
         <span class="eyebrow">Galerie</span>
-        <h2>Ambiance du <span class="grad">Strike</span></h2>
-        <p>Cliquez sur une image pour l'agrandir.</p>
+        <h2>L'ambiance du <span class="grad">Strike</span></h2>
+        <p>Quelques aperçus de votre prochaine soirée. Cliquez pour agrandir.</p>
       </header>
 
       <div class="gallery" data-reveal>
-        <button class="gallery__item gallery__item--1" data-caption="Pistes de bowling sous lumière noire">
-          <div class="gallery__art gart--bowling"></div>
+        <button class="gallery__item gallery__item--1" data-caption="Pistes de bowling sous lumière néon">
+          <img src="https://images.unsplash.com/photo-1538511841329-9d63b29eea88?w=1200&q=80&auto=format&fit=crop" alt="Pistes de bowling sous lumière néon" loading="lazy" />
           <span>Bowling</span>
         </button>
-        <button class="gallery__item gallery__item--2" data-caption="Arène de lasergame immersive">
-          <div class="gallery__art gart--laser"></div>
-          <span>Lasergame</span>
+        <button class="gallery__item gallery__item--2" data-caption="Arène laser game immersive">
+          <img src="https://images.unsplash.com/photo-1574897773801-79e44b34a82d?w=800&q=80&auto=format&fit=crop" alt="Laser game arène" loading="lazy" />
+          <span>Laser Game</span>
         </button>
         <button class="gallery__item gallery__item--3" data-caption="Tables de billard américain">
-          <div class="gallery__art gart--billard"></div>
+          <img src="https://images.unsplash.com/photo-1615722440048-da4fd9202223?w=800&q=80&auto=format&fit=crop" alt="Billards" loading="lazy" />
           <span>Billards</span>
         </button>
         <button class="gallery__item gallery__item--4" data-caption="Le bar et ses cocktails">
-          <div class="gallery__art gart--bar"></div>
+          <img src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=1200&q=80&auto=format&fit=crop" alt="Cocktails au bar" loading="lazy" />
           <span>Bar</span>
         </button>
         <button class="gallery__item gallery__item--5" data-caption="Salle d'arcade rétro et nouveautés">
-          <div class="gallery__art gart--arcade"></div>
+          <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800&q=80&auto=format&fit=crop" alt="Arcade" loading="lazy" />
           <span>Arcade</span>
         </button>
-        <button class="gallery__item gallery__item--6" data-caption="Espaces anniversaires et privatisation">
-          <div class="gallery__art gart--party"></div>
+        <button class="gallery__item gallery__item--6" data-caption="Soirées et anniversaires inoubliables">
+          <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=800&q=80&auto=format&fit=crop" alt="Anniversaires" loading="lazy" />
           <span>Événements</span>
         </button>
       </div>
@@ -400,24 +591,28 @@
 
       <div class="faq" data-reveal>
         <details class="faq__item">
-          <summary>Faut-il réserver ?</summary>
+          <summary>Faut-il réserver à l'avance ?</summary>
           <p>La réservation est conseillée le week-end et pendant les vacances scolaires. Elle est <strong>obligatoire pour les groupes de 10 personnes ou plus</strong>, au minimum 2 heures avant.</p>
         </details>
         <details class="faq__item">
-          <summary>À partir de quel âge ?</summary>
-          <p>Le bowling est accessible dès 3 ans grâce à nos rampes adaptées. Le lasergame est ouvert à partir de 6 ans.</p>
+          <summary>À partir de quel âge peut-on jouer ?</summary>
+          <p>Le bowling est accessible dès 3 ans grâce à nos rampes adaptées. Le laser game est ouvert dès 6 ans.</p>
         </details>
         <details class="faq__item">
           <summary>Peut-on privatiser l'établissement ?</summary>
-          <p>Oui ! Nous accueillons régulièrement des entreprises, associations et groupes pour des privatisations. Contactez-nous pour un devis personnalisé.</p>
+          <p>Oui ! Nous accueillons régulièrement des entreprises, associations et groupes pour des privatisations complètes ou partielles. Contactez-nous pour un devis personnalisé.</p>
         </details>
         <details class="faq__item">
-          <summary>Acceptez-vous les titres-restaurant / chèques cadeaux ?</summary>
-          <p>N'hésitez pas à nous appeler pour connaître les moyens de paiement acceptés en fonction de votre formule.</p>
+          <summary>Y a-t-il de quoi manger sur place ?</summary>
+          <p>Le bar propose une petite restauration (snacks, planches, formules anniversaire avec gâteau). Pour des événements privés, des formules sur mesure peuvent être organisées.</p>
         </details>
         <details class="faq__item">
-          <summary>Y a-t-il un parking ?</summary>
-          <p>Oui, un parking gratuit est disponible à proximité de l'établissement, rue de Normandie.</p>
+          <summary>Acceptez-vous les chèques cadeaux / cartes cadeaux ?</summary>
+          <p>Oui, nous proposons des cartes cadeaux à offrir et acceptons plusieurs moyens de paiement. Contactez-nous pour plus de détails.</p>
+        </details>
+        <details class="faq__item">
+          <summary>Y a-t-il un parking à proximité ?</summary>
+          <p>Oui, un parking gratuit est disponible à proximité immédiate, rue de Normandie.</p>
         </details>
       </div>
     </div>
@@ -429,7 +624,7 @@
       <header class="section__head" data-reveal>
         <span class="eyebrow">Réservation</span>
         <h2>Réservez votre <span class="grad">prochaine partie</span></h2>
-        <p>Remplissez ce formulaire — nous vous recontactons rapidement pour confirmer votre créneau.</p>
+        <p>Remplissez ce formulaire — nous vous recontactons rapidement pour confirmer.</p>
       </header>
 
       <div class="booking" data-reveal>
@@ -454,10 +649,11 @@
               <select name="activity" required>
                 <option value="">Choisir…</option>
                 <option>Bowling</option>
-                <option>Lasergame</option>
+                <option>Laser Game</option>
                 <option>Billard</option>
                 <option>Anniversaire</option>
-                <option>Privatisation</option>
+                <option>EVG / EVJF</option>
+                <option>Privatisation / Séminaire</option>
               </select>
             </label>
             <label class="field">
@@ -479,7 +675,7 @@
             <span>Message</span>
             <textarea name="message" rows="3" placeholder="Anniversaire ? Allergie ? Demande particulière…"></textarea>
           </label>
-          <button type="submit" class="btn btn--neon btn--block">
+          <button type="submit" class="btn btn--neon btn--block btn--lg">
             <span class="btn__label">Envoyer ma demande</span>
           </button>
           <p class="booking__success" id="bookingSuccess" hidden>
@@ -514,29 +710,66 @@
     </div>
   </section>
 
+  <!-- BIG CTA -->
+  <section class="bigcta">
+    <div class="bigcta__bg" aria-hidden="true">
+      <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=1920&q=80&auto=format&fit=crop" alt="" />
+    </div>
+    <div class="container bigcta__inner" data-reveal>
+      <h2>Prêt à faire <span class="grad">tomber les quilles</span> ?</h2>
+      <p>Réservez votre piste en quelques clics ou appelez-nous directement.</p>
+      <div class="bigcta__buttons">
+        <a href="#reserver" class="btn btn--neon btn--lg">Réserver maintenant</a>
+        <a href="tel:+33299715951" class="btn btn--ghost btn--lg">📞 02 99 71 59 51</a>
+      </div>
+    </div>
+  </section>
+
   <!-- FOOTER -->
   <footer class="footer">
     <div class="container footer__inner">
       <div>
         <p class="brand brand--footer">
           <span class="brand__logo" aria-hidden="true">
-            <svg viewBox="0 0 32 32" width="28" height="28"><circle cx="16" cy="16" r="14" fill="url(#g2)"/><circle cx="11" cy="13" r="1.6" fill="#0b0d17"/><circle cx="16" cy="11" r="1.6" fill="#0b0d17"/><circle cx="21" cy="13" r="1.6" fill="#0b0d17"/><defs><linearGradient id="g2"><stop offset="0%" stop-color="#ff3d7f"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs></svg>
+            <svg viewBox="0 0 48 48" width="36" height="36">
+              <defs>
+                <linearGradient id="logoGrad2" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#ff3d7f"/>
+                  <stop offset="100%" stop-color="#7c3aed"/>
+                </linearGradient>
+              </defs>
+              <circle cx="24" cy="24" r="21" fill="url(#logoGrad2)"/>
+              <circle cx="17" cy="20" r="2.2" fill="#0b0d17"/>
+              <circle cx="24" cy="16" r="2.2" fill="#0b0d17"/>
+              <circle cx="31" cy="20" r="2.2" fill="#0b0d17"/>
+              <path d="M32 28 L37 24 L34 31 L39 29 L31 39 L33 32 L29 34 Z" fill="#facc15"/>
+            </svg>
           </span>
           Le <strong>Strike</strong> Redon
         </p>
-        <p class="muted">Bowling · Lasergame · Billards · Bar · Arcade</p>
+        <p class="muted">Le complexe de loisirs N°1 à Redon.<br/>Bowling · Laser Game · Billards · Bar · Arcade · Événements</p>
       </div>
       <div>
         <h4>Contact</h4>
         <p>3 Rue de Normandie<br/>35600 Redon</p>
         <p><a href="tel:+33299715951">02 99 71 59 51</a></p>
+        <p><a href="mailto:bowlingredon@gmail.com">bowlingredon@gmail.com</a></p>
+      </div>
+      <div>
+        <h4>Activités</h4>
+        <ul class="footer__links">
+          <li><a href="#activites">Bowling</a></li>
+          <li><a href="#activites">Laser Game</a></li>
+          <li><a href="#activites">Billards</a></li>
+          <li><a href="#activites">Arcade</a></li>
+        </ul>
       </div>
       <div>
         <h4>Liens</h4>
         <ul class="footer__links">
-          <li><a href="#activites">Activités</a></li>
           <li><a href="#tarifs">Tarifs</a></li>
           <li><a href="#horaires">Horaires</a></li>
+          <li><a href="#evenements">Événements</a></li>
           <li><a href="#reserver">Réserver</a></li>
         </ul>
       </div>
@@ -547,8 +780,17 @@
   <!-- LIGHTBOX -->
   <div class="lightbox" id="lightbox" hidden>
     <button class="lightbox__close" id="lightboxClose" aria-label="Fermer">×</button>
-    <div class="lightbox__art" id="lightboxArt"></div>
+    <img id="lightboxImg" alt="" />
     <p class="lightbox__caption" id="lightboxCaption"></p>
+  </div>
+
+  <!-- MOBILE BOTTOM BAR -->
+  <div class="mobile-bar" aria-hidden="true">
+    <a href="tel:+33299715951" class="mobile-bar__btn">
+      <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M6.6 10.8a15.2 15.2 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.2 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .6 3.6 1 1 0 0 1-.2 1l-2.3 2.2Z"/></svg>
+      Appeler
+    </a>
+    <a href="#reserver" class="mobile-bar__btn mobile-bar__btn--primary">Réserver une piste</a>
   </div>
 
   <!-- BACK TO TOP -->

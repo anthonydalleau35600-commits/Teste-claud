@@ -1,5 +1,5 @@
 /* ===========================================================
-   Le Strike Bowling Redon — Interactivity
+   Le Strike Bowling Redon — Interactivity v2
    =========================================================== */
 (() => {
   'use strict';
@@ -7,7 +7,7 @@
   // ---------- LOADER ----------
   window.addEventListener('load', () => {
     const loader = document.getElementById('loader');
-    if (loader) setTimeout(() => loader.classList.add('is-done'), 350);
+    if (loader) setTimeout(() => loader.classList.add('is-done'), 400);
   });
 
   // ---------- FOOTER YEAR ----------
@@ -40,9 +40,10 @@
   const revealEls = document.querySelectorAll('[data-reveal]');
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
+      entries.forEach((e, i) => {
         if (e.isIntersecting) {
-          e.target.classList.add('is-visible');
+          // stagger children slightly within the same batch
+          setTimeout(() => e.target.classList.add('is-visible'), i * 60);
           io.unobserve(e.target);
         }
       });
@@ -50,33 +51,6 @@
     revealEls.forEach(el => io.observe(el));
   } else {
     revealEls.forEach(el => el.classList.add('is-visible'));
-  }
-
-  // ---------- HERO COUNTERS ----------
-  const counters = document.querySelectorAll('[data-count]');
-  const animateCount = (el) => {
-    const target = parseInt(el.dataset.count, 10);
-    const suffix = el.dataset.suffix || '';
-    const duration = 1400;
-    const start = performance.now();
-    const tick = (now) => {
-      const p = Math.min(1, (now - start) / duration);
-      const eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = Math.round(target * eased) + suffix;
-      if (p < 1) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  };
-  if ('IntersectionObserver' in window) {
-    const co = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          animateCount(e.target);
-          co.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.5 });
-    counters.forEach(c => co.observe(c));
   }
 
   // ---------- PRICING TABS ----------
@@ -110,29 +84,23 @@
   });
 
   // ---------- OPEN / CLOSED STATUS ----------
-  // Schedule: Mon=0..Sun=6 (we'll use JS getDay() with Sun=0)
-  // Hors vacances: only Wed 14-20, Fri 17-1 next day, Sat 14-1 next day, Sun 14-19
-  // Vacances scolaires: Mon-Thu 14-0 (midnight), Fri 14-1, Sat 14-1, Sun 14-19
-  // For simplicity, we'll show the "hors vacances" schedule (the safer default).
   const statusCard = document.getElementById('statusCard');
   const statusText = document.getElementById('statusText');
   if (statusCard && statusText) {
     const now = new Date();
-    const day = now.getDay(); // 0=Dim, 1=Lun, ...6=Sam
+    const day = now.getDay();
     const hour = now.getHours() + now.getMinutes() / 60;
 
-    // Default to "hors vacances"
     const schedule = {
-      0: [{ from: 14, to: 19 }],  // Dim
-      3: [{ from: 14, to: 20 }],  // Mer
-      5: [{ from: 17, to: 25 }],  // Ven (jusqu'à 1h = 25)
-      6: [{ from: 14, to: 25 }],  // Sam (jusqu'à 1h)
+      0: [{ from: 14, to: 19 }],
+      3: [{ from: 14, to: 20 }],
+      5: [{ from: 17, to: 25 }],
+      6: [{ from: 14, to: 25 }],
     };
 
     let isOpen = false;
     let nextInfo = '';
 
-    // Check current
     const today = schedule[day];
     if (today) {
       for (const slot of today) {
@@ -144,7 +112,6 @@
         }
       }
     }
-    // Yesterday late-night carry (e.g. Sat night → Sun 1am)
     if (!isOpen) {
       const prevDay = (day + 6) % 7;
       const prev = schedule[prevDay];
@@ -160,7 +127,6 @@
     }
 
     if (!isOpen) {
-      // Find next opening
       const labels = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
       for (let i = 0; i < 7; i++) {
         const d = (day + i) % 7;
@@ -188,7 +154,7 @@
   const bdayDetails = document.getElementById('bdayDetails');
 
   const PRICES = {
-    base: 12,          // bowling + chaussures
+    base: 12,
     extra: { laser: 4, billard: 2, arcade: 3 },
     cake: 2,
     drinks: 3,
@@ -216,13 +182,14 @@
     bdayPerKid.textContent = perKid.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
     bdayDetails.innerHTML = '';
+    const extraLabels = { laser: 'Laser Game', billard: 'Billard', arcade: 'Arcade' };
     const rows = [
       ['Bowling + chaussures', `${PRICES.base}€`],
-      [`Activité : ${extraVal}`, `+${PRICES.extra[extraVal]}€`],
+      [`Activité : ${extraLabels[extraVal]}`, `+${PRICES.extra[extraVal]}€`],
     ];
     if (cake)   rows.push(['Gâteau', `+${PRICES.cake}€`]);
     if (drinks) rows.push(['Boissons', `+${PRICES.drinks}€`]);
-    if (gift)   rows.push(['Cadeau', `+${PRICES.gift}€`]);
+    if (gift)   rows.push(['Cadeau souvenir', `+${PRICES.gift}€`]);
     rows.push([`× ${kids} enfants`, '']);
     rows.forEach(([label, val]) => {
       const li = document.createElement('li');
@@ -238,23 +205,74 @@
     computeBirthday();
   }
 
+  // ---------- TESTIMONIALS CAROUSEL ----------
+  const track = document.getElementById('reviewsTrack');
+  const prevBtn = document.getElementById('reviewsPrev');
+  const nextBtn = document.getElementById('reviewsNext');
+  if (track && prevBtn && nextBtn) {
+    let index = 0;
+    function visibleCount() {
+      const w = window.innerWidth;
+      if (w < 720) return 1;
+      if (w < 1100) return 2;
+      return 3;
+    }
+    function maxIndex() {
+      return Math.max(0, track.children.length - visibleCount());
+    }
+    function update() {
+      const slideW = track.children[0].getBoundingClientRect().width + 24; // 1.5rem gap
+      track.style.transform = `translateX(-${index * slideW}px)`;
+    }
+    prevBtn.addEventListener('click', () => {
+      index = Math.max(0, index - 1);
+      update();
+    });
+    nextBtn.addEventListener('click', () => {
+      index = Math.min(maxIndex(), index + 1);
+      update();
+    });
+    window.addEventListener('resize', () => {
+      index = Math.min(index, maxIndex());
+      update();
+    });
+
+    // Autoplay
+    let autoplay = setInterval(() => {
+      index = index >= maxIndex() ? 0 : index + 1;
+      update();
+    }, 5000);
+    track.addEventListener('mouseenter', () => clearInterval(autoplay));
+    track.addEventListener('mouseleave', () => {
+      autoplay = setInterval(() => {
+        index = index >= maxIndex() ? 0 : index + 1;
+        update();
+      }, 5000);
+    });
+  }
+
   // ---------- GALLERY LIGHTBOX ----------
   const lightbox = document.getElementById('lightbox');
-  const lightboxArt = document.getElementById('lightboxArt');
+  const lightboxImg = document.getElementById('lightboxImg');
   const lightboxCaption = document.getElementById('lightboxCaption');
   const lightboxClose = document.getElementById('lightboxClose');
 
   document.querySelectorAll('.gallery__item').forEach(item => {
     item.addEventListener('click', () => {
-      const art = item.querySelector('.gallery__art');
+      const img = item.querySelector('img');
       const caption = item.dataset.caption || '';
-      if (!art) return;
-      lightboxArt.className = art.className;
+      if (!img) return;
+      // Use a higher-res version
+      lightboxImg.src = img.src.replace(/w=\d+/, 'w=1600');
+      lightboxImg.alt = img.alt;
       lightboxCaption.textContent = caption;
       lightbox.hidden = false;
     });
   });
-  function closeLightbox() { lightbox.hidden = true; }
+  function closeLightbox() {
+    lightbox.hidden = true;
+    lightboxImg.src = '';
+  }
   lightboxClose?.addEventListener('click', closeLightbox);
   lightbox?.addEventListener('click', (e) => {
     if (e.target === lightbox) closeLightbox();
@@ -280,7 +298,6 @@
     label.textContent = 'Envoi…';
     btn.disabled = true;
 
-    // Simulate request (no backend yet)
     setTimeout(() => {
       success.hidden = false;
       label.textContent = '✓ Envoyé';
@@ -301,6 +318,17 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
+  // ---------- PARALLAX HERO ----------
+  const heroBg = document.querySelector('.hero__bg img');
+  if (heroBg && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      if (y < window.innerHeight) {
+        heroBg.style.transform = `scale(1.1) translateY(${y * 0.25}px)`;
+      }
+    }, { passive: true });
+  }
+
   // ---------- CANVAS PARTICLES BACKGROUND ----------
   const canvas = document.getElementById('bg-canvas');
   if (canvas && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -309,34 +337,37 @@
     const COLORS = ['#ff3d7f', '#7c3aed', '#22d3ee'];
 
     function resize() {
-      w = canvas.width = window.innerWidth * window.devicePixelRatio;
-      h = canvas.height = window.innerHeight * window.devicePixelRatio;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = canvas.width = window.innerWidth * dpr;
+      h = canvas.height = window.innerHeight * dpr;
       canvas.style.width = window.innerWidth + 'px';
       canvas.style.height = window.innerHeight + 'px';
+      ctx.scale(1, 1);
     }
     function init() {
-      const count = Math.min(60, Math.floor(window.innerWidth / 30));
+      const count = Math.min(50, Math.floor(window.innerWidth / 35));
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
       particles = Array.from({ length: count }, () => ({
         x: Math.random() * w,
         y: Math.random() * h,
-        r: Math.random() * 2 + 0.6,
-        vx: (Math.random() - 0.5) * 0.3 * window.devicePixelRatio,
-        vy: (Math.random() - 0.5) * 0.3 * window.devicePixelRatio,
+        r: (Math.random() * 1.8 + 0.6) * dpr,
+        vx: (Math.random() - 0.5) * 0.3 * dpr,
+        vy: (Math.random() - 0.5) * 0.3 * dpr,
         c: COLORS[Math.floor(Math.random() * COLORS.length)],
       }));
     }
     function draw() {
       ctx.clearRect(0, 0, w, h);
-      // Connect lines
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const maxDist = 140 * dpr;
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
         for (let j = i + 1; j < particles.length; j++) {
           const q = particles[j];
           const dx = p.x - q.x, dy = p.y - q.y;
           const dist = Math.hypot(dx, dy);
-          const max = 140 * window.devicePixelRatio;
-          if (dist < max) {
-            ctx.strokeStyle = `rgba(255,61,127,${0.18 * (1 - dist / max)})`;
+          if (dist < maxDist) {
+            ctx.strokeStyle = `rgba(255,61,127,${0.18 * (1 - dist / maxDist)})`;
             ctx.lineWidth = 0.7;
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
@@ -351,7 +382,7 @@
         if (p.y < 0 || p.y > h) p.vy *= -1;
         ctx.fillStyle = p.c;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r * window.devicePixelRatio, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
       });
       requestAnimationFrame(draw);
@@ -363,4 +394,12 @@
       resizeTimer = setTimeout(() => { resize(); init(); }, 200);
     });
   }
+
+  // ---------- IMAGE FALLBACK ----------
+  // If an Unsplash image fails to load, hide it gracefully (gradient bg shows)
+  document.querySelectorAll('.actcard__media img, .event__media img, .gallery__item img').forEach(img => {
+    img.addEventListener('error', () => {
+      img.style.opacity = '0';
+    });
+  });
 })();
