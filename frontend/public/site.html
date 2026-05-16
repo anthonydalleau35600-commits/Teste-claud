@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PremiumRefonte — Refonte premium de sites web pour PME</title>
+<meta name="description" content="Agence de refonte premium pour PME. Design immersif, performance, conversion. Audit gratuit.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&family=Shippori+Mincho:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --vermilion:#d94e3a;
+  --red:#c41e3a;--red-d:#8b0000;--red-l:#e8324a;--red-glow:rgba(217,78,58,.45);
+  --ink:#050505;--bg:#080808;--s1:#0e0e0e;--s2:#161616;
+  --tx:#f0ece8;--tm:#807a76;--tw:#fafaf7;
+  --border:rgba(255,255,255,0.07);--glass:rgba(255,255,255,0.04)
+}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--tx);overflow-x:hidden;cursor:none}
+
+/* ── FILM GRAIN OVERLAY ── */
+.grain{position:fixed;inset:0;z-index:9990;pointer-events:none;opacity:.10;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='.45'/></svg>");
+  animation:grainShift 1.4s steps(6) infinite}
+@keyframes grainShift{
+  0%{transform:translate(0,0)}20%{transform:translate(-5%,3%)}40%{transform:translate(4%,-2%)}
+  60%{transform:translate(-3%,-4%)}80%{transform:translate(2%,5%)}100%{transform:translate(0,0)}
+}
+
+/* ── VIGNETTE ── */
+.vignette{position:fixed;inset:0;z-index:9989;pointer-events:none;
+  background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,.55) 100%)}
+
+/* ── LOADER ── */
+#loader{position:fixed;inset:0;background:#000;z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .8s .2s,visibility .8s .2s}
+#loader.done{opacity:0;visibility:hidden;pointer-events:none}
+.loader-kanji{font-family:'Shippori Mincho',serif;font-size:clamp(3rem,7vw,5rem);color:var(--vermilion);opacity:0;animation:kFade 1.4s .1s forwards;letter-spacing:.2em}
+.loader-text{font-family:'Cormorant Garamond',serif;font-size:clamp(1.4rem,3vw,2rem);font-weight:300;letter-spacing:.4em;color:#fff;overflow:hidden;margin-top:24px}
+.loader-text span{display:inline-block;animation:loaderIn 1.2s cubic-bezier(.16,1,.3,1) forwards;opacity:0}
+.loader-bar{position:absolute;bottom:0;left:0;height:1px;background:var(--vermilion);animation:loaderBar 1.8s ease forwards;box-shadow:0 0 12px var(--red-glow)}
+@keyframes kFade{0%{opacity:0;transform:translateY(20px) scale(.96)}60%{opacity:1}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes loaderIn{from{opacity:0;transform:translateY(100%)}to{opacity:1;transform:translateY(0)}}
+@keyframes loaderBar{from{width:0}to{width:100%}}
+
+/* ── CURSOR ── */
+.cursor{position:fixed;width:6px;height:6px;background:var(--vermilion);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .12s;box-shadow:0 0 10px var(--red-glow)}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(217,78,58,.45);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s,background .3s;backdrop-filter:invert(.05)}
+@media(hover:none){.cursor,.cursor-ring{display:none}body{cursor:auto}}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:28px 56px;display:flex;align-items:center;justify-content:space-between;transition:all .4s}
+nav.scrolled{background:rgba(8,8,8,.85);backdrop-filter:blur(22px) saturate(1.2);padding:18px 56px;border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;letter-spacing:.2em;color:var(--tx);text-decoration:none;display:flex;align-items:center;gap:10px}
+.nav-logo::before{content:'縁';font-family:'Shippori Mincho',serif;font-size:1.1rem;color:var(--vermilion);font-weight:600}
+.nav-logo span{color:var(--vermilion)}
+.nav-links{display:flex;gap:44px;list-style:none}
+.nav-links a{color:rgba(240,236,232,.6);text-decoration:none;font-size:.72rem;font-weight:400;letter-spacing:.18em;text-transform:uppercase;transition:color .3s}
+.nav-links a:hover{color:var(--vermilion)}
+.nav-cta{background:var(--vermilion);color:#fff;padding:11px 28px;border-radius:1px;text-decoration:none;font-size:.72rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;transition:all .3s;box-shadow:0 8px 28px rgba(217,78,58,.25)}
+.nav-cta:hover{background:var(--red-l);transform:translateY(-1px);box-shadow:0 12px 32px rgba(217,78,58,.45)}
+
+/* ── SIDE DOTS ── */
+.side-nav{position:fixed;right:28px;top:50%;transform:translateY(-50%);z-index:99;display:flex;flex-direction:column;gap:18px}
+.side-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.22);cursor:pointer;transition:all .35s;position:relative}
+.side-dot.active{background:var(--vermilion);transform:scale(1.8);box-shadow:0 0 12px var(--red-glow)}
+.side-dot::after{content:attr(data-jp);position:absolute;right:18px;top:50%;transform:translateY(-50%);font-family:'Shippori Mincho',serif;font-size:.72rem;color:rgba(255,255,255,.4);opacity:0;transition:opacity .3s;white-space:nowrap;letter-spacing:.1em}
+.side-dot:hover::after,.side-dot.active::after{opacity:1;color:var(--vermilion)}
+
+/* ── AUDIO TOGGLE ── */
+.audio-toggle{position:fixed;left:28px;bottom:28px;z-index:99;width:46px;height:46px;border-radius:50%;background:rgba(8,8,8,.6);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s;color:var(--tx)}
+.audio-toggle:hover{border-color:var(--vermilion);transform:scale(1.06)}
+.audio-toggle svg{width:18px;height:18px}
+.audio-toggle .line-mute{display:none}
+.audio-toggle.muted .line-mute{display:block}
+.audio-toggle.muted .wave{display:none}
+
+/* ── IMMERSIVE VIDEO LAYER ── */
+.bg-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;will-change:transform,opacity;pointer-events:none}
+.media-wrap{position:absolute;inset:0;overflow:hidden}
+.media-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,8,.25) 0%,rgba(8,8,8,.15) 50%,rgba(8,8,8,.55) 100%);pointer-events:none}
+
+/* ── MIST PARTICLES ── */
+.mist{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:2}
+.mist span{position:absolute;display:block;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.06) 0%,transparent 70%);filter:blur(40px);animation:mistDrift 28s linear infinite}
+.mist span:nth-child(1){top:20%;left:-10%;animation-delay:0s}
+.mist span:nth-child(2){top:55%;left:30%;animation-delay:-8s;width:380px;height:380px}
+.mist span:nth-child(3){top:75%;left:65%;animation-delay:-15s;width:220px;height:220px}
+.mist span:nth-child(4){top:10%;left:80%;animation-delay:-20s;width:340px;height:340px}
+@keyframes mistDrift{
+  0%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(60px,-40px) scale(1.15);opacity:.8}
+  100%{transform:translate(0,0) scale(1)}
+}
+
+/* ── HERO ── */
+#hero{position:relative;height:100vh;min-height:720px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#000}
+#hero .media-wrap{will-change:transform;transform-origin:center center}
+.hero-bg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;will-change:transform;z-index:0}
+.hero-video{z-index:1;opacity:0;transition:opacity 1.6s ease}
+.hero-video.ready{opacity:1}
+.hero-ov{position:absolute;inset:0;z-index:3;background:
+  radial-gradient(ellipse at 50% 35%,transparent 0%,rgba(8,8,8,.35) 60%,rgba(8,8,8,.85) 100%),
+  linear-gradient(180deg,rgba(8,8,8,.2) 0%,transparent 30%,transparent 60%,rgba(8,8,8,.9) 100%)}
+.hero-kanji-deco{position:absolute;right:6vw;top:50%;transform:translateY(-50%) rotate(0deg);font-family:'Shippori Mincho',serif;font-size:clamp(8rem,22vw,18rem);font-weight:400;color:rgba(217,78,58,.07);line-height:.9;z-index:2;letter-spacing:0;writing-mode:vertical-rl;pointer-events:none;user-select:none}
+.hero-content{position:relative;z-index:4;text-align:center;max-width:980px;padding:0 24px}
+.hero-eyebrow{font-size:.65rem;letter-spacing:.45em;text-transform:uppercase;color:var(--vermilion);margin-bottom:36px;display:inline-flex;align-items:center;gap:14px;opacity:0;animation:fadeUp 1s .4s forwards}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';width:32px;height:1px;background:var(--vermilion);opacity:.6}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3.8rem,8.5vw,7.8rem);font-weight:300;line-height:1;letter-spacing:-.02em;color:var(--tw);opacity:0;animation:fadeUp 1s .6s forwards;text-shadow:0 4px 40px rgba(0,0,0,.6)}
+.hero-title em{font-style:italic;color:var(--vermilion);font-weight:400}
+.hero-sub{margin-top:36px;font-size:1rem;font-weight:300;color:rgba(240,236,232,.7);line-height:1.9;max-width:600px;margin-left:auto;margin-right:auto;opacity:0;animation:fadeUp 1s .8s forwards;text-shadow:0 2px 20px rgba(0,0,0,.6)}
+.hero-ctas{margin-top:60px;display:flex;gap:20px;justify-content:center;align-items:center;opacity:0;animation:fadeUp 1s 1s forwards;flex-wrap:wrap}
+.btn-p{background:var(--vermilion);color:#fff;padding:17px 44px;font-size:.75rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;text-decoration:none;border-radius:1px;transition:all .35s;border:none;cursor:pointer;font-family:'Inter',sans-serif;position:relative;overflow:hidden;box-shadow:0 12px 32px rgba(217,78,58,.3)}
+.btn-p::before{content:'';position:absolute;inset:0;background:var(--red-l);transform:translateY(100%);transition:transform .35s ease}
+.btn-p:hover::before{transform:translateY(0)}
+.btn-p span{position:relative;z-index:1}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 24px 48px rgba(217,78,58,.45)}
+.btn-g{color:rgba(240,236,232,.85);padding:17px 44px;font-size:.75rem;font-weight:400;letter-spacing:.15em;text-transform:uppercase;text-decoration:none;border:1px solid rgba(240,236,232,.28);border-radius:1px;transition:all .35s;backdrop-filter:blur(8px);background:rgba(8,8,8,.2)}
+.btn-g:hover{border-color:var(--vermilion);color:var(--vermilion);background:rgba(217,78,58,.06)}
+.hero-scroll{position:absolute;bottom:52px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:14px;opacity:0;animation:fadeIn 1s 1.6s forwards;z-index:4}
+.hero-scroll span{font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:rgba(240,236,232,.5)}
+.scroll-line{width:1px;height:64px;background:linear-gradient(to bottom,var(--vermilion),transparent);animation:pulse 2s ease-in-out infinite;box-shadow:0 0 8px var(--red-glow)}
+
+/* ── SECTION COMMONS ── */
+.s-label{display:inline-flex;align-items:center;gap:14px;font-size:.62rem;letter-spacing:.45em;text-transform:uppercase;color:var(--vermilion);margin-bottom:24px}
+.s-label::before{content:'';width:24px;height:1px;background:var(--vermilion);opacity:.6}
+.s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,5vw,4.5rem);font-weight:300;line-height:1.05;letter-spacing:-.01em}
+.s-title em{font-style:italic;color:var(--vermilion);font-weight:400}
+
+/* ── FRAMES INTRO ── */
+.frames-intro{text-align:center;padding:140px 24px 0;position:relative;z-index:5}
+.frames-intro .kanji-mark{font-family:'Shippori Mincho',serif;font-size:3rem;color:var(--vermilion);opacity:.5;display:block;margin-bottom:20px}
+
+/* ── FRAME PANELS — IMMERSIVE VIDEO ── */
+.frame-panel{position:relative;height:100vh;min-height:680px;overflow:hidden;display:flex;align-items:center}
+.frame-panel .media-wrap{will-change:transform}
+.frame-bg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.frame-video{z-index:1;opacity:0;transition:opacity 1.2s ease}
+.frame-video.ready{opacity:1}
+.frame-ov{position:absolute;inset:0;z-index:3}
+.frame-ov-l{background:linear-gradient(to right,rgba(8,8,8,.92) 0%,rgba(8,8,8,.75) 32%,transparent 65%)}
+.frame-ov-r{background:linear-gradient(to left,rgba(8,8,8,.92) 0%,rgba(8,8,8,.75) 32%,transparent 65%)}
+.frame-content{position:relative;z-index:4;max-width:560px;padding:64px}
+.frame-panel:nth-child(even) .frame-content{margin-left:auto;text-align:left}
+.f-kanji{position:absolute;font-family:'Shippori Mincho',serif;font-size:clamp(10rem,26vw,24rem);font-weight:400;color:rgba(217,78,58,.06);line-height:.9;z-index:2;pointer-events:none;user-select:none;top:50%;transform:translateY(-50%)}
+.frame-panel:nth-child(odd) .f-kanji{right:5vw}
+.frame-panel:nth-child(even) .f-kanji{left:5vw}
+.f-num{font-family:'Cormorant Garamond',serif;font-size:8rem;font-weight:300;color:rgba(217,78,58,.16);line-height:1;margin-bottom:-30px;display:flex;align-items:baseline;gap:14px}
+.f-num small{font-family:'Shippori Mincho',serif;font-size:1.4rem;color:rgba(217,78,58,.5)}
+.f-tag{font-size:.62rem;letter-spacing:.4em;text-transform:uppercase;color:var(--vermilion);margin-bottom:18px;display:block}
+.f-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.9rem,3.2vw,3rem);font-weight:300;line-height:1.15;margin-bottom:24px;color:var(--tw)}
+.f-title em{font-style:italic;color:var(--vermilion);font-weight:400}
+.f-bar{width:48px;height:1px;background:var(--vermilion);margin:28px 0;box-shadow:0 0 8px var(--red-glow)}
+.frame-panel:nth-child(even) .f-bar{margin-left:0}
+.f-text{font-size:.95rem;font-weight:300;color:rgba(240,236,232,.7);line-height:2;max-width:480px}
+
+/* ── SERVICES ── */
+#services{padding:160px 56px;max-width:1400px;margin:0 auto;position:relative}
+#services::before{content:'美';position:absolute;top:80px;right:60px;font-family:'Shippori Mincho',serif;font-size:18rem;color:rgba(217,78,58,.03);pointer-events:none;line-height:1}
+.svc-head{display:grid;grid-template-columns:1fr 1fr;gap:80px;margin-bottom:80px;align-items:end;position:relative}
+.svc-desc{font-size:.95rem;font-weight:300;color:rgba(240,236,232,.6);line-height:2;align-self:end}
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;position:relative}
+.svc-card{background:var(--s1);padding:56px 44px;border-top:1px solid var(--border);position:relative;overflow:hidden;transition:background .4s}
+.svc-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:2px;background:var(--vermilion);transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.svc-card:hover{background:var(--s2)}
+.svc-card:hover::before{transform:scaleX(1)}
+.svc-n{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;color:rgba(217,78,58,.2);position:absolute;top:28px;right:28px}
+.svc-icon{width:44px;height:44px;margin-bottom:32px;opacity:.85;transition:transform .4s}
+.svc-card:hover .svc-icon{transform:translateY(-4px)}
+.svc-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:400;margin-bottom:18px;line-height:1.2;color:var(--tw)}
+.svc-text{font-size:.86rem;font-weight:300;color:rgba(240,236,232,.55);line-height:2}
+.svc-link{display:inline-flex;align-items:center;gap:8px;margin-top:28px;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--vermilion);text-decoration:none;transition:gap .3s}
+.svc-link:hover{gap:16px}
+
+/* ── STATS ── */
+.stats{background:var(--vermilion);padding:80px 56px;display:grid;grid-template-columns:repeat(4,1fr);text-align:center;position:relative;overflow:hidden}
+.stats::before{content:'';position:absolute;inset:0;background:
+  radial-gradient(circle at 20% 30%,rgba(255,255,255,.08),transparent 50%),
+  radial-gradient(circle at 80% 70%,rgba(0,0,0,.15),transparent 50%)}
+.stat-item{padding:36px 16px;position:relative;z-index:1}
+.stat-n{font-family:'Cormorant Garamond',serif;font-size:4.8rem;font-weight:300;line-height:1;color:#fff;display:block}
+.stat-l{font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.75);margin-top:12px;display:block}
+
+/* ── PROCESS ── */
+#process{padding:160px 56px;max-width:980px;margin:0 auto;position:relative}
+#process::before{content:'道';position:absolute;top:140px;left:-100px;font-family:'Shippori Mincho',serif;font-size:14rem;color:rgba(217,78,58,.04);pointer-events:none;line-height:1}
+.process-steps{margin-top:80px}
+.p-step{display:grid;grid-template-columns:80px 1fr;gap:48px;padding:52px 0;border-top:1px solid var(--border);transition:padding-left .4s}
+.p-step:hover{padding-left:18px}
+.p-step:last-child{border-bottom:1px solid var(--border)}
+.p-num{font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:300;color:var(--vermilion);line-height:1;padding-top:4px}
+.p-step h3{font-family:'Cormorant Garamond',serif;font-size:1.85rem;font-weight:400;margin-bottom:14px;color:var(--tw)}
+.p-step p{font-size:.9rem;font-weight:300;color:rgba(240,236,232,.6);line-height:2;max-width:600px}
+.p-dur{display:inline-block;margin-top:18px;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--vermilion);border:1px solid rgba(217,78,58,.35);padding:6px 16px;border-radius:1px}
+
+/* ── TESTIMONIALS ── */
+#testimonials{position:relative;padding:160px 56px;background:var(--s1);overflow:hidden}
+#testimonials::before{content:'"';position:absolute;top:60px;left:48px;font-family:'Cormorant Garamond',serif;font-size:22rem;font-weight:300;color:rgba(217,78,58,.05);line-height:1;pointer-events:none}
+#testimonials::after{content:'信';position:absolute;bottom:80px;right:60px;font-family:'Shippori Mincho',serif;font-size:12rem;color:rgba(217,78,58,.04);pointer-events:none;line-height:1}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:80px;max-width:1400px;margin-left:auto;margin-right:auto;position:relative}
+.testi-card{background:var(--bg);padding:56px;transition:transform .4s,background .4s}
+.testi-card:hover{background:#0a0a0a;transform:translateY(-6px)}
+.testi-q{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:300;font-style:italic;line-height:1.75;color:rgba(240,236,232,.85);margin-bottom:40px}
+.testi-author{display:flex;align-items:center;gap:16px}
+.t-avatar{width:46px;height:46px;border-radius:50%;background:var(--vermilion);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.25rem;color:#fff;flex-shrink:0;box-shadow:0 6px 16px rgba(217,78,58,.3)}
+.t-info strong{display:block;font-size:.86rem;font-weight:500;color:var(--tw)}
+.t-info span{font-size:.76rem;color:var(--tm)}
+
+/* ── CONTACT ── */
+#contact{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:120px 24px;background:#000}
+#contact .media-wrap{z-index:0}
+.contact-bg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;filter:brightness(.35) saturate(.6)}
+.contact-video{z-index:1;opacity:0;transition:opacity 1.4s ease;filter:brightness(.45) saturate(.7)}
+.contact-video.ready{opacity:1}
+.contact-ov{position:absolute;inset:0;z-index:2;background:
+  radial-gradient(ellipse at center,transparent 0%,rgba(8,8,8,.45) 60%,rgba(8,8,8,.85) 100%),
+  linear-gradient(135deg,rgba(139,0,0,.18),rgba(8,8,8,.4))}
+.contact-content{position:relative;z-index:4;text-align:center;max-width:720px;padding:0 24px}
+.contact-content .s-title{font-size:clamp(2.2rem,4.5vw,4rem);margin-bottom:28px;text-shadow:0 4px 30px rgba(0,0,0,.7)}
+.contact-content>p{font-size:.95rem;font-weight:300;color:rgba(240,236,232,.7);line-height:1.9;margin-bottom:52px}
+.c-form{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:560px;margin:0 auto;text-align:left}
+.c-form input,.c-form textarea{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:var(--tx);padding:17px 22px;font-family:'Inter',sans-serif;font-size:.86rem;border-radius:1px;outline:none;transition:border-color .3s,background .3s;backdrop-filter:blur(10px)}
+.c-form input::placeholder,.c-form textarea::placeholder{color:rgba(240,236,232,.32)}
+.c-form input:focus,.c-form textarea:focus{border-color:var(--vermilion);background:rgba(255,255,255,.08)}
+.c-form textarea{grid-column:1/-1;height:120px;resize:none}
+.c-form .btn-p{grid-column:1/-1;text-align:center;width:100%}
+
+/* ── FOOTER ── */
+footer{background:var(--bg);border-top:1px solid var(--border);padding:80px 56px 48px;position:relative}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:72px;margin-bottom:72px;max-width:1400px;margin-left:auto;margin-right:auto}
+.footer-desc{margin-top:24px;font-size:.85rem;font-weight:300;color:var(--tm);line-height:1.85;max-width:280px}
+.footer-col h4{font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;color:var(--tm);margin-bottom:24px;display:flex;align-items:center;gap:10px}
+.footer-col h4::before{content:'';width:18px;height:1px;background:var(--vermilion)}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:12px}
+.footer-col ul a{color:rgba(240,236,232,.48);text-decoration:none;font-size:.85rem;font-weight:300;transition:color .3s}
+.footer-col ul a:hover{color:var(--vermilion)}
+.footer-bot{display:flex;justify-content:space-between;align-items:center;padding-top:36px;border-top:1px solid var(--border);max-width:1400px;margin:0 auto}
+.footer-bot p{font-size:.72rem;color:var(--tm)}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(36px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.rd1{transition-delay:.1s}.rd2{transition-delay:.2s}.rd3{transition-delay:.3s}.rd4{transition-delay:.4s}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  .svc-head{grid-template-columns:1fr;gap:36px}.svc-grid{grid-template-columns:repeat(2,1fr)}
+  .stats{grid-template-columns:repeat(2,1fr)}.testi-grid{grid-template-columns:1fr 1fr}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:48px}
+  .hero-kanji-deco{font-size:14rem;opacity:.05}
+}
+@media(max-width:768px){
+  nav{padding:18px 22px}.nav-links,.side-nav{display:none}
+  .svc-grid{grid-template-columns:1fr}#services,#process,#testimonials{padding:80px 22px}
+  .stats{padding:48px 22px;grid-template-columns:repeat(2,1fr)}.stat-n{font-size:3.6rem}
+  .testi-grid{grid-template-columns:1fr}.footer-grid{grid-template-columns:1fr}
+  .c-form{grid-template-columns:1fr}
+  .frame-content{padding:36px;margin:0 5%;max-width:none}
+  .frame-panel:nth-child(even) .frame-content{margin:0 5%}
+  .p-step{grid-template-columns:1fr;gap:12px}.p-step:hover{padding-left:0}
+  .footer-bot{flex-direction:column;gap:12px;text-align:center}
+  .hero-kanji-deco{font-size:9rem}
+  .f-kanji{font-size:14rem;opacity:.04!important}
+  .audio-toggle{left:18px;bottom:18px;width:42px;height:42px}
+  .f-num{font-size:5.5rem}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  .mist,.grain{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- FILM GRAIN + VIGNETTE -->
+<div class="grain"></div>
+<div class="vignette"></div>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-kanji">縁</div>
+  <div class="loader-text">
+    <span style="animation-delay:.1s">P</span><span style="animation-delay:.15s">r</span><span style="animation-delay:.2s">e</span><span style="animation-delay:.25s">m</span><span style="animation-delay:.3s">i</span><span style="animation-delay:.35s">u</span><span style="animation-delay:.4s">m</span><span style="animation-delay:.5s">&nbsp;</span><span style="animation-delay:.55s">R</span><span style="animation-delay:.6s">e</span><span style="animation-delay:.65s">f</span><span style="animation-delay:.7s">o</span><span style="animation-delay:.75s">n</span><span style="animation-delay:.8s">t</span><span style="animation-delay:.85s">e</span>
+  </div>
+  <div class="loader-bar"></div>
+</div>
+
+<!-- CURSOR -->
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curRing"></div>
+
+<!-- AUDIO TOGGLE -->
+<button class="audio-toggle muted" id="audioBtn" data-testid="audio-toggle-btn" aria-label="Activer le son">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+    <path class="wave" d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+    <path class="wave" d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+    <line class="line-mute" x1="22" y1="9" x2="16" y2="15"></line>
+    <line class="line-mute" x1="16" y1="9" x2="22" y2="15"></line>
+  </svg>
+</button>
+
+<!-- SIDE DOTS -->
+<div class="side-nav" id="sideNav">
+  <div class="side-dot active" data-s="hero" data-jp="序"></div>
+  <div class="side-dot" data-s="frames" data-jp="心"></div>
+  <div class="side-dot" data-s="services" data-jp="技"></div>
+  <div class="side-dot" data-s="process" data-jp="道"></div>
+  <div class="side-dot" data-s="testimonials" data-jp="信"></div>
+  <div class="side-dot" data-s="contact" data-jp="始"></div>
+</div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#" class="nav-logo">Premium<span>Refonte</span></a>
+  <ul class="nav-links">
+    <li><a href="#frames">Vision</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#process">Méthode</a></li>
+    <li><a href="#testimonials">Clients</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Démarrer →</a>
+</nav>
+
+<!-- ════════════════ HERO ════════════════ -->
+<section id="hero" data-testid="hero-section">
+  <div class="media-wrap" id="heroMedia">
+    <img class="hero-bg-img" src="https://customer-assets.emergentagent.com/job_d64ec5e5-c98a-47eb-a763-6d81db20bbf2/artifacts/uupq4q59_D22CFF2A-F8BD-4022-A798-5B8735B21DA9_4_5005_c.jpeg" alt="Paysage zen japonais" style="filter:brightness(.45) saturate(.85)">
+    <video class="bg-video hero-video" id="heroVideo" muted loop playsinline preload="auto" poster="https://customer-assets.emergentagent.com/job_d64ec5e5-c98a-47eb-a763-6d81db20bbf2/artifacts/uupq4q59_D22CFF2A-F8BD-4022-A798-5B8735B21DA9_4_5005_c.jpeg" style="filter:brightness(.55) saturate(.85)">
+      <source src="https://assets.mixkit.co/videos/4146/4146-1080.mp4" type="video/mp4">
+      <source src="https://assets.mixkit.co/videos/4146/4146-720.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="mist"><span></span><span></span><span></span><span></span></div>
+  <div class="hero-kanji-deco">静寂</div>
+  <div class="hero-ov"></div>
+  <div class="hero-content">
+    <span class="hero-eyebrow">Agence digitale · Paris</span>
+    <h1 class="hero-title">Votre site web,<br><em>réinventé.</em></h1>
+    <p class="hero-sub">Nous transformons les sites des PME en expériences digitales immersives — qui convertissent, inspirent et durent dans le temps.</p>
+    <div class="hero-ctas">
+      <a href="#contact" class="btn-p" data-testid="hero-cta-audit"><span>Audit gratuit</span></a>
+      <a href="#frames" class="btn-g" data-testid="hero-cta-vision">Découvrir notre vision</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Défiler</span>
+  </div>
+</section>
+
+<!-- ════════════════ FRAMES (Immersive Video Panels) ════════════════ -->
+<section id="frames">
+  <div class="frames-intro reveal">
+    <span class="kanji-mark">心</span>
+    <span class="s-label">Notre Philosophie</span>
+    <h2 class="s-title">Chaque détail<br><em>raconte une histoire</em></h2>
+  </div>
+
+  <!-- Frame 01 -->
+  <div class="frame-panel" data-frame-idx="0">
+    <div class="media-wrap">
+      <img class="frame-bg-img" src="https://customer-assets.emergentagent.com/job_d64ec5e5-c98a-47eb-a763-6d81db20bbf2/artifacts/uupq4q59_D22CFF2A-F8BD-4022-A798-5B8735B21DA9_4_5005_c.jpeg" alt="" style="filter:brightness(.32) saturate(.7)">
+      <video class="bg-video frame-video" muted loop playsinline preload="metadata" style="filter:brightness(.42) saturate(.7) hue-rotate(-6deg)">
+        <source src="https://assets.mixkit.co/videos/18260/18260-1080.mp4" type="video/mp4">
+        <source src="https://assets.mixkit.co/videos/18260/18260-720.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="mist"><span></span><span></span><span></span></div>
+    <div class="f-kanji">観</div>
+    <div class="frame-ov frame-ov-l"></div>
+    <div class="frame-content reveal">
+      <div class="f-num">01<small>序</small></div>
+      <span class="f-tag">Analyse & Stratégie</span>
+      <h3 class="f-title">Comprendre<br><em>avant de créer</em></h3>
+      <div class="f-bar"></div>
+      <p class="f-text">Chaque refonte commence par une immersion profonde dans votre marché, vos utilisateurs et vos objectifs. Nous construisons une fondation stratégique solide avant de toucher au design.</p>
+    </div>
+  </div>
+
+  <!-- Frame 02 -->
+  <div class="frame-panel" data-frame-idx="1">
+    <div class="media-wrap">
+      <img class="frame-bg-img" src="https://customer-assets.emergentagent.com/job_d64ec5e5-c98a-47eb-a763-6d81db20bbf2/artifacts/uupq4q59_D22CFF2A-F8BD-4022-A798-5B8735B21DA9_4_5005_c.jpeg" alt="" style="filter:brightness(.3) saturate(.65)">
+      <video class="bg-video frame-video" muted loop playsinline preload="metadata" style="filter:brightness(.4) saturate(.7) hue-rotate(-14deg)">
+        <source src="https://assets.mixkit.co/videos/18259/18259-1080.mp4" type="video/mp4">
+        <source src="https://assets.mixkit.co/videos/18259/18259-720.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="mist"><span></span><span></span><span></span></div>
+    <div class="f-kanji">美</div>
+    <div class="frame-ov frame-ov-r"></div>
+    <div class="frame-content reveal">
+      <div class="f-num">02<small>美</small></div>
+      <span class="f-tag">Design Premium</span>
+      <h3 class="f-title">L'esthétique au<br><em>service du business</em></h3>
+      <div class="f-bar"></div>
+      <p class="f-text">Nos designers créent des interfaces visuellement remarquables qui reflètent le positionnement premium de votre marque — tout en optimisant chaque élément pour la conversion.</p>
+    </div>
+  </div>
+
+  <!-- Frame 03 -->
+  <div class="frame-panel" data-frame-idx="2">
+    <div class="media-wrap">
+      <img class="frame-bg-img" src="https://customer-assets.emergentagent.com/job_d64ec5e5-c98a-47eb-a763-6d81db20bbf2/artifacts/uupq4q59_D22CFF2A-F8BD-4022-A798-5B8735B21DA9_4_5005_c.jpeg" alt="" style="filter:brightness(.28) saturate(.65)">
+      <video class="bg-video frame-video" muted loop playsinline preload="metadata" style="filter:brightness(.38) saturate(.7) hue-rotate(-10deg)">
+        <source src="https://assets.mixkit.co/videos/18261/18261-1080.mp4" type="video/mp4">
+        <source src="https://assets.mixkit.co/videos/18261/18261-720.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="mist"><span></span><span></span><span></span></div>
+    <div class="f-kanji">技</div>
+    <div class="frame-ov frame-ov-l"></div>
+    <div class="frame-content reveal">
+      <div class="f-num">03<small>技</small></div>
+      <span class="f-tag">Développement</span>
+      <h3 class="f-title">Performant,<br><em>sur-mesure</em></h3>
+      <div class="f-bar"></div>
+      <p class="f-text">Code propre, chargement ultra-rapide, SEO technique optimisé. Nous développons des sites qui passent les Core Web Vitals avec les meilleures notes — parce que la performance est un avantage compétitif.</p>
+    </div>
+  </div>
+
+  <!-- Frame 04 -->
+  <div class="frame-panel" data-frame-idx="3">
+    <div class="media-wrap">
+      <img class="frame-bg-img" src="https://customer-assets.emergentagent.com/job_d64ec5e5-c98a-47eb-a763-6d81db20bbf2/artifacts/uupq4q59_D22CFF2A-F8BD-4022-A798-5B8735B21DA9_4_5005_c.jpeg" alt="" style="filter:brightness(.32) saturate(.7)">
+      <video class="bg-video frame-video" muted loop playsinline preload="metadata" style="filter:brightness(.42) saturate(.75) hue-rotate(-4deg)">
+        <source src="https://assets.mixkit.co/videos/18262/18262-1080.mp4" type="video/mp4">
+        <source src="https://assets.mixkit.co/videos/18262/18262-720.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="mist"><span></span><span></span><span></span></div>
+    <div class="f-kanji">緣</div>
+    <div class="frame-ov frame-ov-r"></div>
+    <div class="frame-content reveal">
+      <div class="f-num">04<small>続</small></div>
+      <span class="f-tag">Croissance Continue</span>
+      <h3 class="f-title">Le début,<br><em>pas la fin</em></h3>
+      <div class="f-bar"></div>
+      <p class="f-text">Notre relation ne s'arrête pas au lancement. Nous analysons, optimisons et évoluons votre site en continu pour garantir des résultats croissants dans la durée.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ SERVICES ════════════════ -->
+<section id="services">
+  <div class="svc-head">
+    <div>
+      <span class="s-label reveal">Nos Services</span>
+      <h2 class="s-title reveal">Ce que nous<br><em>faisons</em></h2>
+    </div>
+    <p class="svc-desc reveal">Des solutions digitales complètes pensées pour les PME ambitieuses qui veulent un site à la hauteur de leur excellence opérationnelle.</p>
+  </div>
+  <div class="svc-grid">
+    <div class="svc-card reveal rd1">
+      <span class="svc-n">01</span>
+      <svg class="svc-icon" viewBox="0 0 48 48" fill="none"><rect x="4" y="4" width="40" height="30" rx="2" stroke="#d94e3a" stroke-width="1.5"/><line x1="4" y1="38" x2="44" y2="38" stroke="#d94e3a" stroke-width="1.5"/><circle cx="24" cy="44" r="2" fill="#d94e3a"/></svg>
+      <h3 class="svc-title">Refonte Web<br>Premium</h3>
+      <p class="svc-text">Transformation complète de votre présence digitale. Design sur-mesure, UX optimisée, identité visuelle cohérente et performante.</p>
+      <a href="#contact" class="svc-link">En savoir plus →</a>
+    </div>
+    <div class="svc-card reveal rd2">
+      <span class="svc-n">02</span>
+      <svg class="svc-icon" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="20" r="12" stroke="#d94e3a" stroke-width="1.5"/><path d="M12 44C12 37.4 17.4 32 24 32C30.6 32 36 37.4 36 44" stroke="#d94e3a" stroke-width="1.5"/></svg>
+      <h3 class="svc-title">UX / UI<br>Design</h3>
+      <p class="svc-text">Interfaces intuitives centrées utilisateur. Wireframing, prototypage, tests et design system complet pour une expérience irréprochable.</p>
+      <a href="#contact" class="svc-link">En savoir plus →</a>
+    </div>
+    <div class="svc-card reveal rd3">
+      <span class="svc-n">03</span>
+      <svg class="svc-icon" viewBox="0 0 48 48" fill="none"><polyline points="8,36 18,20 28,28 38,10" stroke="#d94e3a" stroke-width="1.5"/><circle cx="8" cy="36" r="2" fill="#d94e3a"/><circle cx="38" cy="10" r="2" fill="#d94e3a"/></svg>
+      <h3 class="svc-title">SEO &<br>Performance</h3>
+      <p class="svc-text">Optimisation technique avancée. Core Web Vitals, SEO on-page, schema markup et stratégie de contenu pour dominer Google.</p>
+      <a href="#contact" class="svc-link">En savoir plus →</a>
+    </div>
+    <div class="svc-card reveal rd1">
+      <span class="svc-n">04</span>
+      <svg class="svc-icon" viewBox="0 0 48 48" fill="none"><rect x="4" y="8" width="24" height="32" rx="2" stroke="#d94e3a" stroke-width="1.5"/><rect x="32" y="16" width="12" height="24" rx="2" stroke="#d94e3a" stroke-width="1.5"/></svg>
+      <h3 class="svc-title">Mobile<br>First</h3>
+      <p class="svc-text">Expériences pensées mobile d'abord. Plus de 70% du trafic vient du mobile — votre site doit être parfait sur tous les écrans.</p>
+      <a href="#contact" class="svc-link">En savoir plus →</a>
+    </div>
+    <div class="svc-card reveal rd2">
+      <span class="svc-n">05</span>
+      <svg class="svc-icon" viewBox="0 0 48 48" fill="none"><path d="M24 4L44 16V32L24 44L4 32V16L24 4Z" stroke="#d94e3a" stroke-width="1.5"/><path d="M24 4V44M4 16L44 16M4 32L44 32" stroke="#d94e3a" stroke-width="1" stroke-opacity="0.4"/></svg>
+      <h3 class="svc-title">E-commerce<br>Premium</h3>
+      <p class="svc-text">Boutiques en ligne qui vendent. Tunnels de conversion optimisés, UX produit irréprochable et intégration paiement sécurisée.</p>
+      <a href="#contact" class="svc-link">En savoir plus →</a>
+    </div>
+    <div class="svc-card reveal rd3">
+      <span class="svc-n">06</span>
+      <svg class="svc-icon" viewBox="0 0 48 48" fill="none"><path d="M8 24H40M8 16H32M8 32H24" stroke="#d94e3a" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <h3 class="svc-title">Maintenance<br>& Support</h3>
+      <p class="svc-text">Votre site évolue avec votre business. Mises à jour, sécurité, sauvegardes automatiques et support réactif inclus.</p>
+      <a href="#contact" class="svc-link">En savoir plus →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ STATS ════════════════ -->
+<div class="stats">
+  <div class="stat-item reveal"><span class="stat-n" data-count="147">0</span><span class="stat-l">PME refontes réalisées</span></div>
+  <div class="stat-item reveal rd1"><span class="stat-n" data-count="340" data-suf="%">0</span><span class="stat-l">Augmentation trafic moyen</span></div>
+  <div class="stat-item reveal rd2"><span class="stat-n" data-count="98">0</span><span class="stat-l">Score PageSpeed moyen</span></div>
+  <div class="stat-item reveal rd3"><span class="stat-n" data-count="12">0</span><span class="stat-l">Années d'expertise</span></div>
+</div>
+
+<!-- ════════════════ PROCESS ════════════════ -->
+<section id="process">
+  <span class="s-label reveal">Notre Méthode</span>
+  <h2 class="s-title reveal">Comment nous<br><em>travaillons</em></h2>
+  <div class="process-steps">
+    <div class="p-step reveal"><div class="p-num">01</div><div><h3>Audit & Diagnostic</h3><p>Analyse complète : performance technique, UX, SEO, positionnement concurrentiel et opportunités de croissance identifiées.</p><span class="p-dur">Semaine 1</span></div></div>
+    <div class="p-step reveal rd1"><div class="p-num">02</div><div><h3>Stratégie & Architecture</h3><p>Définition de l'arborescence, des personas, du parcours utilisateur idéal et de la stratégie de contenu adaptée à vos objectifs commerciaux.</p><span class="p-dur">Semaines 2–3</span></div></div>
+    <div class="p-step reveal rd2"><div class="p-num">03</div><div><h3>Design & Prototypage</h3><p>Maquettes haute-fidélité et prototypes interactifs. Trois cycles de révision inclus pour affiner jusqu'à la perfection.</p><span class="p-dur">Semaines 4–6</span></div></div>
+    <div class="p-step reveal rd3"><div class="p-num">04</div><div><h3>Développement & Tests</h3><p>Intégration front-end ultra-soignée, back-end robuste, tests multi-navigateurs, accessibilité WCAG et optimisation des performances.</p><span class="p-dur">Semaines 7–10</span></div></div>
+    <div class="p-step reveal rd4"><div class="p-num">05</div><div><h3>Lancement & Croissance</h3><p>Déploiement sécurisé, formation de votre équipe, mise en place du tracking et suivi mensuel des performances pour maximiser le ROI.</p><span class="p-dur">Semaine 11+</span></div></div>
+  </div>
+</section>
+
+<!-- ════════════════ TESTIMONIALS ════════════════ -->
+<section id="testimonials">
+  <div style="max-width:1400px;margin:0 auto;position:relative;z-index:1">
+    <span class="s-label reveal">Ils nous font confiance</span>
+    <h2 class="s-title reveal">Résultats<br><em>concrets</em></h2>
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <p class="testi-q">"Notre trafic organique a augmenté de 420% en 6 mois. PremiumRefonte a su capturer l'essence de notre marque et la traduire en une expérience digitale qui convertit vraiment."</p>
+        <div class="testi-author"><div class="t-avatar">M</div><div class="t-info"><strong>Marie Dubois</strong><span>Directrice, Cabinet Dubois & Associés</span></div></div>
+      </div>
+      <div class="testi-card reveal rd1">
+        <p class="testi-q">"L'investissement remboursé en 3 mois. Notre taux de conversion est passé de 1,2% à 4,7%. Le niveau de qualité livré est au niveau des grandes agences parisiennes."</p>
+        <div class="testi-author"><div class="t-avatar">T</div><div class="t-info"><strong>Thomas Laurent</strong><span>CEO, Laurent Industries</span></div></div>
+      </div>
+      <div class="testi-card reveal rd2">
+        <p class="testi-q">"Professionnalisme exemplaire, délais respectés et résultats au-delà de nos attentes. Notre site score 98/100 sur PageSpeed et nos clients le remarquent immédiatement."</p>
+        <div class="testi-author"><div class="t-avatar">S</div><div class="t-info"><strong>Sophie Moreau</strong><span>Fondatrice, Moreau Consulting</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ CONTACT ════════════════ -->
+<section id="contact">
+  <div class="media-wrap" id="contactMedia">
+    <img class="contact-bg-img" src="https://customer-assets.emergentagent.com/job_d64ec5e5-c98a-47eb-a763-6d81db20bbf2/artifacts/uupq4q59_D22CFF2A-F8BD-4022-A798-5B8735B21DA9_4_5005_c.jpeg" alt="">
+    <video class="bg-video contact-video" id="contactVideo" muted loop playsinline preload="metadata">
+      <source src="https://assets.mixkit.co/videos/18263/18263-1080.mp4" type="video/mp4">
+      <source src="https://assets.mixkit.co/videos/18263/18263-720.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="mist"><span></span><span></span><span></span><span></span></div>
+  <div class="contact-ov"></div>
+  <div class="contact-content">
+    <span class="s-label">Commençons · 始</span>
+    <h2 class="s-title">Prêt à transformer<br><em>votre présence digitale ?</em></h2>
+    <p>Audit gratuit de votre site actuel — sans engagement. Nous vous montrons précisément ce qui freine votre croissance.</p>
+    <form class="c-form" onsubmit="handleForm(event)">
+      <input type="text" placeholder="Votre prénom" required data-testid="form-firstname">
+      <input type="text" placeholder="Votre entreprise" required data-testid="form-company">
+      <input type="email" placeholder="Email professionnel" required data-testid="form-email">
+      <input type="tel" placeholder="Téléphone" data-testid="form-phone">
+      <textarea placeholder="Parlez-nous de votre projet..." data-testid="form-message"></textarea>
+      <button type="submit" class="btn-p" data-testid="form-submit"><span>Demander mon audit gratuit</span></button>
+    </form>
+  </div>
+</section>
+
+<!-- ════════════════ FOOTER ════════════════ -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <a href="#" class="nav-logo" style="font-size:1.8rem">Premium<span>Refonte</span></a>
+      <p class="footer-desc">L'agence de refonte web qui transforme les PME ambitieuses en marques digitales premium. Basés à Paris, nous intervenons partout en France.</p>
+    </div>
+    <div class="footer-col"><h4>Services</h4><ul><li><a href="#">Refonte Web</a></li><li><a href="#">UX / UI Design</a></li><li><a href="#">SEO & Performance</a></li><li><a href="#">E-commerce</a></li><li><a href="#">Maintenance</a></li></ul></div>
+    <div class="footer-col"><h4>Agence</h4><ul><li><a href="#">Notre approche</a></li><li><a href="#">Réalisations</a></li><li><a href="#">Équipe</a></li><li><a href="#">Blog</a></li><li><a href="#">Carrières</a></li></ul></div>
+    <div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:hello@premiumrefonte.fr">hello@premiumrefonte.fr</a></li><li><a href="tel:+33142000000">+33 1 42 00 00 00</a></li><li><a href="#">Paris 75008</a></li><li><a href="#">LinkedIn</a></li><li><a href="#">Instagram</a></li></ul></div>
+  </div>
+  <div class="footer-bot">
+    <p>© 2026 PremiumRefonte · 縁 · Tous droits réservés.</p>
+    <p>Confidentialité · Mentions légales · CGV</p>
+  </div>
+</footer>
+
+<script>
+// ─────────── LOADER ───────────
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('loader').classList.add('done'), 1800);
+});
+
+// ─────────── CURSOR ───────────
+const cur = document.getElementById('cur');
+const curRing = document.getElementById('curRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cur.style.left = mx+'px'; cur.style.top = my+'px';
+});
+(function loop(){
+  rx += (mx-rx)*.14; ry += (my-ry)*.14;
+  curRing.style.left = rx+'px'; curRing.style.top = ry+'px';
+  requestAnimationFrame(loop);
+})();
+document.querySelectorAll('a,button,.svc-card,.testi-card,.side-dot').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    curRing.style.width='60px'; curRing.style.height='60px';
+    curRing.style.borderColor='rgba(217,78,58,.85)';
+    curRing.style.background='rgba(217,78,58,.06)';
+  });
+  el.addEventListener('mouseleave', () => {
+    curRing.style.width='36px'; curRing.style.height='36px';
+    curRing.style.borderColor='rgba(217,78,58,.45)';
+    curRing.style.background='transparent';
+  });
+});
+
+// ─────────── NAV SCROLL ───────────
+const mainNav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => {
+  mainNav.classList.toggle('scrolled', scrollY > 50);
+  updateDots();
+}, {passive:true});
+
+// ─────────── SIDE DOTS ───────────
+const secs = ['hero','frames','services','process','testimonials','contact'];
+const dots = document.querySelectorAll('.side-dot');
+function updateDots(){
+  const mid = scrollY + innerHeight/2;
+  secs.forEach((id,i) => {
+    const el = document.getElementById(id); if(!el) return;
+    if(mid >= el.offsetTop && mid < el.offsetTop + el.offsetHeight){
+      dots.forEach(d => d.classList.remove('active'));
+      dots[i].classList.add('active');
+    }
+  });
+}
+dots.forEach((d,i) => d.addEventListener('click', () => document.getElementById(secs[i])?.scrollIntoView({behavior:'smooth'})));
+
+// ─────────── IMMERSIVE VIDEO LOAD + INTERSECTION ───────────
+const allVideos = document.querySelectorAll('video.bg-video');
+allVideos.forEach(v => {
+  const markReady = () => v.classList.add('ready');
+  v.addEventListener('loadeddata', markReady);
+  v.addEventListener('canplay', markReady);
+  v.addEventListener('error', () => console.warn('Video failed, using poster fallback'));
+});
+
+// Play/Pause based on visibility — saves bandwidth & CPU
+const videoObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    const v = e.target.querySelector('video.bg-video');
+    if(!v) return;
+    if(e.isIntersecting){
+      v.play().catch(()=>{});
+    } else {
+      v.pause();
+    }
+  });
+}, {threshold:0.15});
+document.querySelectorAll('#hero, .frame-panel, #contact').forEach(el => videoObs.observe(el));
+
+// ─────────── SCROLL-DRIVEN IMMERSION (Zoom + Parallax) ───────────
+const heroMedia = document.getElementById('heroMedia');
+const heroSection = document.getElementById('hero');
+const contactMedia = document.getElementById('contactMedia');
+const contactSection = document.getElementById('contact');
+const framePanels = document.querySelectorAll('.frame-panel');
+
+function applyScrollFX(){
+  const y = scrollY;
+  const vh = innerHeight;
+
+  // HERO — zoom from 1.0 → 1.18 as we scroll past it, parallax up
+  if(heroMedia){
+    const progress = Math.max(0, Math.min(1, y / vh));
+    const scale = 1 + progress * 0.18;
+    const translate = progress * 80;
+    heroMedia.style.transform = `translateY(${translate}px) scale(${scale})`;
+    heroMedia.style.opacity = 1 - progress * 0.35;
+  }
+
+  // FRAME PANELS — each panel scales/parallax as it enters/exits viewport
+  framePanels.forEach(panel => {
+    const rect = panel.getBoundingClientRect();
+    const center = rect.top + rect.height/2;
+    const distFromCenter = (center - vh/2) / vh; // -1 → 1
+    if(rect.bottom < -100 || rect.top > vh + 100) return; // off-screen skip
+    const media = panel.querySelector('.media-wrap');
+    if(!media) return;
+    // Zoom IN when near center, slight Y parallax
+    const scale = 1.1 - Math.abs(distFromCenter) * 0.12;
+    const translate = distFromCenter * 80;
+    media.style.transform = `translateY(${translate}px) scale(${Math.max(1, scale)})`;
+  });
+
+  // CONTACT — subtle zoom as we approach
+  if(contactMedia){
+    const rect = contactSection.getBoundingClientRect();
+    if(rect.top < vh && rect.bottom > 0){
+      const p = 1 - (rect.top / vh);
+      const scale = 1 + Math.min(1, Math.max(0, p)) * 0.1;
+      contactMedia.style.transform = `scale(${scale})`;
+    }
+  }
+}
+let ticking = false;
+window.addEventListener('scroll', () => {
+  if(!ticking){
+    requestAnimationFrame(() => { applyScrollFX(); ticking = false; });
+    ticking = true;
+  }
+}, {passive:true});
+applyScrollFX();
+
+// ─────────── REVEAL ON SCROLL ───────────
+const revEls = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, {threshold:.08,rootMargin:'0px 0px -50px 0px'});
+revEls.forEach(el => obs.observe(el));
+
+// ─────────── COUNT UP STATS ───────────
+const countEls = document.querySelectorAll('[data-count]');
+const cObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(!e.isIntersecting) return;
+    const target = +e.target.dataset.count;
+    const suf = e.target.dataset.suf||'';
+    let cur = 0; const step = target/60;
+    const t = setInterval(() => {
+      cur = Math.min(cur+step, target);
+      e.target.textContent = Math.round(cur)+suf;
+      if(cur >= target) clearInterval(t);
+    }, 22);
+    cObs.unobserve(e.target);
+  });
+},{threshold:.5});
+countEls.forEach(el => cObs.observe(el));
+
+// ─────────── AUDIO TOGGLE (ambient audio via hero video unmute) ───────────
+const audioBtn = document.getElementById('audioBtn');
+const heroVid = document.getElementById('heroVideo');
+audioBtn.addEventListener('click', () => {
+  const muted = audioBtn.classList.contains('muted');
+  if(muted){
+    // Unmute hero video (only one with audio at a time)
+    heroVid.muted = false;
+    heroVid.volume = 0.35;
+    heroVid.play().catch(()=>{});
+    audioBtn.classList.remove('muted');
+    audioBtn.setAttribute('aria-label','Couper le son');
+  } else {
+    heroVid.muted = true;
+    audioBtn.classList.add('muted');
+    audioBtn.setAttribute('aria-label','Activer le son');
+  }
+});
+
+// ─────────── FORM ───────────
+function handleForm(e){
+  e.preventDefault();
+  const btn = e.target.querySelector('button');
+  const span = btn.querySelector('span') || btn;
+  span.textContent = 'Message envoyé ✓';
+  btn.style.background = '#2a7a4f';
+  setTimeout(() => {
+    span.textContent = 'Demander mon audit gratuit';
+    btn.style.background = '';
+    e.target.reset();
+  }, 3500);
+}
+
+// ─────────── SMOOTH ANCHORS ───────────
+document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+  const href = a.getAttribute('href');
+  if(href === '#') return;
+  const t = document.querySelector(href);
+  if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth'}); }
+}));
+</script>
+</body>
+</html>
