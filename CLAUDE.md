@@ -29,3 +29,28 @@ Sites de référence pour l'inspiration WebGL, interactions 3D, et expériences 
 - Transitions de page fluides en WebGL
 - Interfaces gamifiées en 3D
 - Expériences storytelling scroll-driven
+
+---
+
+## Composants UI — 21st.dev Community
+Source : https://21st.dev/community/components
+
+Bibliothèque communautaire de composants UI modernes (React/Tailwind principalement). Contenu chargé dynamiquement — toujours consulter la source pour les derniers ajouts.
+
+### Catégories disponibles
+| Catégorie | Description |
+|-----------|-------------|
+| **Shaders** | Effets visuels GLSL/WebGL intégrés en composants |
+| **Heros** | Sections hero créatives et animées |
+| **Features** | Sections de mise en avant de fonctionnalités |
+| **AI Chat Components** | Composants d'interface de chat IA |
+| **Calls to Action** | Boutons et sections CTA expressifs |
+| **Buttons** | Boutons interactifs et animés |
+| **Testimonials** | Sections témoignages |
+| **Pricing Sections** | Sections tarifaires |
+| **Text Components** | Composants texte animés / typographiques |
+
+### Usage
+- Référence pour composants React prêts à l'emploi avec effets visuels avancés
+- Particulièrement utile pour les **shaders** et effets GPU directement en composants
+- Communauté active — nouveaux composants régulièrement ajoutés
