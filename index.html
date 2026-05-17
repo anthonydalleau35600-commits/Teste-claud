@@ -93,27 +93,28 @@
       padding: 0 24px;
     }
 
-    /* Image de fond katana — remplace le gradient par ton image */
+    /* Image de fond katana */
     .hero-bg {
       position: absolute; inset: 0; z-index: 0;
-      background:
-        radial-gradient(ellipse 60% 80% at 50% 100%, rgba(139,0,0,.55) 0%, transparent 70%),
-        radial-gradient(ellipse 100% 50% at 50% 60%, rgba(80,0,0,.4) 0%, transparent 60%),
-        radial-gradient(ellipse 80% 40% at 30% 80%, rgba(120,0,0,.3) 0%, transparent 50%),
-        linear-gradient(180deg, #0a0000 0%, #050000 40%, #0f0000 70%, #030000 100%);
-      /* ↓ Décommente et remplace par ton image katana :
-         background-image: url('katana.jpg');
-         background-size: cover;
-         background-position: center;
-      */
+      background-image: url('katana.JPG');
+      background-size: cover;
+      background-position: center 20%;
+      background-repeat: no-repeat;
     }
 
     /* Overlay gradients par-dessus l'image */
     .hero-overlay {
       position: absolute; inset: 0; z-index: 1;
       background:
-        linear-gradient(to bottom, rgba(3,0,0,.7) 0%, rgba(3,0,0,.1) 40%, rgba(3,0,0,.1) 60%, rgba(3,0,0,.9) 100%),
-        radial-gradient(ellipse 50% 50% at 50% 80%, rgba(192,18,26,.25), transparent);
+        linear-gradient(to bottom,
+          rgba(3,0,0,.75) 0%,
+          rgba(3,0,0,.25) 30%,
+          rgba(3,0,0,.15) 55%,
+          rgba(3,0,0,.85) 85%,
+          rgba(3,0,0,.98) 100%
+        ),
+        radial-gradient(ellipse 60% 40% at 50% 85%, rgba(140,10,10,.4), transparent),
+        radial-gradient(ellipse 80% 20% at 50% 100%, rgba(80,0,0,.6), transparent);
     }
 
     /* Canvas braises + brume */
