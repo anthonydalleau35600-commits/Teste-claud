@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Métamorphe Studio — Création de sites web premium</title>
+  <meta name="description" content="Agence de création de sites web premium. Design immersif, performances maximales, résultats mesurables." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --black:  #050002;
+      --red:    #c0121a;
+      --red-hi: #ff3333;
+      --white:  #f8f3f0;
+      --gray:   #b0a8a8;
+      --glass:  rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.12);
+      --red-border: rgba(192,18,26,0.3);
+      --r: 20px;   /* radius standard */
+      --r-lg: 28px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--black); color: var(--white); font-family: 'Inter', sans-serif; overflow-x: hidden; cursor: none; }
+
+    /* ─── CURSOR ─── */
+    #cur  { position:fixed; width:8px; height:8px; background:var(--red-hi); border-radius:50%; pointer-events:none; z-index:9999; box-shadow:0 0 14px var(--red-hi),0 0 28px rgba(255,50,50,.4); }
+    #ring { position:fixed; width:36px; height:36px; border:1.5px solid rgba(192,18,26,.55); border-radius:50%; pointer-events:none; z-index:9998; transition:width .25s,height .25s,opacity .25s; }
+
+    /* ─── NAV — pill arrondi style Apple ─── */
+    nav {
+      position:fixed; top:20px; left:50%; transform:translateX(-50%);
+      z-index:1000; padding:12px 28px;
+      display:flex; align-items:center; justify-content:space-between; gap:40px;
+      background:rgba(10,2,2,.7);
+      backdrop-filter:blur(24px) saturate(180%);
+      -webkit-backdrop-filter:blur(24px) saturate(180%);
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:100px;
+      min-width:min(900px, 92vw);
+      transition:background .3s;
+    }
+    .nav-logo { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:700; letter-spacing:.04em; color:var(--white); text-decoration:none; white-space:nowrap; }
+    .nav-logo span { color:var(--red); }
+    .nav-links { display:flex; gap:28px; list-style:none; }
+    .nav-links a { color:rgba(255,255,255,.6); text-decoration:none; font-size:13px; letter-spacing:.03em; transition:color .2s; white-space:nowrap; }
+    .nav-links a:hover { color:#fff; }
+    .nav-cta { background:var(--red); color:#fff; padding:8px 20px; border-radius:100px; font-size:13px; font-weight:600; letter-spacing:.04em; text-decoration:none; white-space:nowrap; transition:background .2s,box-shadow .2s; box-shadow:0 0 20px rgba(192,18,26,.4); }
+    .nav-cta:hover { background:#a50f16; box-shadow:0 0 32px rgba(192,18,26,.7); }
+
+    /* ─── HERO ─── */
+    #hero { position:relative; height:100vh; min-height:700px; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+
+    /* Image avec Ken Burns — zoom lent + légère rotation */
+    .hero-img {
+      position:absolute; inset:-8%; z-index:0;
+      background:url('katana.JPG') center 25% / cover no-repeat;
+      animation:kenBurns 18s ease-in-out infinite alternate;
+      will-change:transform;
+    }
+    @keyframes kenBurns {
+      0%   { transform:scale(1.0) translate(0,0); }
+      33%  { transform:scale(1.06) translate(-1%,1%); }
+      66%  { transform:scale(1.04) translate(1%,-0.5%); }
+      100% { transform:scale(1.08) translate(-0.5%,0.5%); }
+    }
+
+    /* Overlay en couches pour lisibilité */
+    .hero-ov1 {
+      position:absolute; inset:0; z-index:1;
+      background:radial-gradient(ellipse 70% 60% at 50% 50%, rgba(0,0,0,.25) 0%, rgba(0,0,0,.55) 100%);
+    }
+    .hero-ov2 {
+      position:absolute; inset:0; z-index:2;
+      background:linear-gradient(
+        to bottom,
+        rgba(5,0,2,.55) 0%,
+        rgba(5,0,2,.05) 35%,
+        rgba(5,0,2,.05) 55%,
+        rgba(5,0,2,.7)  80%,
+        rgba(5,0,2,.97) 100%
+      );
+    }
+    /* Lueur rouge depuis le bas */
+    .hero-ov3 {
+      position:absolute; inset:0; z-index:3;
+      background:radial-gradient(ellipse 80% 30% at 50% 100%, rgba(160,10,10,.45), transparent 70%);
+    }
+
+    /* Canvas braises */
+    #fx { position:absolute; inset:0; z-index:4; pointer-events:none; }
+
+    /* Ligne verticale centrale */
+    .vline {
+      position:absolute; top:0; bottom:0; left:50%; width:1px; z-index:5;
+      background:linear-gradient(to bottom,transparent,rgba(192,18,26,.4) 40%,rgba(192,18,26,.15) 70%,transparent);
+      opacity:.35;
+    }
+
+    .hero-content {
+      position:relative; z-index:6;
+      display:flex; flex-direction:column; align-items:center; text-align:center;
+      padding:0 24px;
+    }
+
+    .hero-emblem { width:52px; height:52px; margin-bottom:28px; opacity:0; animation:up .8s .3s forwards; }
+    .hero-badge {
+      display:inline-flex; align-items:center; gap:8px;
+      background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.15);
+      backdrop-filter:blur(10px);
+      padding:6px 18px; border-radius:100px;
+      font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase;
+      color:rgba(255,220,210,.85); margin-bottom:28px;
+      opacity:0; animation:up .8s .5s forwards;
+    }
+    .hero-badge::before { content:''; width:5px; height:5px; background:var(--red); border-radius:50%; box-shadow:0 0 6px var(--red); animation:blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+
+    .hero-title {
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(54px,9vw,110px);
+      font-weight:700; line-height:.95; letter-spacing:-.015em;
+      margin-bottom:10px; text-shadow:0 2px 40px rgba(0,0,0,.8);
+      opacity:0; animation:up 1s .7s forwards;
+    }
+    .hero-title em { font-style:italic; color:var(--red); text-shadow:0 0 60px rgba(192,18,26,.6),0 2px 40px rgba(0,0,0,.8); }
+
+    .hero-sub2 {
+      font-size:clamp(12px,1.4vw,15px); font-weight:400;
+      letter-spacing:.28em; color:rgba(255,255,255,.5);
+      text-transform:uppercase; margin-bottom:36px;
+      opacity:0; animation:up .8s .9s forwards;
+    }
+
+    .hero-sep { width:60px; height:1px; background:linear-gradient(to right,transparent,var(--red),transparent); margin:0 auto 32px; opacity:0; animation:up .6s 1.0s forwards; }
+
+    .hero-desc {
+      font-size:clamp(15px,1.6vw,17px); color:rgba(255,255,255,.7);
+      max-width:480px; line-height:1.75; margin-bottom:44px;
+      text-shadow:0 1px 20px rgba(0,0,0,.9);
+      opacity:0; animation:up .8s 1.1s forwards;
+    }
+
+    .hero-btns { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; opacity:0; animation:up .8s 1.3s forwards; }
+    .btn-p { background:var(--red); color:#fff; padding:14px 32px; border-radius:100px; font-size:14px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; text-decoration:none; box-shadow:0 0 36px rgba(192,18,26,.45); transition:background .2s,box-shadow .2s,transform .2s; }
+    .btn-p:hover { background:#a50f16; box-shadow:0 0 56px rgba(192,18,26,.75); transform:translateY(-2px); }
+    .btn-g { background:rgba(255,255,255,.08); color:#fff; padding:14px 32px; border-radius:100px; border:1px solid rgba(255,255,255,.18); font-size:14px; font-weight:500; letter-spacing:.04em; text-decoration:none; backdrop-filter:blur(10px); transition:background .2s,border-color .2s; }
+    .btn-g:hover { background:rgba(255,255,255,.14); border-color:rgba(255,255,255,.3); }
+
+    .hero-scroll { position:absolute; bottom:32px; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:8px; color:rgba(255,255,255,.4); font-size:10px; letter-spacing:.14em; text-transform:uppercase; z-index:6; opacity:0; animation:up .8s 1.7s forwards; }
+    .sbar { width:1px; height:44px; background:linear-gradient(to bottom,var(--red),transparent); animation:sb 2.2s ease-in-out infinite; }
+    @keyframes sb { 0%{transform:scaleY(0);transform-origin:top} 50%{transform:scaleY(1);transform-origin:top} 51%{transform:scaleY(1);transform-origin:bottom} 100%{transform:scaleY(0);transform-origin:bottom} }
+
+    @keyframes up { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+
+    /* ─── MARQUEE ─── */
+    .mq-wrap { padding:16px 0; border-top:1px solid rgba(255,255,255,.06); border-bottom:1px solid rgba(255,255,255,.06); overflow:hidden; background:rgba(255,255,255,.015); }
+    .mq-track { display:flex; gap:52px; width:max-content; animation:mq 24s linear infinite; }
+    .mq-track span { font-size:11px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:rgba(180,170,170,.5); white-space:nowrap; display:flex; align-items:center; gap:18px; }
+    .mq-track span::after { content:'✦'; color:var(--red); font-size:8px; }
+    @keyframes mq { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+    /* ─── SECTIONS communes ─── */
+    section { padding:110px 24px; }
+    .wrap { max-width:1080px; margin:0 auto; }
+
+    .eyebrow { display:flex; align-items:center; gap:12px; font-size:11px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--red); margin-bottom:18px; }
+    .eyebrow::before { content:''; width:24px; height:1px; background:var(--red); flex-shrink:0; }
+
+    h2.st {
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(36px,5.5vw,66px);
+      font-weight:700; line-height:1.05; letter-spacing:-.015em; margin-bottom:18px;
+    }
+    h2.st em { font-style:italic; color:var(--red); }
+
+    .sub { font-size:17px; color:var(--gray); line-height:1.7; max-width:480px; }
+
+    /* reveal */
+    .r { opacity:0; transform:translateY(32px); transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1); }
+    .r.v { opacity:1; transform:none; }
+
+    /* ─── GRILLE CARDS glassmorphism ─── */
+    .g3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:56px; }
+    .g2 { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-top:56px; }
+
+    .card {
+      background:var(--glass);
+      border:1px solid var(--glass-border);
+      border-radius:var(--r-lg);
+      padding:36px 30px;
+      backdrop-filter:blur(16px);
+      -webkit-backdrop-filter:blur(16px);
+      transition:background .3s,border-color .3s,transform .3s;
+    }
+    .card:hover { background:rgba(255,255,255,.09); border-color:rgba(192,18,26,.35); transform:translateY(-3px); }
+    .card-icon { font-size:26px; margin-bottom:18px; display:block; }
+    .card h3 { font-size:17px; font-weight:700; margin-bottom:10px; }
+    .card p { font-size:14px; color:var(--gray); line-height:1.65; }
+
+    /* service card */
+    .scard {
+      background:var(--glass);
+      border:1px solid var(--glass-border);
+      border-radius:var(--r-lg);
+      padding:34px 28px;
+      backdrop-filter:blur(16px);
+      transition:background .3s,border-color .3s,transform .3s;
+      position:relative; overflow:hidden;
+    }
+    .scard::after { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; background:linear-gradient(to right,transparent,var(--red),transparent); transform:scaleX(0); transform-origin:left; transition:transform .4s cubic-bezier(.16,1,.3,1); border-radius:0 0 var(--r-lg) var(--r-lg); }
+    .scard:hover::after { transform:scaleX(1); }
+    .scard:hover { background:rgba(192,18,26,.06); border-color:rgba(192,18,26,.4); transform:translateY(-4px); }
+    .snum { font-size:11px; font-weight:700; letter-spacing:.14em; color:var(--red); text-transform:uppercase; margin-bottom:14px; }
+    .sicon { font-size:26px; margin-bottom:14px; display:block; }
+    .scard h3 { font-size:17px; font-weight:700; margin-bottom:9px; }
+    .scard p { font-size:14px; color:var(--gray); line-height:1.65; margin-bottom:18px; }
+    .tags { display:flex; flex-wrap:wrap; gap:6px; }
+    .tag { background:rgba(192,18,26,.1); border:1px solid rgba(192,18,26,.25); padding:3px 10px; border-radius:100px; font-size:11px; color:rgba(220,120,120,.9); font-weight:600; letter-spacing:.04em; }
+
+    /* ─── SECTION FOND DÉGRADÉ ─── */
+    .sec-alt { background:rgba(192,18,26,.03); border-top:1px solid rgba(255,255,255,.05); border-bottom:1px solid rgba(255,255,255,.05); }
+
+    /* ─── DÉMOS ─── */
+    .demo-hdr { display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:20px; margin-bottom:48px; }
+    .demo-note { font-size:13px; color:var(--gray); background:var(--glass); border:1px solid var(--glass-border); padding:10px 18px; border-radius:var(--r); max-width:300px; line-height:1.5; backdrop-filter:blur(12px); }
+    .demo-note strong { color:var(--white); }
+
+    .dgrid { display:grid; grid-template-columns:repeat(12,1fr); gap:14px; }
+    .dc { border-radius:var(--r-lg); overflow:hidden; border:1px solid var(--glass-border); position:relative; transition:transform .4s cubic-bezier(.16,1,.3,1),border-color .3s; }
+    .dc:hover { transform:scale(1.02); border-color:rgba(192,18,26,.5); }
+    .dc.c7 { grid-column:span 7; min-height:340px; }
+    .dc.c5 { grid-column:span 5; min-height:340px; }
+    .dc.c6 { grid-column:span 6; min-height:250px; }
+    .dc.c12 { grid-column:span 12; min-height:200px; }
+    .dci { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:52px; transition:transform .5s; }
+    .dc:hover .dci { transform:scale(1.1); }
+    .dinfo { position:absolute; inset:0; background:linear-gradient(to top,rgba(5,0,2,.95) 0%,rgba(5,0,2,.4) 45%,transparent 100%); opacity:.8; transition:opacity .3s; display:flex; flex-direction:column; justify-content:flex-end; padding:22px 24px; }
+    .dc:hover .dinfo { opacity:1; }
+    .dcat { font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--red); margin-bottom:5px; }
+    .dtitle { font-size:17px; font-weight:700; line-height:1.25; }
+    .dbg1 { background:linear-gradient(135deg,#070010,#130020,#040008); }
+    .dbg2 { background:linear-gradient(135deg,#0c0008,#180012,#080006); }
+    .dbg3 { background:linear-gradient(135deg,#090c00,#141800,#060800); }
+    .dbg4 { background:linear-gradient(135deg,#001008,#001a10,#000804); }
+    .dbg5 { background:linear-gradient(135deg,#0e0700,#1a0e00,#080400); }
+
+    /* ─── TRANSPARENCE ─── */
+    .transp-grid { display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:center; margin-top:56px; }
+    .transp-text h3 { font-size:24px; font-weight:700; margin-bottom:16px; }
+    .transp-text p { font-size:15px; color:var(--gray); line-height:1.75; margin-bottom:14px; }
+    .titem { display:flex; align-items:flex-start; gap:14px; padding:16px 20px; background:var(--glass); border:1px solid var(--glass-border); border-radius:var(--r); backdrop-filter:blur(12px); margin-bottom:12px; transition:border-color .3s,background .3s; }
+    .titem:hover { border-color:rgba(192,18,26,.4); background:rgba(192,18,26,.05); }
+    .titem-ico { font-size:20px; flex-shrink:0; }
+    .titem h4 { font-size:14px; font-weight:600; margin-bottom:4px; }
+    .titem p { font-size:13px; color:var(--gray); line-height:1.5; }
+
+    /* ─── STEPS ─── */
+    .steps { margin-top:64px; }
+    .step { display:grid; grid-template-columns:52px 1fr; gap:28px; padding:32px 0; border-bottom:1px solid rgba(255,255,255,.06); align-items:start; }
+    .step:last-child { border-bottom:none; }
+    .step-n { font-size:12px; font-weight:700; color:var(--red); letter-spacing:.06em; padding-top:3px; }
+    .step h3 { font-size:19px; font-weight:700; margin-bottom:8px; }
+    .step p { font-size:14px; color:var(--gray); line-height:1.65; max-width:540px; }
+
+    /* ─── TARIFS ─── */
+    .tgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+    .tcard { background:var(--glass); border:1px solid var(--glass-border); border-radius:var(--r-lg); padding:36px 28px; position:relative; backdrop-filter:blur(16px); transition:border-color .3s,transform .3s; }
+    .tcard:hover { border-color:rgba(192,18,26,.4); transform:translateY(-4px); }
+    .tcard.feat { border-color:var(--red); background:rgba(192,18,26,.06); }
+    .tbadge { position:absolute; top:-11px; left:50%; transform:translateX(-50%); background:var(--red); color:#fff; font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:3px 16px; border-radius:100px; white-space:nowrap; }
+    .ttype { font-size:11px; color:var(--gray); font-weight:500; letter-spacing:.06em; margin-bottom:8px; text-transform:uppercase; }
+    .tname { font-size:20px; font-weight:700; margin-bottom:6px; }
+    .tprice { font-size:34px; font-weight:800; letter-spacing:-.02em; margin:16px 0 4px; }
+    .tprice span { font-size:14px; font-weight:400; color:var(--gray); }
+    .tdesc { font-size:13px; color:var(--gray); margin-bottom:22px; line-height:1.55; }
+    .tfeats { list-style:none; display:flex; flex-direction:column; gap:8px; margin-bottom:26px; }
+    .tfeats li { display:flex; align-items:center; gap:10px; font-size:13px; color:var(--gray); }
+    .tfeats li::before { content:'—'; color:var(--red); font-weight:700; flex-shrink:0; }
+    .tcta { display:block; text-align:center; padding:12px; border-radius:100px; font-size:13px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; text-decoration:none; transition:background .2s,box-shadow .2s; }
+    .tcta.p { background:var(--red); color:#fff; box-shadow:0 0 20px rgba(192,18,26,.4); }
+    .tcta.p:hover { background:#a50f16; box-shadow:0 0 36px rgba(192,18,26,.7); }
+    .tcta.s { border:1px solid var(--glass-border); color:var(--white); }
+    .tcta.s:hover { border-color:rgba(192,18,26,.4); background:rgba(192,18,26,.05); }
+
+    /* ─── CONTACT ─── */
+    .cgrid { display:grid; grid-template-columns:1fr 1fr; gap:72px; margin-top:56px; }
+    .cinfo h3 { font-size:21px; font-weight:700; margin-bottom:14px; }
+    .cinfo p { font-size:15px; color:var(--gray); line-height:1.7; margin-bottom:28px; }
+    .cdet { display:flex; flex-direction:column; gap:12px; }
+    .cd { display:flex; align-items:center; gap:12px; font-size:14px; color:var(--gray); }
+    .cdico { width:36px; height:36px; background:rgba(192,18,26,.12); border:1px solid var(--red-border); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+    form { display:flex; flex-direction:column; gap:12px; }
+    .frow { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    input,textarea,select { width:100%; background:rgba(255,255,255,.05); border:1px solid var(--glass-border); border-radius:var(--r); padding:13px 16px; color:var(--white); font-family:'Inter',sans-serif; font-size:14px; outline:none; transition:border-color .2s,background .2s; }
+    input::placeholder,textarea::placeholder { color:rgba(176,168,168,.4); }
+    input:focus,textarea:focus,select:focus { border-color:rgba(192,18,26,.5); background:rgba(192,18,26,.04); }
+    textarea { resize:vertical; min-height:120px; }
+    select option { background:#0a0002; }
+    .fsub { background:var(--red); color:#fff; border:none; padding:14px 32px; border-radius:100px; font-size:13px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; cursor:none; align-self:flex-start; box-shadow:0 0 26px rgba(192,18,26,.4); transition:background .2s,box-shadow .2s,transform .2s; }
+    .fsub:hover { background:#a50f16; box-shadow:0 0 44px rgba(192,18,26,.7); transform:translateY(-2px); }
+
+    /* ─── FOOTER ─── */
+    footer { padding:40px 24px; border-top:1px solid rgba(255,255,255,.06); }
+    .foot { max-width:1080px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
+    .flogo { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:700; }
+    .flogo span { color:var(--red); }
+    .fcopy { font-size:12px; color:var(--gray); }
+    .flinks { display:flex; gap:22px; }
+    .flinks a { font-size:12px; color:var(--gray); text-decoration:none; transition:color .2s; }
+    .flinks a:hover { color:#fff; }
+
+    /* ─── RESPONSIVE ─── */
+    @media(max-width:960px){
+      nav { top:12px; padding:10px 18px; min-width:92vw; }
+      .nav-links { display:none; }
+      .g3,.tgrid { grid-template-columns:1fr 1fr; }
+      .transp-grid,.cgrid { grid-template-columns:1fr; gap:48px; }
+      .dc.c7,.dc.c5,.dc.c6 { grid-column:span 12; }
+      .frow { grid-template-columns:1fr; }
+    }
+    @media(max-width:600px){
+      section { padding:80px 16px; }
+      .g3,.g2,.tgrid { grid-template-columns:1fr; }
+      .dgrid { display:flex; flex-direction:column; }
+      .dc { min-height:220px !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="ring"></div>
+
+<!-- NAV PILL -->
+<nav>
+  <a href="#" class="nav-logo">Métamorphe<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#demos">Réalisations</a></li>
+    <li><a href="#approche">Méthode</a></li>
+    <li><a href="#tarifs">Tarifs</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Démarrer un projet</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-img" id="parallax-bg"></div>
+  <div class="hero-ov1"></div>
+  <div class="hero-ov2"></div>
+  <div class="hero-ov3"></div>
+  <canvas id="fx"></canvas>
+  <div class="vline"></div>
+
+  <div class="hero-content">
+    <div class="hero-emblem">
+      <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="26" cy="26" r="24" stroke="rgba(192,18,26,.55)" stroke-width="1"/>
+        <circle cx="26" cy="26" r="17" stroke="rgba(192,18,26,.25)" stroke-width=".5"/>
+        <line x1="26" y1="2" x2="26" y2="50" stroke="rgba(192,18,26,.3)" stroke-width=".6"/>
+        <line x1="2" y1="26" x2="50" y2="26" stroke="rgba(192,18,26,.3)" stroke-width=".6"/>
+        <circle cx="26" cy="26" r="3.5" fill="rgba(192,18,26,.9)"/>
+      </svg>
+    </div>
+    <div class="hero-badge">Studio de Création Web · France</div>
+    <h1 class="hero-title">Votre vision,<br><em>réalisée.</em></h1>
+    <p class="hero-sub2">Design · Performance · Résultats</p>
+    <div class="hero-sep"></div>
+    <p class="hero-desc">Nous créons des expériences web immersives qui captivent vos visiteurs et transforment votre présence digitale en avantage compétitif.</p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-p">Démarrer mon projet</a>
+      <a href="#demos" class="btn-g">Voir nos réalisations</a>
+    </div>
+  </div>
+  <div class="hero-scroll"><div class="sbar"></div>Défiler</div>
+</section>
+
+<!-- MARQUEE -->
+<div class="mq-wrap">
+  <div class="mq-track">
+    <span>Landing Page 3D</span><span>Site Vitrine</span><span>E-Commerce</span>
+    <span>Application Web</span><span>Refonte</span><span>Maintenance & SEO</span>
+    <span>Design System</span><span>Mobile First</span>
+    <span>Landing Page 3D</span><span>Site Vitrine</span><span>E-Commerce</span>
+    <span>Application Web</span><span>Refonte</span><span>Maintenance & SEO</span>
+    <span>Design System</span><span>Mobile First</span>
+  </div>
+</div>
+
+<!-- POURQUOI -->
+<section id="pourquoi">
+  <div class="wrap">
+    <p class="eyebrow r">Notre différence</p>
+    <h2 class="st r">Pourquoi<br><em>Métamorphe</em> ?</h2>
+    <div class="g3">
+      <div class="card r"><span class="card-icon">🎯</span><h3>Design qui convertit</h3><p>Chaque élément visuel sert vos objectifs. On crée du beau qui transforme les visiteurs en clients.</p></div>
+      <div class="card r"><span class="card-icon">⚡</span><h3>Performance maximale</h3><p>Score PageSpeed 95+, code propre. Un site lent coûte des clients — les nôtres ne le font pas.</p></div>
+      <div class="card r"><span class="card-icon">📱</span><h3>Mobile-first absolu</h3><p>70% du trafic vient du mobile. Vos sites sont parfaits sur tous les écrans, toujours.</p></div>
+      <div class="card r"><span class="card-icon">🔍</span><h3>SEO natif</h3><p>Structure technique, balises optimisées. Visible sur Google dès le lancement.</p></div>
+      <div class="card r"><span class="card-icon">🎨</span><h3>Animations premium</h3><p>Scroll 3D, transitions fluides. On s'inspire des meilleures marques mondiales.</p></div>
+      <div class="card r"><span class="card-icon">🤝</span><h3>Transparence totale</h3><p>Tout expliquer, tout montrer. Pas de jargon, pas de surprise. Un vrai partenariat.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="sec-alt">
+  <div class="wrap">
+    <p class="eyebrow r">Ce qu'on crée</p>
+    <h2 class="st r">Tous vos besoins<br><em>couverts.</em></h2>
+    <p class="sub r">Du site vitrine à l'application web complexe, on maîtrise l'ensemble du spectre.</p>
+    <div class="g3" style="margin-top:56px">
+      <div class="scard r"><p class="snum">01</p><span class="sicon">🚀</span><h3>Landing Pages Premium</h3><p>Pages de conversion immersives avec animations 3D, effets parallaxe et design inspiré des plus grandes marques tech.</p><div class="tags"><span class="tag">Three.js</span><span class="tag">GSAP</span><span class="tag">Next.js</span></div></div>
+      <div class="scard r"><p class="snum">02</p><span class="sicon">🏢</span><h3>Sites Vitrines</h3><p>Pour restaurants, artisans, professionnels libéraux. Design sur-mesure qui reflète votre identité.</p><div class="tags"><span class="tag">Sur-mesure</span><span class="tag">SEO local</span><span class="tag">Rapide</span></div></div>
+      <div class="scard r"><p class="snum">03</p><span class="sicon">🛍️</span><h3>E-Commerce</h3><p>Boutiques en ligne performantes et élégantes. Expérience d'achat fluide, paiement sécurisé.</p><div class="tags"><span class="tag">Shopify</span><span class="tag">Stripe</span><span class="tag">WooCommerce</span></div></div>
+      <div class="scard r"><p class="snum">04</p><span class="sicon">⚙️</span><h3>Applications Web</h3><p>Dashboards, SaaS, espaces membres. Interfaces complexes rendues simples et intuitives.</p><div class="tags"><span class="tag">React</span><span class="tag">Next.js</span><span class="tag">API</span></div></div>
+      <div class="scard r"><p class="snum">05</p><span class="sicon">📈</span><h3>Refonte de Site</h3><p>Votre site ne vous représente plus ? On le transforme en préservant votre SEO existant.</p><div class="tags"><span class="tag">Audit</span><span class="tag">Migration SEO</span><span class="tag">Performance</span></div></div>
+      <div class="scard r"><p class="snum">06</p><span class="sicon">🔧</span><h3>Maintenance & SEO</h3><p>Contrats mensuels pour garder votre site à jour, sécurisé et visible. On gère tout.</p><div class="tags"><span class="tag">Mises à jour</span><span class="tag">SEO mensuel</span><span class="tag">Support</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMOS -->
+<section id="demos">
+  <div class="wrap">
+    <div class="demo-hdr">
+      <div>
+        <p class="eyebrow r">Exemples</p>
+        <h2 class="st r">Ce qu'on peut<br><em>créer pour vous.</em></h2>
+      </div>
+      <div class="demo-note r"><strong>Note :</strong> Exemples illustratifs. Chaque site est 100% sur-mesure.</div>
+    </div>
+    <div class="dgrid">
+      <div class="dc c7 dbg1 r"><div class="dci">🌌</div><div class="dinfo"><div class="dcat">Landing Page 3D</div><div class="dtitle">Startup Tech — Lancement immersif WebGL avec animations au scroll</div></div></div>
+      <div class="dc c5 dbg2 r"><div class="dci">🍽️</div><div class="dinfo"><div class="dcat">Site Vitrine</div><div class="dtitle">Restaurant gastronomique — Réservation en ligne, carte interactive</div></div></div>
+      <div class="dc c6 dbg3 r"><div class="dci">👗</div><div class="dinfo"><div class="dcat">E-Commerce</div><div class="dtitle">Boutique mode — Expérience premium, 3D product viewer</div></div></div>
+      <div class="dc c6 dbg4 r"><div class="dci">📊</div><div class="dinfo"><div class="dcat">Application Web</div><div class="dtitle">Dashboard SaaS — Analytique temps réel</div></div></div>
+      <div class="dc c12 dbg5 r"><div class="dci">⚡</div><div class="dinfo"><div class="dcat">Refonte + SEO</div><div class="dtitle">Cabinet d'avocats — Refonte complète + SEO local, PageSpeed 98</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TRANSPARENCE -->
+<section id="transparence" class="sec-alt">
+  <div class="wrap">
+    <p class="eyebrow r">Honnêteté</p>
+    <h2 class="st r">On démarre<br><em>ensemble.</em></h2>
+    <div class="transp-grid">
+      <div class="transp-text r">
+        <h3>Pourquoi cette transparence ?</h3>
+        <p>Métamorphe Studio est une agence en démarrage. On ne va pas inventer des années d'expérience ou des dizaines de clients fictifs.</p>
+        <p>Ce qu'on offre : une maîtrise technique réelle, une passion pour le design premium et une motivation totale — parce que vos premiers projets sont nos meilleures références futures.</p>
+      </div>
+      <div class="r">
+        <div class="titem"><div class="titem-ico">🎓</div><div><h4>Compétences techniques réelles</h4><p>Next.js, Three.js, GSAP, Tailwind, React — maîtrisés, pas juste connus.</p></div></div>
+        <div class="titem"><div class="titem-ico">💎</div><div><h4>Prix de lancement</h4><p>Premiers projets à des tarifs préférentiels. Profitez-en maintenant.</p></div></div>
+        <div class="titem"><div class="titem-ico">🔒</div><div><h4>Satisfaction garantie</h4><p>Révisions illimitées jusqu'à votre validation complète.</p></div></div>
+        <div class="titem"><div class="titem-ico">📞</div><div><h4>Réponse sous 24h</h4><p>Toujours quelqu'un à qui parler, pas un ticket sans réponse.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APPROCHE -->
+<section id="approche">
+  <div class="wrap">
+    <p class="eyebrow r">Méthode</p>
+    <h2 class="st r">De l'idée au site,<br><em>sans friction.</em></h2>
+    <div class="steps">
+      <div class="step r"><div class="step-n">01</div><div><h3>Découverte & Stratégie</h3><p>Appel de 30 min pour comprendre votre business, vos clients, vos objectifs. Analyse concurrentielle et direction créative.</p></div></div>
+      <div class="step r"><div class="step-n">02</div><div><h3>Design & Maquette Figma</h3><p>Maquettes avant tout développement. Vous validez design, couleurs, arborescence. Zéro surprise ensuite.</p></div></div>
+      <div class="step r"><div class="step-n">03</div><div><h3>Développement</h3><p>Code propre, performant, accessible. Suivi en temps réel sur URL de preview. Retours intégrés au fil de l'eau.</p></div></div>
+      <div class="step r"><div class="step-n">04</div><div><h3>Tests & Optimisation</h3><p>Multi-navigateurs, multi-appareils. SEO, performance, accessibilité. 95+ sur PageSpeed avant lancement.</p></div></div>
+      <div class="step r"><div class="step-n">05</div><div><h3>Mise en ligne & Suivi</h3><p>Déploiement, domaine, hébergement — on gère tout. Suivi post-lancement inclus.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TARIFS -->
+<section id="tarifs" class="sec-alt">
+  <div class="wrap">
+    <p class="eyebrow r">Investissement</p>
+    <h2 class="st r">Des tarifs clairs,<br><em>sans surprise.</em></h2>
+    <p class="sub r" style="margin-bottom:48px">Tarifs de lancement pour nos premiers clients. Ces prix augmenteront avec notre portfolio.</p>
+    <div class="tgrid">
+      <div class="tcard r">
+        <div class="ttype">Site Vitrine</div>
+        <div class="tname">Essentiel</div>
+        <div class="tprice">790 <span>€</span></div>
+        <div class="tdesc">Pour les professionnels qui veulent une présence web soignée.</div>
+        <ul class="tfeats"><li>5 pages sur-mesure</li><li>Responsive mobile-first</li><li>SEO de base</li><li>Formulaire de contact</li><li>Hébergement 1ère année inclus</li><li>3 révisions</li></ul>
+        <a href="#contact" class="tcta s">Demander un devis</a>
+      </div>
+      <div class="tcard feat r">
+        <div class="tbadge">Le plus demandé</div>
+        <div class="ttype">Landing Page Premium</div>
+        <div class="tname">Premium</div>
+        <div class="tprice">1 490 <span>€</span></div>
+        <div class="tdesc">Pour les marques qui veulent un site immersif qui se démarque.</div>
+        <ul class="tfeats"><li>Animations 3D / GSAP</li><li>Page de conversion optimisée</li><li>Effets scroll immersifs</li><li>SEO avancé + PageSpeed 95+</li><li>Hébergement 1ère année inclus</li><li>Révisions illimitées</li></ul>
+        <a href="#contact" class="tcta p">Démarrer ce projet</a>
+      </div>
+      <div class="tcard r">
+        <div class="ttype">E-Commerce / App Web</div>
+        <div class="tname">Sur-mesure</div>
+        <div class="tprice">Devis <span>gratuit</span></div>
+        <div class="tdesc">Boutiques, SaaS, dashboards. Tarif selon le projet.</div>
+        <ul class="tfeats"><li>Cahier des charges complet</li><li>Architecture sur-mesure</li><li>Paiement & API intégrés</li><li>Espace d'administration</li><li>Formation incluse</li><li>Support prioritaire</li></ul>
+        <a href="#contact" class="tcta s">Obtenir un devis</a>
+      </div>
+    </div>
+    <p class="r" style="margin-top:24px;font-size:13px;color:var(--gray);text-align:center">+ Maintenance mensuelle à partir de 90 €/mois — mises à jour, sécurité, SEO continu.</p>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="wrap">
+    <p class="eyebrow r">Travaillons ensemble</p>
+    <h2 class="st r">Prêt à transformer<br><em>votre présence web ?</em></h2>
+    <div class="cgrid">
+      <div class="cinfo r">
+        <h3>Parlez-nous de votre projet</h3>
+        <p>Remplissez le formulaire et on vous répond sous 24h. Premier échange toujours gratuit et sans engagement.</p>
+        <div class="cdet">
+          <div class="cd"><div class="cdico">📍</div>France — Prestation à distance partout en France</div>
+          <div class="cd"><div class="cdico">⏱️</div>Réponse garantie sous 24h ouvrées</div>
+          <div class="cd"><div class="cdico">🎁</div>Audit de votre site actuel offert</div>
+        </div>
+      </div>
+      <form class="r" onsubmit="handleForm(event)">
+        <div class="frow">
+          <input type="text" placeholder="Prénom" required />
+          <input type="text" placeholder="Nom" required />
+        </div>
+        <input type="email" placeholder="Email professionnel" required />
+        <input type="text" placeholder="Entreprise (optionnel)" />
+        <select required>
+          <option value="" disabled selected>Type de projet</option>
+          <option>Landing Page Premium</option>
+          <option>Site Vitrine</option>
+          <option>E-Commerce</option>
+          <option>Application Web</option>
+          <option>Refonte de site existant</option>
+          <option>Maintenance & SEO</option>
+          <option>Autre</option>
+        </select>
+        <textarea placeholder="Décrivez votre projet..."></textarea>
+        <button type="submit" class="fsub">Envoyer →</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot">
+    <div class="flogo">Métamorphe<span>.</span></div>
+    <p class="fcopy">© 2025 Métamorphe Studio · Tous droits réservés</p>
+    <div class="flinks">
+      <a href="#services">Services</a>
+      <a href="#tarifs">Tarifs</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ─── CURSOR ───
+const cur=document.getElementById('cur'),ring=document.getElementById('ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function tick(){
+  cur.style.transform=`translate(${mx-4}px,${my-4}px)`;
+  rx+=(mx-rx)*.1; ry+=(my-ry)*.1;
+  ring.style.transform=`translate(${rx-18}px,${ry-18}px)`;
+  requestAnimationFrame(tick);
+})();
+
+// ─── NAV SCROLL ───
+window.addEventListener('scroll',()=>{
+  document.querySelector('nav').style.background=
+    scrollY>60?'rgba(8,2,2,.85)':'rgba(10,2,2,.7)';
+});
+
+// ─── PARALLAXE 3D AU SCROLL ───
+// L'image se déplace plus lentement que le contenu + légère rotation en perspective
+const bg = document.getElementById('parallax-bg');
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+  const s = window.scrollY;
+  const h = window.innerHeight;
+  if (s > h) return; // seulement sur le hero
+  const progress = s / h; // 0 à 1
+  const translateY = s * 0.45; // parallaxe: fond bouge moins vite
+  const rotateX   = progress * 4;   // légère inclinaison perspective
+  const scale     = 1 + progress * 0.04; // zoom subtil
+  bg.style.transform = `translateY(${translateY}px) scale(${scale}) perspective(800px) rotateX(${rotateX}deg)`;
+  lastScroll = s;
+}, { passive: true });
+
+// ─── CANVAS BRAISES + BRUME ───
+const cv=document.getElementById('fx'), cx2=cv.getContext('2d');
+let W,H;
+function rsz(){W=cv.width=innerWidth;H=cv.height=innerHeight;}
+rsz(); window.addEventListener('resize',rsz);
+
+const embers=Array.from({length:90},()=>({
+  x:Math.random()*innerWidth,
+  y:Math.random()*innerHeight,
+  r:Math.random()*1.6+.3,
+  vx:(Math.random()-.5)*.35,
+  vy:-(Math.random()*.55+.18),
+  a:Math.random()*.65+.1,
+  t:Math.random()*Math.PI*2
+}));
+
+const wisps=Array.from({length:5},(_,i)=>({
+  x:(i/5)*innerWidth,
+  y:innerHeight*.65+Math.random()*innerHeight*.25,
+  r:220+Math.random()*280,
+  a:.025+Math.random()*.025,
+  dx:.12+Math.random()*.18,
+  t:Math.random()*Math.PI*2
+}));
+
+function draw(){
+  cx2.clearRect(0,0,W,H);
+  // Brume
+  wisps.forEach(w=>{
+    w.t+=.003; w.x+=w.dx;
+    if(w.x-w.r>W) w.x=-w.r;
+    const g=cx2.createRadialGradient(w.x,w.y,0,w.x,w.y,w.r);
+    g.addColorStop(0,`rgba(90,0,0,${w.a})`);
+    g.addColorStop(.5,`rgba(50,0,0,${w.a*.45})`);
+    g.addColorStop(1,'rgba(0,0,0,0)');
+    cx2.fillStyle=g;
+    cx2.beginPath();
+    cx2.ellipse(w.x,w.y+Math.sin(w.t)*15,w.r,w.r*.3,0,0,Math.PI*2);
+    cx2.fill();
+  });
+  // Braises
+  embers.forEach(e=>{
+    e.t+=.005;
+    e.x+=e.vx+Math.sin(e.t)*.25;
+    e.y+=e.vy;
+    if(e.y<-10||e.t>Math.PI*2){e.y=H+10;e.x=Math.random()*W;e.t=0;}
+    const flick=.5+Math.sin(e.t*18)*.5;
+    const g2=cx2.createRadialGradient(e.x,e.y,0,e.x,e.y,e.r*3.5);
+    g2.addColorStop(0,`rgba(255,90,30,${e.a*flick})`);
+    g2.addColorStop(.4,`rgba(200,20,0,${e.a*.35*flick})`);
+    g2.addColorStop(1,'rgba(0,0,0,0)');
+    cx2.beginPath(); cx2.arc(e.x,e.y,e.r*3.5,0,Math.PI*2);
+    cx2.fillStyle=g2; cx2.fill();
+    cx2.beginPath(); cx2.arc(e.x,e.y,e.r*.55,0,Math.PI*2);
+    cx2.fillStyle=`rgba(255,210,120,${e.a*.85*flick})`; cx2.fill();
+  });
+  requestAnimationFrame(draw);
+}
+draw();
+
+// ─── REVEAL AU SCROLL ───
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      setTimeout(()=>e.target.classList.add('v'),(i%4)*70);
+      obs.unobserve(e.target);
+    }
+  });
+},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.r').forEach(el=>obs.observe(el));
+
+// ─── FORM ───
+function handleForm(e){
+  e.preventDefault();
+  const b=e.target.querySelector('.fsub');
+  b.textContent='✓ Envoyé !'; b.style.background='#16a34a';
+  setTimeout(()=>{b.textContent='Envoyer →';b.style.background='';e.target.reset();},3000);
+}
+
+// ─── SMOOTH SCROLL ───
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t) t.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+});
+</script>
+</body>
+</html>
