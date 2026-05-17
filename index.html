@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Métamorphe Studio — Création de sites web premium en France</title>
+  <meta name="description" content="Agence de création de sites web premium. Landing pages 3D, sites vitrines, e-commerce, applications web. Design pixel-perfect inspiré des plus grandes marques." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --black: #050508;
+      --white: #f8f8fc;
+      --accent: #7c6dfa;
+      --accent2: #c084fc;
+      --gray: #a0a0b8;
+      --gray-dark: #1a1a2e;
+      --border: rgba(255,255,255,0.08);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* CURSOR */
+    #cursor {
+      position: fixed;
+      width: 10px; height: 10px;
+      background: var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.15s ease;
+      mix-blend-mode: screen;
+    }
+    #cursor-ring {
+      position: fixed;
+      width: 40px; height: 40px;
+      border: 1px solid rgba(124,109,250,0.4);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transition: transform 0.35s cubic-bezier(0.23,1,0.32,1), width 0.3s, height 0.3s, border-color 0.3s;
+    }
+    body:has(a:hover) #cursor-ring, body:has(button:hover) #cursor-ring {
+      width: 60px; height: 60px;
+      border-color: rgba(124,109,250,0.8);
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 20px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(5,5,8,0);
+      backdrop-filter: blur(0px);
+      transition: background 0.4s, backdrop-filter 0.4s, padding 0.3s;
+    }
+    nav.scrolled {
+      background: rgba(5,5,8,0.85);
+      backdrop-filter: blur(20px);
+      padding: 14px 48px;
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--gray);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: none;
+      transition: background 0.2s, transform 0.2s;
+      text-decoration: none;
+    }
+    .nav-cta:hover { background: #6a5be0; transform: translateY(-1px); }
+
+    /* HERO */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    #hero-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      opacity: 0.6;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(124,109,250,0.12);
+      border: 1px solid rgba(124,109,250,0.3);
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--accent2);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+      position: relative;
+      z-index: 1;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--accent2);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.3); }
+    }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(48px, 8vw, 100px);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      margin-bottom: 28px;
+      position: relative;
+      z-index: 1;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    .hero-title .grad {
+      background: linear-gradient(135deg, #fff 0%, var(--accent2) 50%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: clamp(16px, 2vw, 20px);
+      color: var(--gray);
+      max-width: 580px;
+      line-height: 1.65;
+      margin-bottom: 48px;
+      position: relative;
+      z-index: 1;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      padding: 16px 32px;
+      border-radius: 100px;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 40px rgba(124,109,250,0.3);
+    }
+    .btn-primary:hover { background: #6a5be0; transform: translateY(-2px); box-shadow: 0 0 60px rgba(124,109,250,0.5); }
+    .btn-secondary {
+      background: transparent;
+      color: var(--white);
+      padding: 16px 32px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      font-size: 15px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-secondary:hover { border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.04); }
+    .hero-scroll {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--gray);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      z-index: 1;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, var(--gray), transparent);
+      animation: scrollLine 2s ease-in-out infinite;
+    }
+    @keyframes scrollLine {
+      0% { transform: scaleY(0); transform-origin: top; }
+      50% { transform: scaleY(1); transform-origin: top; }
+      51% { transform: scaleY(1); transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+
+    /* MARQUEE */
+    .marquee-section {
+      padding: 24px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+      background: rgba(124,109,250,0.03);
+    }
+    .marquee-track {
+      display: flex;
+      gap: 64px;
+      width: max-content;
+      animation: marquee 20s linear infinite;
+    }
+    .marquee-track span {
+      color: var(--gray);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .marquee-track span::after {
+      content: '✦';
+      color: var(--accent);
+      font-size: 10px;
+    }
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* SECTIONS COMMUNES */
+    section { padding: 120px 24px; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+    .section-sub {
+      font-size: 18px;
+      color: var(--gray);
+      line-height: 1.65;
+      max-width: 520px;
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* POURQUOI NOUS */
+    #pourquoi { background: rgba(124,109,250,0.03); }
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2px;
+      margin-top: 64px;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      overflow: hidden;
+    }
+    .why-card {
+      padding: 48px 40px;
+      background: rgba(255,255,255,0.02);
+      transition: background 0.3s;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .why-card:hover { background: rgba(124,109,250,0.06); }
+    .why-icon {
+      width: 48px; height: 48px;
+      border-radius: 14px;
+      background: rgba(124,109,250,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 24px;
+    }
+    .why-card h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: -0.01em;
+    }
+    .why-card p { font-size: 15px; color: var(--gray); line-height: 1.65; }
+
+    /* SERVICES */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-top: 64px;
+    }
+    .service-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px 36px;
+      transition: border-color 0.3s, background 0.3s, transform 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(600px circle at var(--mx,50%) var(--my,50%), rgba(124,109,250,0.08), transparent 60%);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .service-card:hover::before { opacity: 1; }
+    .service-card:hover {
+      border-color: rgba(124,109,250,0.3);
+      transform: translateY(-4px);
+    }
+    .service-num {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .service-icon {
+      font-size: 32px;
+      margin-bottom: 20px;
+      display: block;
+    }
+    .service-card h3 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    .service-card p { font-size: 15px; color: var(--gray); line-height: 1.65; margin-bottom: 24px; }
+    .service-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .tag {
+      background: rgba(124,109,250,0.1);
+      border: 1px solid rgba(124,109,250,0.2);
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 12px;
+      color: var(--accent2);
+      font-weight: 500;
+    }
+
+    /* APPROCHE */
+    #approche { background: rgba(124,109,250,0.02); }
+    .steps {
+      margin-top: 72px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .step {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 32px;
+      padding: 40px 0;
+      border-bottom: 1px solid var(--border);
+      align-items: start;
+    }
+    .step:last-child { border-bottom: none; }
+    .step-num {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      padding-top: 4px;
+    }
+    .step-content h3 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+    .step-content p { font-size: 15px; color: var(--gray); line-height: 1.65; max-width: 540px; }
+
+    /* RÉALISATIONS DÉMO */
+    #realisations { overflow: hidden; }
+    .demo-intro {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-bottom: 64px;
+    }
+    .demo-note {
+      font-size: 14px;
+      color: var(--gray);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      padding: 10px 20px;
+      border-radius: 100px;
+      max-width: 340px;
+      line-height: 1.5;
+    }
+    .demo-note strong { color: var(--white); }
+    .demos-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+    }
+    .demo-card {
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      position: relative;
+      background: var(--gray-dark);
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), border-color 0.3s;
+      cursor: none;
+    }
+    .demo-card:hover { transform: scale(1.02); border-color: rgba(124,109,250,0.4); }
+    .demo-card:hover .demo-overlay { opacity: 1; }
+    .demo-card.large { grid-column: span 7; min-height: 380px; }
+    .demo-card.medium { grid-column: span 5; min-height: 380px; }
+    .demo-card.wide { grid-column: span 12; min-height: 240px; }
+    .demo-card.half { grid-column: span 6; min-height: 280px; }
+    .demo-bg {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 64px;
+      transition: transform 0.4s;
+    }
+    .demo-card:hover .demo-bg { transform: scale(1.1); }
+    .demo-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(5,5,8,0.9) 0%, rgba(5,5,8,0.3) 60%, transparent 100%);
+      opacity: 0.7;
+      transition: opacity 0.3s;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 28px;
+    }
+    .demo-type {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 8px;
+    }
+    .demo-title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+    /* Démo backgrounds */
+    .demo-lp { background: linear-gradient(135deg, #0f0a2e 0%, #1a0a3e 50%, #0a0a20 100%); }
+    .demo-vitrine { background: linear-gradient(135deg, #0a1628 0%, #0d2040 50%, #081020 100%); }
+    .demo-ecom { background: linear-gradient(135deg, #1a0a14 0%, #2d0a20 50%, #10080e 100%); }
+    .demo-app { background: linear-gradient(135deg, #0a1a14 0%, #0d2a1a 50%, #081410 100%); }
+    .demo-seo { background: linear-gradient(135deg, #1a1408 0%, #2d2010 50%, #141008 100%); }
+
+    /* TRANSPARENCE */
+    #transparence {
+      background: rgba(124,109,250,0.04);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .transp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      margin-top: 64px;
+    }
+    .transp-text h3 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+    .transp-text p { font-size: 16px; color: var(--gray); line-height: 1.75; margin-bottom: 16px; }
+    .transp-items {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .transp-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 20px 24px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .transp-item:hover { border-color: rgba(124,109,250,0.3); background: rgba(124,109,250,0.05); }
+    .transp-item-icon { font-size: 24px; flex-shrink: 0; }
+    .transp-item-text h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+    .transp-item-text p { font-size: 14px; color: var(--gray); line-height: 1.55; }
+
+    /* TARIFS */
+    #tarifs {}
+    .tarifs-note {
+      font-size: 15px;
+      color: var(--gray);
+      margin-bottom: 56px;
+      max-width: 500px;
+      line-height: 1.65;
+    }
+    .tarifs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .tarif-card {
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px 32px;
+      background: rgba(255,255,255,0.02);
+      position: relative;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .tarif-card:hover { border-color: rgba(124,109,250,0.3); transform: translateY(-4px); }
+    .tarif-card.featured {
+      border-color: var(--accent);
+      background: rgba(124,109,250,0.06);
+    }
+    .tarif-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 100px;
+    }
+    .tarif-type { font-size: 13px; color: var(--gray); font-weight: 500; margin-bottom: 12px; }
+    .tarif-name { font-size: 22px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.01em; }
+    .tarif-price {
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--white);
+      margin: 20px 0 4px;
+    }
+    .tarif-price span { font-size: 16px; font-weight: 400; color: var(--gray); }
+    .tarif-desc { font-size: 14px; color: var(--gray); margin-bottom: 28px; line-height: 1.55; }
+    .tarif-features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px; }
+    .tarif-features li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--gray);
+    }
+    .tarif-features li::before {
+      content: '✓';
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+    .tarif-cta {
+      display: block;
+      text-align: center;
+      padding: 14px;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .tarif-cta.primary { background: var(--accent); color: #fff; }
+    .tarif-cta.primary:hover { background: #6a5be0; transform: translateY(-1px); }
+    .tarif-cta.secondary { border: 1px solid var(--border); color: var(--white); }
+    .tarif-cta.secondary:hover { border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.04); }
+
+    /* CONTACT */
+    #contact { background: rgba(124,109,250,0.03); }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      margin-top: 64px;
+      align-items: start;
+    }
+    .contact-info h3 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      letter-spacing: -0.01em;
+    }
+    .contact-info p { font-size: 16px; color: var(--gray); line-height: 1.7; margin-bottom: 36px; }
+    .contact-details { display: flex; flex-direction: column; gap: 16px; }
+    .contact-detail {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 15px;
+      color: var(--gray);
+    }
+    .contact-detail-icon {
+      width: 40px; height: 40px;
+      background: rgba(124,109,250,0.1);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    form { display: flex; flex-direction: column; gap: 16px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    input, textarea, select {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    input::placeholder, textarea::placeholder { color: rgba(160,160,184,0.5); }
+    input:focus, textarea:focus, select:focus {
+      border-color: rgba(124,109,250,0.5);
+      background: rgba(124,109,250,0.05);
+    }
+    textarea { resize: vertical; min-height: 130px; }
+    select option { background: #1a1a2e; }
+    .form-submit {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 16px 32px;
+      border-radius: 100px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: none;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      align-self: flex-start;
+      box-shadow: 0 0 30px rgba(124,109,250,0.3);
+    }
+    .form-submit:hover { background: #6a5be0; transform: translateY(-2px); box-shadow: 0 0 50px rgba(124,109,250,0.5); }
+
+    /* FOOTER */
+    footer {
+      padding: 48px 24px;
+      border-top: 1px solid var(--border);
+    }
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .footer-logo { font-size: 16px; font-weight: 700; }
+    .footer-logo span { color: var(--accent); }
+    .footer-copy { font-size: 13px; color: var(--gray); }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { font-size: 13px; color: var(--gray); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--white); }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      nav.scrolled { padding: 12px 24px; }
+      .nav-links { display: none; }
+      .demo-card.large, .demo-card.medium { grid-column: span 12; }
+      .demo-card.half { grid-column: span 12; }
+      .transp-grid, .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      section { padding: 80px 20px; }
+      .demos-grid { display: flex; flex-direction: column; }
+      .demo-card { min-height: 240px !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">Métamorphe<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#realisations">Exemples</a></li>
+    <li><a href="#approche">Approche</a></li>
+    <li><a href="#tarifs">Tarifs</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Démarrer un projet</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-badge">Studio de création web · France</div>
+  <h1 class="hero-title">
+    Votre site web,<br>
+    <span class="grad">réinventé.</span>
+  </h1>
+  <p class="hero-sub">
+    Design premium, animations immersives, performances maximales.
+    On crée des expériences digitales qui convertissent et qui se démarquent.
+  </p>
+  <div class="hero-actions">
+    <a href="#contact" class="btn-primary">Démarrer mon projet</a>
+    <a href="#realisations" class="btn-secondary">Voir nos exemples</a>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Défiler
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <span>Landing Page 3D</span>
+    <span>Site Vitrine</span>
+    <span>E-Commerce</span>
+    <span>Application Web</span>
+    <span>Maintenance & SEO</span>
+    <span>Design System</span>
+    <span>Performance</span>
+    <span>Mobile First</span>
+    <span>Landing Page 3D</span>
+    <span>Site Vitrine</span>
+    <span>E-Commerce</span>
+    <span>Application Web</span>
+    <span>Maintenance & SEO</span>
+    <span>Design System</span>
+    <span>Performance</span>
+    <span>Mobile First</span>
+  </div>
+</div>
+
+<!-- POURQUOI NOUS -->
+<section id="pourquoi">
+  <div class="container">
+    <p class="section-label reveal">Notre différence</p>
+    <h2 class="section-title reveal">Pourquoi choisir<br>Métamorphe Studio ?</h2>
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <div class="why-icon">🎯</div>
+        <h3>Design pensé pour convertir</h3>
+        <p>Chaque élément visuel est au service de vos objectifs. On ne crée pas juste du beau — on crée des sites qui transforment les visiteurs en clients.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon">⚡</div>
+        <h3>Performance maximale</h3>
+        <p>Score PageSpeed 95+, chargement ultra-rapide, code propre et optimisé. Un site lent perd des clients — les nôtres ne le font pas.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon">📱</div>
+        <h3>Mobile-first absolu</h3>
+        <p>Plus de 70% du trafic est mobile. Vos sites sont pensés mobile en premier, desktop en second. Parfait sur tous les écrans, toujours.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon">🔍</div>
+        <h3>SEO intégré dès le départ</h3>
+        <p>Structure technique, balises optimisées, contenu structuré. Votre site est pensé pour être trouvé sur Google dès sa mise en ligne.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon">🎨</div>
+        <h3>Animations premium</h3>
+        <p>Effets scroll, animations 3D, transitions fluides. On s'inspire des meilleures marques mondiales pour un résultat qui en impose.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon">🤝</div>
+        <h3>Transparence totale</h3>
+        <p>On vous explique tout, on vous implique dans le processus. Pas de jargon inutile, pas de surprise. Un partenariat clair et honnête.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="container">
+    <p class="section-label reveal">Ce qu'on crée</p>
+    <h2 class="section-title reveal">Tous vos besoins<br>web, couverts.</h2>
+    <p class="section-sub reveal">Du site vitrine au SaaS complet, on maîtrise l'ensemble du spectre de la création web.</p>
+    <div class="services-grid">
+
+      <div class="service-card reveal">
+        <p class="service-num">01</p>
+        <span class="service-icon">🚀</span>
+        <h3>Landing Pages Premium</h3>
+        <p>Pages de conversion immersives avec animations 3D au scroll, effets parallaxe et design inspiré des plus grandes marques tech mondiales.</p>
+        <div class="service-tags">
+          <span class="tag">Three.js</span>
+          <span class="tag">GSAP</span>
+          <span class="tag">Next.js</span>
+        </div>
+      </div>
+
+      <div class="service-card reveal">
+        <p class="service-num">02</p>
+        <span class="service-icon">🏢</span>
+        <h3>Sites Vitrines</h3>
+        <p>Pour restaurants, artisans, professionnels libéraux, commerces. Design sur-mesure qui reflète votre identité et attire vos clients locaux.</p>
+        <div class="service-tags">
+          <span class="tag">Design sur-mesure</span>
+          <span class="tag">SEO Local</span>
+          <span class="tag">Rapide</span>
+        </div>
+      </div>
+
+      <div class="service-card reveal">
+        <p class="service-num">03</p>
+        <span class="service-icon">🛍️</span>
+        <h3>E-Commerce</h3>
+        <p>Boutiques en ligne performantes et élégantes. Expérience d'achat fluide, paiement sécurisé, gestion des stocks simplifiée.</p>
+        <div class="service-tags">
+          <span class="tag">Shopify</span>
+          <span class="tag">Stripe</span>
+          <span class="tag">WooCommerce</span>
+        </div>
+      </div>
+
+      <div class="service-card reveal">
+        <p class="service-num">04</p>
+        <span class="service-icon">⚙️</span>
+        <h3>Applications Web</h3>
+        <p>Dashboards, plateformes SaaS, espaces membres. Interfaces complexes rendues simples et intuitives pour vos utilisateurs.</p>
+        <div class="service-tags">
+          <span class="tag">React</span>
+          <span class="tag">Next.js</span>
+          <span class="tag">API</span>
+        </div>
+      </div>
+
+      <div class="service-card reveal">
+        <p class="service-num">05</p>
+        <span class="service-icon">📈</span>
+        <h3>Refonte de Site</h3>
+        <p>Votre site actuel ne vous représente plus ? On le transforme en profondeur — design, performance, UX — tout en conservant votre SEO existant.</p>
+        <div class="service-tags">
+          <span class="tag">Audit complet</span>
+          <span class="tag">Migration SEO</span>
+          <span class="tag">Performance</span>
+        </div>
+      </div>
+
+      <div class="service-card reveal">
+        <p class="service-num">06</p>
+        <span class="service-icon">🔧</span>
+        <h3>Maintenance & SEO</h3>
+        <p>Contrats mensuels pour garder votre site à jour, sécurisé et visible sur Google. On s'occupe de tout pendant que vous gérez votre business.</p>
+        <div class="service-tags">
+          <span class="tag">Mises à jour</span>
+          <span class="tag">SEO mensuel</span>
+          <span class="tag">Support</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- RÉALISATIONS DÉMO -->
+<section id="realisations">
+  <div class="container">
+    <div class="demo-intro">
+      <div>
+        <p class="section-label reveal">Exemples de réalisations</p>
+        <h2 class="section-title reveal">Ce qu'on peut<br>créer pour vous.</h2>
+      </div>
+      <div class="demo-note reveal">
+        <strong>Note de transparence :</strong> Ces exemples illustrent les types de projets que nous réalisons. Chaque site est créé sur-mesure pour votre activité.
+      </div>
+    </div>
+    <div class="demos-grid">
+
+      <div class="demo-card large demo-lp reveal">
+        <div class="demo-bg">🌌</div>
+        <div class="demo-overlay">
+          <div class="demo-type">Landing Page 3D</div>
+          <div class="demo-title">Startup Tech — Page de lancement immersive avec animations WebGL au scroll</div>
+        </div>
+      </div>
+
+      <div class="demo-card medium demo-vitrine reveal">
+        <div class="demo-bg">🍽️</div>
+        <div class="demo-overlay">
+          <div class="demo-type">Site Vitrine</div>
+          <div class="demo-title">Restaurant gastronomique — Réservation en ligne, carte interactive</div>
+        </div>
+      </div>
+
+      <div class="demo-card half demo-ecom reveal">
+        <div class="demo-bg">👗</div>
+        <div class="demo-overlay">
+          <div class="demo-type">E-Commerce</div>
+          <div class="demo-title">Boutique mode — Expérience d'achat premium, 3D product viewer</div>
+        </div>
+      </div>
+
+      <div class="demo-card half demo-app reveal">
+        <div class="demo-bg">📊</div>
+        <div class="demo-overlay">
+          <div class="demo-type">Application Web</div>
+          <div class="demo-title">Dashboard SaaS — Interface analytique temps réel, design épuré</div>
+        </div>
+      </div>
+
+      <div class="demo-card wide demo-seo reveal">
+        <div class="demo-bg">⚡</div>
+        <div class="demo-overlay">
+          <div class="demo-type">Refonte + SEO</div>
+          <div class="demo-title">Cabinet d'avocats — Refonte complète + stratégie SEO local, site entièrement optimisé Google</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- TRANSPARENCE -->
+<section id="transparence">
+  <div class="container">
+    <p class="section-label reveal">Notre honnêteté</p>
+    <h2 class="section-title reveal">On démarre ensemble.</h2>
+    <div class="transp-grid">
+      <div class="transp-text reveal">
+        <h3>Pourquoi être transparent sur notre situation ?</h3>
+        <p>Métamorphe Studio est une agence en démarrage. On ne va pas inventer des années d'expérience ou des dizaines de clients fictifs pour vous impressionner.</p>
+        <p>Ce qu'on vous offre à la place : une maîtrise technique réelle, une passion pour le design premium, et une motivation totale de faire un travail exceptionnel pour nos premiers clients — parce que votre succès, c'est notre référence.</p>
+        <p>Être votre premier partenaire digital, c'est une responsabilité qu'on prend très au sérieux.</p>
+      </div>
+      <div class="transp-items reveal">
+        <div class="transp-item">
+          <div class="transp-item-icon">🎓</div>
+          <div class="transp-item-text">
+            <h4>Compétences techniques réelles</h4>
+            <p>Next.js, Three.js, GSAP, Tailwind, React — une stack moderne maîtrisée, pas juste connue.</p>
+          </div>
+        </div>
+        <div class="transp-item">
+          <div class="transp-item-icon">💎</div>
+          <div class="transp-item-text">
+            <h4>Prix de lancement avantageux</h4>
+            <p>Nos premiers projets sont réalisés à des tarifs préférentiels. Vous en bénéficiez maintenant.</p>
+          </div>
+        </div>
+        <div class="transp-item">
+          <div class="transp-item-icon">🔒</div>
+          <div class="transp-item-text">
+            <h4>Engagement qualité total</h4>
+            <p>Révisions illimitées jusqu'à votre satisfaction complète. On ne lâche pas avant que vous soyez fier de votre site.</p>
+          </div>
+        </div>
+        <div class="transp-item">
+          <div class="transp-item-icon">📞</div>
+          <div class="transp-item-text">
+            <h4>Disponibilité & réactivité</h4>
+            <p>Réponse garantie sous 24h. Vous avez toujours quelqu'un à qui parler, pas un ticket de support.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APPROCHE -->
+<section id="approche">
+  <div class="container">
+    <p class="section-label reveal">Notre méthode</p>
+    <h2 class="section-title reveal">De l'idée au site,<br>étape par étape.</h2>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <h3>Découverte & Stratégie</h3>
+          <p>Un appel de 30 min pour comprendre votre business, vos clients, vos objectifs. On analyse la concurrence et définit ensemble la direction créative.</p>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <h3>Design & Maquette</h3>
+          <p>On vous soumet les maquettes Figma avant d'écrire une ligne de code. Vous validez le design, l'arborescence, les couleurs. Aucune surprise côté développement.</p>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <h3>Développement</h3>
+          <p>Code propre, performant, et accessible. Vous suivez l'avancement en temps réel sur une URL de prévisualisation. On intègre vos retours au fur et à mesure.</p>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <h3>Tests & Optimisation</h3>
+          <p>Tests multi-navigateurs, multi-appareils. Optimisation des performances, du SEO, de l'accessibilité. On vise 95+ sur PageSpeed avant tout lancement.</p>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">05</div>
+        <div class="step-content">
+          <h3>Mise en ligne & Suivi</h3>
+          <p>Déploiement, nom de domaine, hébergement — on gère tout. Puis un suivi post-lancement pour s'assurer que tout fonctionne parfaitement.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TARIFS -->
+<section id="tarifs">
+  <div class="container">
+    <p class="section-label reveal">Investissement</p>
+    <h2 class="section-title reveal">Des tarifs clairs,<br>sans surprise.</h2>
+    <p class="tarifs-note reveal">Tarifs de lancement pour nos premiers clients. Ces prix augmenteront avec notre portfolio. Profitez-en maintenant.</p>
+    <div class="tarifs-grid">
+
+      <div class="tarif-card reveal">
+        <div class="tarif-type">Site Vitrine</div>
+        <div class="tarif-name">Essentiel</div>
+        <div class="tarif-price">À partir de <span>790 €</span></div>
+        <div class="tarif-desc">Pour les professionnels et petites structures qui veulent une présence web soignée.</div>
+        <ul class="tarif-features">
+          <li>5 pages sur-mesure</li>
+          <li>Design responsive mobile-first</li>
+          <li>SEO de base intégré</li>
+          <li>Formulaire de contact</li>
+          <li>Hébergement 1ère année inclus</li>
+          <li>3 révisions incluses</li>
+        </ul>
+        <a href="#contact" class="tarif-cta secondary">Demander un devis</a>
+      </div>
+
+      <div class="tarif-card featured reveal">
+        <div class="tarif-badge">Le plus demandé</div>
+        <div class="tarif-type">Landing Page Premium</div>
+        <div class="tarif-name">Premium</div>
+        <div class="tarif-price">À partir de <span>1 490 €</span></div>
+        <div class="tarif-desc">Pour les marques qui veulent se démarquer avec un site immersif et mémorable.</div>
+        <ul class="tarif-features">
+          <li>Design animations 3D / GSAP</li>
+          <li>Page de conversion optimisée</li>
+          <li>Effets scroll immersifs</li>
+          <li>SEO avancé + performance 95+</li>
+          <li>Hébergement 1ère année inclus</li>
+          <li>Révisions illimitées</li>
+        </ul>
+        <a href="#contact" class="tarif-cta primary">Démarrer ce projet</a>
+      </div>
+
+      <div class="tarif-card reveal">
+        <div class="tarif-type">E-Commerce / App Web</div>
+        <div class="tarif-name">Sur-mesure</div>
+        <div class="tarif-price">Devis <span>gratuit</span></div>
+        <div class="tarif-desc">Boutiques en ligne, plateformes SaaS, dashboards, applications web complexes.</div>
+        <ul class="tarif-features">
+          <li>Cahier des charges complet</li>
+          <li>Architecture technique sur-mesure</li>
+          <li>Intégration paiement & API</li>
+          <li>Espace d'administration</li>
+          <li>Formation à la prise en main</li>
+          <li>Support prioritaire</li>
+        </ul>
+        <a href="#contact" class="tarif-cta secondary">Obtenir un devis</a>
+      </div>
+
+    </div>
+    <p class="reveal" style="margin-top:32px; font-size:14px; color: var(--gray); text-align:center;">
+      + Maintenance mensuelle disponible à partir de 90 €/mois — mises à jour, sécurité, SEO continu.
+    </p>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <p class="section-label reveal">Travaillons ensemble</p>
+    <h2 class="section-title reveal">Prêt à transformer<br>votre présence web ?</h2>
+    <div class="contact-grid">
+      <div class="contact-info reveal">
+        <h3>Parlez-nous de votre projet</h3>
+        <p>Remplissez le formulaire et on vous répond sous 24h avec un premier retour sur votre projet. Premier échange toujours gratuit et sans engagement.</p>
+        <div class="contact-details">
+          <div class="contact-detail">
+            <div class="contact-detail-icon">📍</div>
+            France — Prestation à distance dans toute la France
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">⏱️</div>
+            Réponse garantie sous 24h ouvrées
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">🎁</div>
+            Audit de votre site actuel offert avec chaque demande
+          </div>
+        </div>
+      </div>
+      <form class="reveal" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <input type="text" placeholder="Votre prénom" required />
+          <input type="text" placeholder="Votre nom" required />
+        </div>
+        <input type="email" placeholder="Votre email professionnel" required />
+        <input type="text" placeholder="Votre entreprise (optionnel)" />
+        <select required>
+          <option value="" disabled selected>Type de projet</option>
+          <option>Landing Page Premium</option>
+          <option>Site Vitrine</option>
+          <option>E-Commerce</option>
+          <option>Application Web</option>
+          <option>Refonte de site existant</option>
+          <option>Maintenance & SEO</option>
+          <option>Autre</option>
+        </select>
+        <textarea placeholder="Décrivez votre projet en quelques lignes..."></textarea>
+        <button type="submit" class="form-submit">Envoyer ma demande →</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">Métamorphe<span>.</span></div>
+    <p class="footer-copy">© 2025 Métamorphe Studio — Tous droits réservés</p>
+    <div class="footer-links">
+      <a href="#services">Services</a>
+      <a href="#tarifs">Tarifs</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // CURSOR
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animateCursor() {
+    cursor.style.transform = `translate(${mx - 5}px, ${my - 5}px)`;
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.transform = `translate(${rx - 20}px, ${ry - 20}px)`;
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+
+  // NAV SCROLL
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // HERO CANVAS — particle field
+  const canvas = document.getElementById('hero-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+  function resize() {
+    W = canvas.width = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  class Particle {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * W;
+      this.y = Math.random() * H;
+      this.r = Math.random() * 1.5 + 0.3;
+      this.vx = (Math.random() - 0.5) * 0.3;
+      this.vy = (Math.random() - 0.5) * 0.3;
+      this.alpha = Math.random() * 0.6 + 0.1;
+    }
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      if (this.x < 0 || this.x > W || this.y < 0 || this.y > H) this.reset();
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(124,109,250,${this.alpha})`;
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < 120; i++) particles.push(new Particle());
+
+  function drawConnections() {
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const d = Math.sqrt(dx * dx + dy * dy);
+        if (d < 100) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(124,109,250,${0.1 * (1 - d / 100)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  function animCanvas() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => { p.update(); p.draw(); });
+    drawConnections();
+    requestAnimationFrame(animCanvas);
+  }
+  animCanvas();
+
+  // HERO ENTRANCE ANIMATIONS
+  const heroEls = document.querySelectorAll('.hero-badge, .hero-title, .hero-sub, .hero-actions');
+  heroEls.forEach((el, i) => {
+    setTimeout(() => {
+      el.style.transition = 'opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1)';
+      el.style.opacity = '1';
+      el.style.transform = 'translateY(0)';
+    }, 200 + i * 150);
+  });
+
+  // SCROLL REVEAL
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+  reveals.forEach((el, i) => {
+    el.style.transitionDelay = `${(i % 4) * 80}ms`;
+    observer.observe(el);
+  });
+
+  // SERVICE CARD GLOW FOLLOW
+  document.querySelectorAll('.service-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', `${e.clientX - r.left}px`);
+      card.style.setProperty('--my', `${e.clientY - r.top}px`);
+    });
+  });
+
+  // FORM SUBMIT
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.form-submit');
+    btn.textContent = '✓ Message envoyé !';
+    btn.style.background = '#22c55e';
+    setTimeout(() => {
+      btn.textContent = 'Envoyer ma demande →';
+      btn.style.background = '';
+      e.target.reset();
+    }, 3000);
+  }
+
+  // SMOOTH ANCHOR SCROLL
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>
