@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "memory-management": {
+      "source": "anthropics/knowledge-work-plugins",
+      "sourceType": "github",
+      "skillPath": "productivity/skills/memory-management/SKILL.md",
+      "computedHash": "8178769b6efe5ef38b1e0eeea682b83ff79a1e3b93acb96aa203ebcfb96d9b98"
+    },
     "memory-merger": {
       "source": "github/awesome-copilot",
       "sourceType": "github",
