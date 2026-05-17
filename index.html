@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PremiumRefonte — Refonte premium de sites web pour PME</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --red:#c41e3a;--red-d:#8b0000;--red-l:#e8324a;
+  --bg:#07090d;--s1:rgba(10,12,18,0.88);--s2:rgba(18,22,28,0.92);
+  --tx:#f0ece8;--tm:#6a6460;
+  --border:rgba(255,255,255,0.07);--glass:rgba(255,255,255,0.035);
+  --glass-b:rgba(255,255,255,0.06)
+}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--tx);overflow-x:hidden;cursor:none}
+
+/* ── VIDEO BACKGROUND FIXE ── */
+#video-bg{
+  position:fixed;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:center;
+  z-index:0;transform:scale(1.08);will-change:transform;
+  filter:brightness(.65) saturate(.8) contrast(1.05);
+}
+/* Voile progressif au scroll */
+#scroll-veil{
+  position:fixed;inset:0;z-index:1;
+  background:rgba(7,9,13,0);pointer-events:none;transition:background .15s linear;
+}
+/* Canvas brume */
+#mist-canvas{
+  position:fixed;inset:0;z-index:2;
+  pointer-events:none;opacity:.45;
+}
+/* Tout le contenu au-dessus */
+#root-content{position:relative;z-index:10;}
+
+/* ── LOADER ── */
+#loader{position:fixed;inset:0;background:#000;z-index:1000;display:flex;align-items:center;justify-content:center;transition:opacity 0.8s 0.2s,visibility 0.8s 0.2s}
+#loader.done{opacity:0;visibility:hidden;pointer-events:none}
+.loader-text{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:300;letter-spacing:.3em;color:#fff;overflow:hidden}
+.loader-text span{display:inline-block;animation:loaderIn 1.2s cubic-bezier(.16,1,.3,1) forwards;opacity:0}
+.loader-bar{position:absolute;bottom:0;left:0;height:2px;background:var(--red);animation:loaderBar 1.8s ease forwards}
+@keyframes loaderIn{from{opacity:0;transform:translateY(100%)}to{opacity:1;transform:translateY(0)}}
+@keyframes loaderBar{from{width:0}to{width:100%}}
+
+/* ── CURSOR ── */
+.cursor{position:fixed;width:8px;height:8px;background:var(--red);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .1s}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(196,30,58,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:28px 56px;display:flex;align-items:center;justify-content:space-between;transition:all .4s}
+nav.scrolled{background:rgba(8,8,8,.96);backdrop-filter:blur(20px);padding:18px 56px;border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;letter-spacing:.2em;color:var(--tx);text-decoration:none}
+.nav-logo span{color:var(--red)}
+.nav-links{display:flex;gap:44px;list-style:none}
+.nav-links a{color:rgba(240,236,232,.6);text-decoration:none;font-size:.72rem;font-weight:400;letter-spacing:.18em;text-transform:uppercase;transition:color .3s}
+.nav-links a:hover{color:var(--red)}
+.nav-cta{background:var(--red);color:#fff;padding:11px 28px;border-radius:1px;text-decoration:none;font-size:.72rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;transition:background .3s,transform .3s}
+.nav-cta:hover{background:var(--red-l);transform:translateY(-1px)}
+
+/* ── SIDE DOTS ── */
+.side-nav{position:fixed;right:28px;top:50%;transform:translateY(-50%);z-index:99;display:flex;flex-direction:column;gap:14px}
+.side-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.25);cursor:pointer;transition:all .3s}
+.side-dot.active{background:var(--red);transform:scale(1.6)}
+
+/* ── HERO ── */
+#hero{position:relative;height:100vh;min-height:700px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.hero-bg{display:none}
+.hero-ov{position:absolute;inset:0;background:linear-gradient(135deg,rgba(196,30,58,.08) 0%,transparent 50%,rgba(7,9,13,.25) 100%)}
+.hero-vg{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(7,9,13,.15) 0%,transparent 35%,transparent 55%,rgba(7,9,13,.85) 85%,var(--bg) 100%)}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:920px;padding:0 24px}
+.hero-eyebrow{font-size:.65rem;letter-spacing:.45em;text-transform:uppercase;color:var(--red);margin-bottom:36px;display:block;opacity:0;animation:fadeUp 1s .4s forwards}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3.8rem,8.5vw,7.5rem);font-weight:300;line-height:1;letter-spacing:-.02em;color:var(--tx);opacity:0;animation:fadeUp 1s .6s forwards}
+.hero-title em{font-style:italic;color:var(--red)}
+.hero-sub{margin-top:36px;font-size:.95rem;font-weight:300;color:rgba(240,236,232,.55);line-height:1.9;max-width:580px;margin-left:auto;margin-right:auto;opacity:0;animation:fadeUp 1s .8s forwards}
+.hero-ctas{margin-top:60px;display:flex;gap:20px;justify-content:center;align-items:center;opacity:0;animation:fadeUp 1s 1s forwards}
+.btn-p{background:var(--red);color:#fff;padding:17px 44px;font-size:.75rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;text-decoration:none;border-radius:1px;transition:all .3s;border:none;cursor:pointer;font-family:'Inter',sans-serif}
+.btn-p:hover{background:var(--red-l);transform:translateY(-2px);box-shadow:0 24px 48px rgba(196,30,58,.3)}
+.btn-g{color:rgba(240,236,232,.75);padding:17px 44px;font-size:.75rem;font-weight:400;letter-spacing:.15em;text-transform:uppercase;text-decoration:none;border:1px solid rgba(240,236,232,.18);border-radius:1px;transition:all .3s}
+.btn-g:hover{border-color:var(--red);color:var(--red)}
+.hero-scroll{position:absolute;bottom:52px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:14px;opacity:0;animation:fadeIn 1s 1.6s forwards}
+.hero-scroll span{font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:rgba(240,236,232,.35)}
+.scroll-line{width:1px;height:64px;background:linear-gradient(to bottom,var(--red),transparent);animation:pulse 2s ease-in-out infinite}
+
+/* ── SECTION COMMONS ── */
+.s-label{display:block;font-size:.62rem;letter-spacing:.45em;text-transform:uppercase;color:var(--red);margin-bottom:24px}
+.s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,5vw,4.5rem);font-weight:300;line-height:1.05;letter-spacing:-.01em}
+.s-title em{font-style:italic;color:var(--red)}
+
+/* ── FRAMES INTRO ── */
+.frames-intro{text-align:center;padding:130px 24px 0}
+
+/* ── FRAME PANELS ── */
+.frame-panel{position:relative;height:100vh;overflow:hidden;display:flex;align-items:center}
+/* Frame BG: garde l'image perso mais avec opacity réduite pour laisser voir la vidéo derrière */
+.frame-bg{position:absolute;inset:-12%;background-size:cover;background-position:center;will-change:transform;transition:filter .8s;opacity:.82}
+.frame-ov{position:absolute;inset:0}
+.frame-content{position:relative;z-index:2;max-width:520px;padding:56px}
+.frame-panel:nth-child(even) .frame-content{margin-left:auto}
+.f-num{font-family:'Cormorant Garamond',serif;font-size:9rem;font-weight:300;color:rgba(196,30,58,.13);line-height:1;margin-bottom:-40px}
+.f-tag{font-size:.62rem;letter-spacing:.4em;text-transform:uppercase;color:var(--red);margin-bottom:18px;display:block}
+.f-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3vw,2.8rem);font-weight:300;line-height:1.2;margin-bottom:24px}
+.f-title em{font-style:italic;color:var(--red)}
+.f-bar{width:36px;height:1px;background:var(--red);margin:28px 0}
+.frame-panel:nth-child(even) .f-bar{margin-left:auto}
+.f-text{font-size:.9rem;font-weight:300;color:rgba(240,236,232,.6);line-height:2}
+
+/* ── SERVICES ── */
+#services{padding:160px 56px;max-width:1400px;margin:0 auto}
+.services-outer{background:rgba(7,9,13,.78);backdrop-filter:blur(24px) saturate(1.3);border-top:1px solid var(--glass-b);border-bottom:1px solid var(--glass-b)}
+.svc-head{display:grid;grid-template-columns:1fr 1fr;gap:80px;margin-bottom:80px;align-items:end}
+.svc-desc{font-size:.92rem;font-weight:300;color:rgba(240,236,232,.55);line-height:2;align-self:end}
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.svc-card{background:rgba(8,10,16,.85);backdrop-filter:blur(8px);padding:52px 44px;border-top:1px solid var(--border);position:relative;overflow:hidden;transition:background .4s}
+.svc-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:2px;background:var(--red);transform:scaleX(0);transform-origin:left;transition:transform .4s}
+.svc-card:hover{background:rgba(18,8,8,.9)}
+.svc-card:hover::before{transform:scaleX(1)}
+.svc-n{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;color:rgba(196,30,58,.18);position:absolute;top:28px;right:28px}
+.svc-icon{width:44px;height:44px;margin-bottom:32px;opacity:.85}
+.svc-title{font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:400;margin-bottom:18px;line-height:1.2}
+.svc-text{font-size:.83rem;font-weight:300;color:rgba(240,236,232,.5);line-height:2}
+.svc-link{display:inline-flex;align-items:center;gap:8px;margin-top:28px;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--red);text-decoration:none;transition:gap .3s}
+.svc-link:hover{gap:16px}
+
+/* ── STATS ── */
+.stats{background:rgba(139,0,0,.82);backdrop-filter:blur(20px);padding:80px 56px;display:grid;grid-template-columns:repeat(4,1fr);text-align:center;border-top:1px solid rgba(196,30,58,.3)}
+.stat-item{padding:36px 16px}
+.stat-n{font-family:'Cormorant Garamond',serif;font-size:4.5rem;font-weight:300;line-height:1;color:#fff;display:block}
+.stat-l{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.65);margin-top:12px;display:block}
+
+/* ── PROCESS ── */
+.process-outer{background:rgba(7,9,13,.8);backdrop-filter:blur(20px);border-top:1px solid var(--glass-b)}
+#process{padding:160px 56px;max-width:960px;margin:0 auto}
+.process-steps{margin-top:80px}
+.p-step{display:grid;grid-template-columns:80px 1fr;gap:48px;padding:52px 0;border-top:1px solid var(--border)}
+.p-step:last-child{border-bottom:1px solid var(--border)}
+.p-num{font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:300;color:var(--red);line-height:1;padding-top:4px}
+.p-step h3{font-family:'Cormorant Garamond',serif;font-size:1.75rem;font-weight:400;margin-bottom:14px}
+.p-step p{font-size:.88rem;font-weight:300;color:rgba(240,236,232,.55);line-height:2;max-width:580px}
+.p-dur{display:inline-block;margin-top:18px;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--red);border:1px solid rgba(196,30,58,.3);padding:5px 14px;border-radius:1px}
+
+/* ── TESTIMONIALS ── */
+#testimonials{position:relative;padding:160px 56px;background:rgba(8,10,15,.82);backdrop-filter:blur(24px);overflow:hidden;border-top:1px solid var(--glass-b)}
+#testimonials::before{content:'"';position:absolute;top:60px;left:48px;font-family:'Cormorant Garamond',serif;font-size:22rem;font-weight:300;color:rgba(196,30,58,.05);line-height:1;pointer-events:none}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:80px;max-width:1400px;margin-left:auto;margin-right:auto}
+.testi-card{background:var(--bg);padding:52px}
+.testi-q{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;font-style:italic;line-height:1.75;color:rgba(240,236,232,.82);margin-bottom:40px}
+.testi-author{display:flex;align-items:center;gap:16px}
+.t-avatar{width:44px;height:44px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:#fff;flex-shrink:0}
+.t-info strong{display:block;font-size:.83rem;font-weight:500}
+.t-info span{font-size:.75rem;color:var(--tm)}
+
+/* ── CONTACT ── */
+#contact{position:relative;height:100vh;min-height:640px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.contact-bg{display:none}
+/* La vidéo fixe sert de background ici aussi — juste un overlay doux */
+.contact-ov{position:absolute;inset:0;background:linear-gradient(135deg,rgba(100,0,0,.45),rgba(7,9,13,.72))}
+.contact-content{position:relative;z-index:2;text-align:center;max-width:680px;padding:0 24px}
+.contact-content .s-title{font-size:clamp(2.2rem,4.5vw,4rem);margin-bottom:28px}
+.contact-content>p{font-size:.92rem;font-weight:300;color:rgba(240,236,232,.6);line-height:1.9;margin-bottom:52px}
+.c-form{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:540px;margin:0 auto;text-align:left}
+.c-form input,.c-form textarea{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--tx);padding:16px 20px;font-family:'Inter',sans-serif;font-size:.83rem;border-radius:1px;outline:none;transition:border-color .3s}
+.c-form input::placeholder,.c-form textarea::placeholder{color:rgba(240,236,232,.28)}
+.c-form input:focus,.c-form textarea:focus{border-color:var(--red)}
+.c-form textarea{grid-column:1/-1;height:110px;resize:none}
+.c-form .btn-p{grid-column:1/-1;text-align:center}
+
+/* ── FOOTER ── */
+footer{background:rgba(5,7,10,.92);backdrop-filter:blur(24px);border-top:1px solid var(--border);padding:80px 56px 48px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:72px;margin-bottom:72px;max-width:1400px;margin-left:auto;margin-right:auto}
+.footer-desc{margin-top:24px;font-size:.83rem;font-weight:300;color:var(--tm);line-height:1.85;max-width:260px}
+.footer-col h4{font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;color:var(--tm);margin-bottom:24px}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:12px}
+.footer-col ul a{color:rgba(240,236,232,.45);text-decoration:none;font-size:.83rem;font-weight:300;transition:color .3s}
+.footer-col ul a:hover{color:var(--red)}
+.footer-bot{display:flex;justify-content:space-between;align-items:center;padding-top:36px;border-top:1px solid var(--border);max-width:1400px;margin:0 auto}
+.footer-bot p{font-size:.72rem;color:var(--tm)}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .8s ease,transform .8s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.rd1{transition-delay:.1s}.rd2{transition-delay:.2s}.rd3{transition-delay:.3s}.rd4{transition-delay:.4s}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){.svc-head{grid-template-columns:1fr;gap:36px}.svc-grid{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(2,1fr)}.testi-grid{grid-template-columns:1fr 1fr}.footer-grid{grid-template-columns:1fr 1fr;gap:48px}}
+@media(max-width:768px){nav{padding:20px 24px}.nav-links,.side-nav{display:none}.svc-grid{grid-template-columns:1fr}#services,#process,#testimonials{padding:80px 24px}.stats{padding:48px 24px;grid-template-columns:repeat(2,1fr)}.testi-grid{grid-template-columns:1fr}.footer-grid{grid-template-columns:1fr}.c-form{grid-template-columns:1fr}.frame-content{padding:32px;margin-left:5%}.p-step{grid-template-columns:1fr;gap:12px}.footer-bot{flex-direction:column;gap:12px;text-align:center}}
+</style>
+</head>
+<body>
+
+<!-- ══ VIDEO BACKGROUND FIXE — remplace src par ta vidéo Veo ══ -->
+<video id="video-bg" autoplay muted loop playsinline>
+  <source src="https://videos.pexels.com/video-files/3571264/3571264-uhd_2560_1440_30fps.mp4" type="video/mp4">
+  <source src="https://videos.pexels.com/video-files/3075942/3075942-uhd_2560_1440_24fps.mp4" type="video/mp4">
+  <source src="https://videos.pexels.com/video-files/1448735/1448735-hd_1920_1080_25fps.mp4" type="video/mp4">
+</video>
+
+<!-- Voile progressif (s'assombrit au scroll) -->
+<div id="scroll-veil"></div>
+
+<!-- Canvas brume animée -->
+<canvas id="mist-canvas"></canvas>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-text">
+    <span style="animation-delay:.1s">P</span><span style="animation-delay:.15s">r</span><span style="animation-delay:.2s">e</span><span style="animation-delay:.25s">m</span><span style="animation-delay:.3s">i</span><span style="animation-delay:.35s">u</span><span style="animation-delay:.4s">m</span><span style="animation-delay:.5s">&nbsp;</span><span style="animation-delay:.55s">R</span><span style="animation-delay:.6s">e</span><span style="animation-delay:.65s">f</span><span style="animation-delay:.7s">o</span><span style="animation-delay:.75s">n</span><span style="animation-delay:.8s">t</span><span style="animation-delay:.85s">e</span>
+  </div>
+  <div class="loader-bar"></div>
+</div>
+
+<!-- CURSOR -->
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curRing"></div>
+
+<div id="root-content">
+
+<!-- SIDE DOTS -->
+<div class="side-nav" id="sideNav">
+  <div class="side-dot active" data-s="hero"></div>
+  <div class="side-dot" data-s="frames"></div>
+  <div class="side-dot" data-s="services"></div>
+  <div class="side-dot" data-s="process"></div>
+  <div class="side-dot" data-s="testimonials"></div>
+  <div class="side-dot" data-s="contact"></div>
+</div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#" class="nav-logo">Premium<span>Refonte</span></a>
+  <ul class="nav-links">
+    <li><a href="#frames">Vision</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#process">Méthode</a></li>
+    <li><a href="#testimonials">Clients</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Démarrer →</a>
+</nav>
+
+<!-- ════════════════ HERO ════════════════ -->
+<section id="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-ov"></div>
+  <div class="hero-vg"></div>
+  <div class="hero-content">
+    <span class="hero-eyebrow">Agence de refonte digitale · Paris</span>
+    <h1 class="hero-title">Votre site web,<br><em>réinventé.</em></h1>
+    <p class="hero-sub">Nous transformons les sites des PME en expériences digitales premium — qui convertissent, inspirent et durent dans le temps.</p>
+    <div class="hero-ctas">
+      <a href="#contact" class="btn-p">Audit gratuit</a>
+      <a href="#frames" class="btn-g">Découvrir notre vision</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Défiler</span>
+  </div>
+</section>
+
+<!-- ════════════════ FRAMES (Video Frames) ════════════════ -->
+<section id="frames">
+  <div class="frames-intro reveal">
+    <span class="s-label">Notre Philosophie</span>
+    <h2 class="s-title">Chaque détail<br><em>raconte une histoire</em></h2>
+  </div>
+
+  <!-- Frame 01 -->
+  <div class="frame-panel">
+    <div class="frame-bg" style="background-image:url('https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=1920&q=90');filter:brightness(.28) saturate(.65) hue-rotate(-8deg)" data-frame></div>
+    <div class="frame-ov" style="background:linear-gradient(to right,rgba(8,8,8,.9) 38%,transparent)"></div>
+    <div class="frame-content reveal">
+      <div class="f-num">01</div>
+      <span class="f-tag">Analyse & Stratégie</span>
+      <h3 class="f-title">Comprendre<br><em>avant de créer</em></h3>
+      <div class="f-bar"></div>
+      <p class="f-text">Chaque refonte commence par une immersion profonde dans votre marché, vos utilisateurs et vos objectifs. Nous construisons une fondation stratégique solide avant de toucher au design.</p>
+    </div>
+  </div>
+
+  <!-- Frame 02 -->
+  <div class="frame-panel">
+    <div class="frame-bg" style="background-image:url('https://images.unsplash.com/photo-1448375240586-882707db888b?w=1920&q=90');filter:brightness(.25) saturate(.6) hue-rotate(-18deg)" data-frame></div>
+    <div class="frame-ov" style="background:linear-gradient(to left,rgba(8,8,8,.9) 38%,transparent)"></div>
+    <div class="frame-content reveal">
+      <div class="f-num">02</div>
+      <span class="f-tag">Design Premium</span>
+      <h3 class="f-title">L'esthétique au<br><em>service du business</em></h3>
+      <div class="f-bar"></div>
+      <p class="f-text">Nos designers créent des interfaces visuellement remarquables qui reflètent le positionnement premium de votre marque — tout en optimisant chaque élément pour la conversion.</p>
+    </div>
+  </div>
+
+  <!-- Frame 03 -->
+  <div class="frame-panel">
+    <div class="frame-bg" style="background-image:url('https://images.unsplash.com/photo-1511497584788-876760111969?w=1920&q=90');filter:brightness(.22) saturate(.65) hue-rotate(-12deg)" data-frame></div>
+    <div class="frame-ov" style="background:linear-gradient(to right,rgba(8,8,8,.9) 38%,transparent)"></div>
+    <div class="frame-content reveal">
+      <div class="f-num">03</div>
+      <span class="f-tag">Développement</span>
+      <h3 class="f-title">Performant,<br><em>sur-mesure</em></h3>
+      <div class="f-bar"></div>
+      <p class="f-text">Code propre, chargement ultra-rapide, SEO technique optimisé. Nous développons des sites qui passent les Core Web Vitals avec les meilleures notes — parce que la performance est un avantage compétitif.</p>
+    </div>
+  </div>
+
+  <!-- Frame 04 -->
+  <div class="frame-panel">
+    <div class="frame-bg" style="background-image:url('https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1920&q=90');filter:brightness(.28) saturate(.6) hue-rotate(-5deg)" data-frame></div>
+    <div class="frame-ov" style="background:linear-gradient(to left,rgba(8,8,8,.9) 38%,transparent)"></div>
+    <div class="frame-content reveal">
+      <div class="f-num">04</div>
+      <span class="f-tag">Croissance Continue</span>
+      <h3 class="f-title">Le début,<br><em>pas la fin</em></h3>
+      <div class="f-bar"></div>
+      <p class="f-text">Notre relation ne s'arrête pas au lancement. Nous analysons, optimisons et évoluons votre site en continu pour garantir des résultats croissants dans la durée.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ SERVICES ════════════════ -->
+<div class="services-outer">
+<section id="services">
+  <div class="svc-head">
+    <div>
+      <span class="s-label reveal">Nos Services</span>
+      <h2 class="s-title reveal">Ce que nous<br><em>faisons</em></h2>
+    </div>
+    <p class="svc-desc reveal">Des solutions digitales complètes pensées pour les PME ambitieuses qui veulent un site à la hauteur de leur excellence opérationnelle.</p>
+  </div>
+  <div class="svc-grid">
+    <div class="svc-card reveal rd1">
+      <span class="svc-n">01</span>
+      <svg class="svc-icon" viewBox="0 0 48 48" fill="none"><rect x="4" y="4" width="40" height="30" rx="2" stroke="#c41e3a" stroke-width="1.5"/><line x1="4" y1="38" x2="44" y2="38" stroke="#c41e3a" stroke-width="1.5"/><circle cx="24" cy="44" r="2" fill="#c41e3a"/></svg>
+      <h3 class="svc-title">Refonte Web<br>Premium</h3>
+      <p class="svc-text">Transformation complète de votre présence digitale. Design sur-mesure, UX optimisée, identité visuelle cohérente et performante.</p>
+      <a href="#contact" class="svc-link">En savoir plus →</a>
+    </div>
+    <div class="svc-card reveal rd2">
+      <span class="svc-n">02</span>
+      <svg class="svc-icon" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="20" r="12" stroke="#c41e3a" stroke-width="1.5"/><path d="M12 44C12 37.4 17.4 32 24 32C30.6 32 36 37.4 36 44" stroke="#c41e3a" stroke-width="1.5"/></svg>
+      <h3 class="svc-title">UX / UI<br>Design</h3>
+      <p class="svc-text">Interfaces intuitives centrées utilisateur. Wireframing, prototypage, tests et design system complet pour une expérience irréprochable.</p>
+      <a href="#contact" class="svc-link">En savoir plus →</a>
+    </div>
+    <div class="svc-card reveal rd3">
+      <span class="svc-n">03</span>
+      <svg class="svc-icon" viewBox="0 0 48 48" fill="none"><polyline points="8,36 18,20 28,28 38,10" stroke="#c41e3a" stroke-width="1.5"/><circle cx="8" cy="36" r="2" fill="#c41e3a"/><circle cx="38" cy="10" r="2" fill="#c41e3a"/></svg>
+      <h3 class="svc-title">SEO &<br>Performance</h3>
+      <p class="svc-text">Optimisation technique avancée. Core Web Vitals, SEO on-page, schema markup et stratégie de contenu pour dominer Google.</p>
+      <a href="#contact" class="svc-link">En savoir plus →</a>
+    </div>
+    <div class="svc-card reveal rd1">
+      <span class="svc-n">04</span>
+      <svg class="svc-icon" viewBox="0 0 48 48" fill="none"><rect x="4" y="8" width="24" height="32" rx="2" stroke="#c41e3a" stroke-width="1.5"/><rect x="32" y="16" width="12" height="24" rx="2" stroke="#c41e3a" stroke-width="1.5"/></svg>
+      <h3 class="svc-title">Mobile<br>First</h3>
+      <p class="svc-text">Expériences pensées mobile d'abord. Plus de 70% du trafic vient du mobile — votre site doit être parfait sur tous les écrans.</p>
+      <a href="#contact" class="svc-link">En savoir plus →</a>
+    </div>
+    <div class="svc-card reveal rd2">
+      <span class="svc-n">05</span>
+      <svg class="svc-icon" viewBox="0 0 48 48" fill="none"><path d="M24 4L44 16V32L24 44L4 32V16L24 4Z" stroke="#c41e3a" stroke-width="1.5"/><path d="M24 4V44M4 16L44 16M4 32L44 32" stroke="#c41e3a" stroke-width="1" stroke-opacity="0.4"/></svg>
+      <h3 class="svc-title">E-commerce<br>Premium</h3>
+      <p class="svc-text">Boutiques en ligne qui vendent. Tunnels de conversion optimisés, UX produit irréprochable et intégration paiement sécurisée.</p>
+      <a href="#contact" class="svc-link">En savoir plus →</a>
+    </div>
+    <div class="svc-card reveal rd3">
+      <span class="svc-n">06</span>
+      <svg class="svc-icon" viewBox="0 0 48 48" fill="none"><path d="M8 24H40M8 16H32M8 32H24" stroke="#c41e3a" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <h3 class="svc-title">Maintenance<br>& Support</h3>
+      <p class="svc-text">Votre site évolue avec votre business. Mises à jour, sécurité, sauvegardes automatiques et support réactif inclus.</p>
+      <a href="#contact" class="svc-link">En savoir plus →</a>
+    </div>
+  </div>
+</section>
+
+</section>
+</div>
+
+<!-- ════════════════ STATS ════════════════ -->
+<div class="stats">
+  <div class="stat-item reveal"><span class="stat-n" data-count="147">0</span><span class="stat-l">PME refontes réalisées</span></div>
+  <div class="stat-item reveal rd1"><span class="stat-n" data-count="340" data-suf="%">0</span><span class="stat-l">Augmentation trafic moyen</span></div>
+  <div class="stat-item reveal rd2"><span class="stat-n" data-count="98">0</span><span class="stat-l">Score PageSpeed moyen</span></div>
+  <div class="stat-item reveal rd3"><span class="stat-n" data-count="12">0</span><span class="stat-l">Années d'expertise</span></div>
+</div>
+
+<!-- ════════════════ PROCESS ════════════════ -->
+<div class="process-outer">
+<section id="process">
+  <span class="s-label reveal">Notre Méthode</span>
+  <h2 class="s-title reveal">Comment nous<br><em>travaillons</em></h2>
+  <div class="process-steps">
+    <div class="p-step reveal"><div class="p-num">01</div><div><h3>Audit & Diagnostic</h3><p>Analyse complète : performance technique, UX, SEO, positionnement concurrentiel et opportunités de croissance identifiées.</p><span class="p-dur">Semaine 1</span></div></div>
+    <div class="p-step reveal rd1"><div class="p-num">02</div><div><h3>Stratégie & Architecture</h3><p>Définition de l'arborescence, des personas, du parcours utilisateur idéal et de la stratégie de contenu adaptée à vos objectifs commerciaux.</p><span class="p-dur">Semaines 2–3</span></div></div>
+    <div class="p-step reveal rd2"><div class="p-num">03</div><div><h3>Design & Prototypage</h3><p>Maquettes haute-fidélité et prototypes interactifs. Trois cycles de révision inclus pour affiner jusqu'à la perfection.</p><span class="p-dur">Semaines 4–6</span></div></div>
+    <div class="p-step reveal rd3"><div class="p-num">04</div><div><h3>Développement & Tests</h3><p>Intégration front-end ultra-soignée, back-end robuste, tests multi-navigateurs, accessibilité WCAG et optimisation des performances.</p><span class="p-dur">Semaines 7–10</span></div></div>
+    <div class="p-step reveal rd4"><div class="p-num">05</div><div><h3>Lancement & Croissance</h3><p>Déploiement sécurisé, formation de votre équipe, mise en place du tracking et suivi mensuel des performances pour maximiser le ROI.</p><span class="p-dur">Semaine 11+</span></div></div>
+  </div>
+</section>
+
+</section>
+</div>
+
+<!-- ════════════════ TESTIMONIALS ════════════════ -->
+<section id="testimonials">
+  <div style="max-width:1400px;margin:0 auto">
+    <span class="s-label reveal">Ils nous font confiance</span>
+    <h2 class="s-title reveal">Résultats<br><em>concrets</em></h2>
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <p class="testi-q">"Notre trafic organique a augmenté de 420% en 6 mois. PremiumRefonte a su capturer l'essence de notre marque et la traduire en une expérience digitale qui convertit vraiment."</p>
+        <div class="testi-author"><div class="t-avatar">M</div><div class="t-info"><strong>Marie Dubois</strong><span>Directrice, Cabinet Dubois & Associés</span></div></div>
+      </div>
+      <div class="testi-card reveal rd1">
+        <p class="testi-q">"L'investissement remboursé en 3 mois. Notre taux de conversion est passé de 1,2% à 4,7%. Le niveau de qualité livré est au niveau des grandes agences parisiennes."</p>
+        <div class="testi-author"><div class="t-avatar">T</div><div class="t-info"><strong>Thomas Laurent</strong><span>CEO, Laurent Industries</span></div></div>
+      </div>
+      <div class="testi-card reveal rd2">
+        <p class="testi-q">"Professionnalisme exemplaire, délais respectés et résultats au-delà de nos attentes. Notre site score 98/100 sur PageSpeed et nos clients le remarquent immédiatement."</p>
+        <div class="testi-author"><div class="t-avatar">S</div><div class="t-info"><strong>Sophie Moreau</strong><span>Fondatrice, Moreau Consulting</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ CONTACT ════════════════ -->
+<section id="contact">
+  <div class="contact-bg" id="contactBg"></div>
+  <div class="contact-ov"></div>
+  <div class="contact-content">
+    <span class="s-label">Commençons</span>
+    <h2 class="s-title">Prêt à transformer<br><em>votre présence digitale ?</em></h2>
+    <p>Audit gratuit de votre site actuel — sans engagement. Nous vous montrons précisément ce qui freine votre croissance.</p>
+    <form class="c-form" onsubmit="handleForm(event)">
+      <input type="text" placeholder="Votre prénom" required>
+      <input type="text" placeholder="Votre entreprise" required>
+      <input type="email" placeholder="Email professionnel" required>
+      <input type="tel" placeholder="Téléphone">
+      <textarea placeholder="Parlez-nous de votre projet..."></textarea>
+      <button type="submit" class="btn-p">Demander mon audit gratuit</button>
+    </form>
+  </div>
+</section>
+
+<!-- ════════════════ FOOTER ════════════════ -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <a href="#" class="nav-logo" style="font-size:1.8rem">Premium<span>Refonte</span></a>
+      <p class="footer-desc">L'agence de refonte web qui transforme les PME ambitieuses en marques digitales premium. Basés à Paris, nous intervenons partout en France.</p>
+    </div>
+    <div class="footer-col"><h4>Services</h4><ul><li><a href="#">Refonte Web</a></li><li><a href="#">UX / UI Design</a></li><li><a href="#">SEO & Performance</a></li><li><a href="#">E-commerce</a></li><li><a href="#">Maintenance</a></li></ul></div>
+    <div class="footer-col"><h4>Agence</h4><ul><li><a href="#">Notre approche</a></li><li><a href="#">Réalisations</a></li><li><a href="#">Équipe</a></li><li><a href="#">Blog</a></li><li><a href="#">Carrières</a></li></ul></div>
+    <div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:hello@premiumrefonte.fr">hello@premiumrefonte.fr</a></li><li><a href="tel:+33142000000">+33 1 42 00 00 00</a></li><li><a href="#">Paris 75008</a></li><li><a href="#">LinkedIn</a></li><li><a href="#">Instagram</a></li></ul></div>
+  </div>
+  <div class="footer-bot">
+    <p>© 2024 PremiumRefonte. Tous droits réservés.</p>
+    <p>Confidentialité · Mentions légales · CGV</p>
+  </div>
+</footer>
+
+</div><!-- /#root-content -->
+
+<script>
+// ── LOADER ──
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('loader').classList.add('done'), 1800);
+});
+
+// ── VIDEO PARALLAX + VEIL ──
+const videoBg = document.getElementById('video-bg');
+const veil    = document.getElementById('scroll-veil');
+window.addEventListener('scroll', () => {
+  const s = scrollY;
+  const maxS = document.body.scrollHeight - innerHeight;
+  const prog = Math.min(s / maxS, 1);
+  // Léger mouvement parallax sur la vidéo
+  if (s < innerHeight * 2.5) videoBg.style.transform = `scale(1.08) translateY(${s * 0.18}px)`;
+  // Voile qui s'assombrit progressivement
+  veil.style.background = `rgba(7,9,13,${Math.min(prog * 1.6, 0.88)})`;
+}, {passive: true});
+
+// ── BRUME CANVAS ──
+const canvas = document.getElementById('mist-canvas');
+const mCtx   = canvas.getContext('2d');
+function resizeCanvas() { canvas.width = innerWidth; canvas.height = innerHeight; }
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+const mists = Array.from({length: 22}, () => {
+  const x = Math.random() * innerWidth;
+  const y = Math.random() * innerHeight;
+  return {
+    ox: x, oy: y, x, y,
+    r: Math.random() * 220 + 90,
+    a: Math.random() * 0.038 + 0.008,
+    sp: Math.random() * 0.22 + 0.07,
+    t: Math.random() * Math.PI * 2
+  };
+});
+
+(function animMist() {
+  mCtx.clearRect(0, 0, canvas.width, canvas.height);
+  mists.forEach(p => {
+    p.t += p.sp * 0.007;
+    p.x = p.ox + Math.sin(p.t) * 58;
+    p.y = p.oy + Math.cos(p.t * 0.63) * 30;
+    const g = mCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+    g.addColorStop(0, `rgba(188,208,222,${p.a})`);
+    g.addColorStop(1, 'rgba(188,208,222,0)');
+    mCtx.beginPath();
+    mCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    mCtx.fillStyle = g;
+    mCtx.fill();
+  });
+  requestAnimationFrame(animMist);
+})();
+
+// ── CURSOR ──
+const cur = document.getElementById('cur');
+const curRing = document.getElementById('curRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cur.style.left = mx+'px'; cur.style.top = my+'px'; });
+(function loop() { rx += (mx-rx)*.12; ry += (my-ry)*.12; curRing.style.left = rx+'px'; curRing.style.top = ry+'px'; requestAnimationFrame(loop); })();
+document.querySelectorAll('a,button,.svc-card').forEach(el => {
+  el.addEventListener('mouseenter', () => { curRing.style.width='60px'; curRing.style.height='60px'; curRing.style.borderColor='rgba(196,30,58,.8)'; });
+  el.addEventListener('mouseleave', () => { curRing.style.width='36px'; curRing.style.height='36px'; curRing.style.borderColor='rgba(196,30,58,.5)'; });
+});
+
+// ── NAV SCROLL ──
+const mainNav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => { mainNav.classList.toggle('scrolled', scrollY > 50); updateDots(); }, {passive:true});
+
+// ── SIDE DOTS ──
+const secs = ['hero','frames','services','process','testimonials','contact'];
+const dots = document.querySelectorAll('.side-dot');
+function updateDots() {
+  const mid = scrollY + innerHeight/2;
+  secs.forEach((id,i) => {
+    const el = document.getElementById(id); if(!el) return;
+    if(mid >= el.offsetTop && mid < el.offsetTop + el.offsetHeight) { dots.forEach(d=>d.classList.remove('active')); dots[i].classList.add('active'); }
+  });
+}
+dots.forEach((d,i) => d.addEventListener('click', () => document.getElementById(secs[i])?.scrollIntoView({behavior:'smooth'})));
+
+// ── PARALLAX ──
+const heroBg = document.getElementById('heroBg');
+const contactBg = document.getElementById('contactBg');
+const frameBgs = document.querySelectorAll('[data-frame]');
+window.addEventListener('scroll', () => {
+  const y = scrollY;
+  if(heroBg) heroBg.style.transform = `translateY(${y*.38}px)`;
+  frameBgs.forEach(bg => {
+    const r = bg.parentElement.getBoundingClientRect();
+    bg.style.transform = `translateY(${(r.top/innerHeight)*70}px)`;
+  });
+  if(contactBg) {
+    const r = contactBg.parentElement.getBoundingClientRect();
+    contactBg.style.transform = `translateY(${(r.top/innerHeight)*55}px)`;
+  }
+}, {passive:true});
+
+// ── REVEAL ──
+const revEls = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:.08,rootMargin:'0px 0px -50px 0px'});
+revEls.forEach(el => obs.observe(el));
+
+// ── COUNT UP ──
+const countEls = document.querySelectorAll('[data-count]');
+const cObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(!e.isIntersecting) return;
+    const target = +e.target.dataset.count;
+    const suf = e.target.dataset.suf||'';
+    let cur = 0; const step = target/60;
+    const t = setInterval(()=>{ cur=Math.min(cur+step,target); e.target.textContent=Math.round(cur)+suf; if(cur>=target)clearInterval(t); },22);
+    cObs.unobserve(e.target);
+  });
+},{threshold:.5});
+countEls.forEach(el => cObs.observe(el));
+
+// ── FORM ──
+function handleForm(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('button');
+  btn.textContent = 'Message envoyé ✓'; btn.style.background='#2a7a4f';
+  setTimeout(()=>{ btn.textContent='Demander mon audit gratuit'; btn.style.background=''; e.target.reset(); },3500);
+}
+
+// ── SMOOTH ANCHORS ──
+document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+  const t = document.querySelector(a.getAttribute('href'));
+  if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});}
+}));
+</script>
+</body>
+</html>
