@@ -11,402 +11,394 @@ export class ScrollAnimations {
   }
 
   init() {
+    this.setupScrollProgress();
     this.setupSplitText();
     this.setupHeroAnimations();
+    this.setupHeroPlane();
+    this.setupHeroZoom();
     this.setupCounterAnimations();
-    this.setupPanelScrolling();
-    this.setupRevealAnimations();
-    this.setupParallaxText();
-    this.setupNavAnimation();
+    this.setupHorizontalWork();
+    this.setupScrubTextReveal();
+    this.setupAboutPanels();
+    this.setupContactReveal();
+    this.setupSliderCards();
+    this.setupNavBehavior();
     this.setupCursor();
+    this.setupMarquee();
   }
 
+  // ---- Scroll progress bar ----
+  setupScrollProgress() {
+    const bar = document.getElementById('scrollProgress');
+    if (!bar) return;
+
+    ScrollTrigger.create({
+      start: 'top top',
+      end: 'bottom bottom',
+      onUpdate: (self) => {
+        bar.style.transform = `scaleX(${self.progress})`;
+      },
+    });
+  }
+
+  // ---- Split text on data-split elements ----
   setupSplitText() {
-    // Split all elements with data-split attribute
-    const splitElements = document.querySelectorAll('[data-split]');
-    splitElements.forEach((el) => {
-      const split = new SplitType(el, { types: 'chars,words,lines' });
+    const els = document.querySelectorAll('[data-split]');
+    els.forEach((el) => {
+      const split = new SplitType(el, { types: 'chars,words' });
       this.splitInstances.push(split);
 
-      // Initial state - hide chars
-      gsap.set(split.chars, {
-        y: '110%',
-        opacity: 0,
-        rotateX: -90,
-      });
+      gsap.set(split.chars, { y: '110%', opacity: 0, rotateX: -90 });
 
-      // Animate when in view
       ScrollTrigger.create({
         trigger: el,
-        start: 'top 85%',
+        start: 'top 88%',
         once: true,
         onEnter: () => {
           gsap.to(split.chars, {
             y: '0%',
             opacity: 1,
             rotateX: 0,
-            duration: 0.8,
+            duration: 0.9,
             ease: 'back.out(1.7)',
-            stagger: {
-              amount: 0.6,
-              from: 'random',
-            },
+            stagger: { amount: 0.5, from: 'start' },
           });
         },
       });
     });
   }
 
+  // ---- Hero entrance ----
   setupHeroAnimations() {
-    const tl = gsap.timeline({ delay: 0.5 });
+    const tl = gsap.timeline({ delay: 0.3 });
 
-    // Hero content entrance
-    tl.from('.hero__eyebrow', {
-      y: 30,
-      opacity: 0,
-      duration: 0.8,
-      ease: 'power3.out',
+    tl.to('.hero__eyebrow', {
+      y: 0, opacity: 1, duration: 0.8, ease: 'power3.out',
     })
-      .from('.hero__subtitle', {
-        y: 20,
-        opacity: 0,
-        duration: 0.7,
-        ease: 'power3.out',
-      }, '-=0.3')
-      .from('.hero__cta', {
-        y: 20,
-        opacity: 0,
-        duration: 0.7,
-        ease: 'power3.out',
-      }, '-=0.3')
-      .from('.hero__scroll-indicator', {
-        y: -20,
-        opacity: 0,
-        duration: 0.6,
-        ease: 'power2.out',
-      }, '-=0.2');
+    .to('.hero__subtitle', {
+      y: 0, opacity: 1, duration: 0.7, ease: 'power3.out',
+    }, '-=0.4')
+    .to('.hero__cta', {
+      y: 0, opacity: 1, duration: 0.7, ease: 'power3.out',
+    }, '-=0.3')
+    .to('#scrollIndicator', {
+      opacity: 1, duration: 0.6, ease: 'power2.out',
+    }, '-=0.2');
 
-    // Scroll indicator looping animation
-    gsap.to('.scroll-line', {
-      scaleY: 0,
-      transformOrigin: 'top center',
-      duration: 1.2,
-      ease: 'power2.in',
-      repeat: -1,
-      yoyo: false,
-      onRepeat: () => {
-        gsap.set('.scroll-line', { scaleY: 1 });
-      },
-    });
-
-    // Hero parallax on scroll
+    // Hero content fades out as user scrolls
     ScrollTrigger.create({
       trigger: '.hero',
       start: 'top top',
       end: 'bottom top',
       scrub: true,
       onUpdate: (self) => {
-        gsap.set('.hero__content', {
-          y: self.progress * 150,
-          opacity: 1 - self.progress * 1.5,
+        const p = self.progress;
+        gsap.set('#heroContent', {
+          y: p * 180,
+          opacity: Math.max(0, 1 - p * 2),
         });
       },
     });
+  }
 
-    // Marquee strip - continuous scroll
-    gsap.to('.marquee__track', {
-      x: '-50%',
-      duration: 20,
-      ease: 'none',
+  // ---- Airplane descending effect ----
+  setupHeroPlane() {
+    const plane = document.getElementById('heroPLane');
+    if (!plane) return;
+
+    // Entry animation
+    gsap.to(plane, {
+      opacity: 1, duration: 1.5, ease: 'power2.out', delay: 0.8,
+    });
+
+    // Hover float
+    gsap.to(plane, {
+      y: '+=12',
+      duration: 3,
+      ease: 'sine.inOut',
       repeat: -1,
+      yoyo: true,
+    });
+
+    // Descend into city on scroll
+    ScrollTrigger.create({
+      trigger: '.hero',
+      start: 'top top',
+      end: 'bottom top',
+      scrub: 1.5,
+      onUpdate: (self) => {
+        const p = self.progress;
+        // Plane descends and shrinks as city approaches
+        gsap.set(plane, {
+          y: p * 280,
+          scale: 1 + p * 0.4,
+          opacity: Math.max(0, 1 - p * 3),
+        });
+      },
     });
   }
 
+  // ---- Hero zoom on scroll — city approaches ----
+  setupHeroZoom() {
+    ScrollTrigger.create({
+      trigger: '.hero',
+      start: 'top top',
+      end: 'bottom top',
+      scrub: 1,
+      onUpdate: (self) => {
+        const p = self.progress;
+        // City layers zoom in at different rates (descent simulation)
+        gsap.set('#cityFar',  { scale: 1 + p * 0.15 });
+        gsap.set('#cityMid',  { scale: 1 + p * 0.25 });
+        gsap.set('#cityNear', { scale: 1 + p * 0.40 });
+        gsap.set('.city-sky', { scale: 1 + p * 0.06 });
+      },
+    });
+  }
+
+  // ---- Horizontal work cards scroll ----
+  setupHorizontalWork() {
+    const pinWrap = document.getElementById('workPin');
+    const track = document.getElementById('workTrack');
+    const cards = document.querySelectorAll('.work__card');
+    const dots = document.querySelectorAll('.work__dot');
+    const progressFill = document.getElementById('workProgressFill');
+    if (!pinWrap || !track || !cards.length) return;
+
+    const cardCount = cards.length;
+    const totalWidth = window.innerWidth * cardCount;
+    track.style.width = `${totalWidth}px`;
+
+    // Set section height to drive horizontal scroll
+    const workSection = document.getElementById('work');
+
+    gsap.to(track, {
+      x: () => -(totalWidth - window.innerWidth),
+      ease: 'none',
+      scrollTrigger: {
+        trigger: pinWrap,
+        start: 'top top',
+        end: () => `+=${totalWidth - window.innerWidth}`,
+        scrub: 1,
+        pin: true,
+        anticipatePin: 1,
+        onUpdate: (self) => {
+          const p = self.progress;
+          const rawIndex = p * (cardCount - 1);
+          const activeIndex = Math.round(rawIndex);
+
+          // Update progress fill
+          if (progressFill) {
+            progressFill.style.width = `${p * 100}%`;
+          }
+
+          // Update dots
+          dots.forEach((dot, i) => {
+            dot.classList.toggle('work__dot--active', i === activeIndex);
+          });
+
+          // Activate card content
+          cards.forEach((card, i) => {
+            const active = i === activeIndex;
+            card.classList.toggle('is-active', active);
+          });
+        },
+      },
+    });
+
+    // Reveal each card with clip-path as it enters the horizontal viewport
+    cards.forEach((card, i) => {
+      gsap.to(card, {
+        clipPath: 'inset(0 0% 0 0)',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: pinWrap,
+          start: () => `top top+=${(i / cardCount) * (totalWidth - window.innerWidth)}`,
+          end: () => `top top+=${((i + 0.6) / cardCount) * (totalWidth - window.innerWidth)}`,
+          scrub: 1,
+          containerAnimation: gsap.to(track, { x: -(totalWidth - window.innerWidth), ease: 'none' }),
+        },
+      });
+    });
+
+    // Activate first card immediately
+    cards[0]?.classList.add('is-active');
+    gsap.set(cards[0], { clipPath: 'inset(0 0% 0 0)' });
+  }
+
+  // ---- Scrub text reveal (big quote section) ----
+  setupScrubTextReveal() {
+    const bigText = document.getElementById('bigText');
+    if (!bigText) return;
+
+    const lines = bigText.querySelectorAll('[data-split-scrub]');
+    lines.forEach((line) => {
+      const split = new SplitType(line, { types: 'chars' });
+      this.splitInstances.push(split);
+
+      gsap.set(split.chars, { opacity: 0.1 });
+
+      gsap.to(split.chars, {
+        opacity: 1,
+        stagger: { each: 0.04 },
+        ease: 'none',
+        scrollTrigger: {
+          trigger: bigText,
+          start: 'top 75%',
+          end: 'bottom 25%',
+          scrub: 0.8,
+        },
+      });
+    });
+  }
+
+  // ---- About panels fade in on scroll ----
+  setupAboutPanels() {
+    const panels = document.querySelectorAll('.about__panel');
+    panels.forEach((panel) => {
+      ScrollTrigger.create({
+        trigger: panel,
+        start: 'top 80%',
+        once: true,
+        onEnter: () => panel.classList.add('is-visible'),
+      });
+    });
+  }
+
+  // ---- Counter animations ----
   setupCounterAnimations() {
-    const counters = document.querySelectorAll('[data-count]');
-    counters.forEach((el) => {
-      const target = parseInt(el.dataset.count);
+    document.querySelectorAll('[data-count]').forEach((el) => {
+      const target = parseInt(el.dataset.count, 10);
       ScrollTrigger.create({
         trigger: el,
         start: 'top 80%',
         once: true,
         onEnter: () => {
-          gsap.to(el, {
-            textContent: target,
+          const obj = { val: 0 };
+          gsap.to(obj, {
+            val: target,
             duration: 2,
             ease: 'power2.out',
-            snap: { textContent: 1 },
-            onUpdate: function () {
-              el.textContent = Math.round(this.targets()[0]._gsap.textContent);
-            },
+            onUpdate() { el.textContent = Math.round(obj.val); },
           });
         },
       });
     });
   }
 
-  setupPanelScrolling() {
-    const panels = document.querySelectorAll('.work__panel');
-    if (!panels.length) return;
+  // ---- Contact section reveal ----
+  setupContactReveal() {
+    const title = document.getElementById('contactTitle');
+    if (!title) return;
 
-    const pinContainer = document.querySelector('#pinContainer');
-    if (!pinContainer) return;
-
-    // Set panels initial state
-    gsap.set(panels, { opacity: 0, x: 100 });
-    gsap.set(panels[0], { opacity: 1, x: 0 });
-
-    // Pin the work section and animate panels
-    ScrollTrigger.create({
-      trigger: '.work',
-      start: 'top top',
-      end: `+=${panels.length * 100}vh`,
-      pin: true,
-      scrub: 1,
-      snap: 1 / (panels.length - 1),
-      onUpdate: (self) => {
-        const panelIndex = Math.round(self.progress * (panels.length - 1));
-        panels.forEach((panel, i) => {
-          if (i === panelIndex) {
-            gsap.to(panel, { opacity: 1, x: 0, duration: 0.4, ease: 'power2.out' });
-          } else {
-            gsap.to(panel, { opacity: 0, x: i < panelIndex ? -100 : 100, duration: 0.4, ease: 'power2.in' });
-          }
-        });
-      },
+    // Clip reveal from bottom
+    gsap.from(title, {
+      clipPath: 'inset(0 0 100% 0)',
+      duration: 1.2,
+      ease: 'power4.out',
+      scrollTrigger: { trigger: title, start: 'top 80%', once: true },
     });
 
-    // Animate panel orbs
-    panels.forEach((panel) => {
-      const orb = panel.querySelector('.panel__orb');
-      if (orb) {
-        gsap.to(orb, {
-          scale: 1.1,
-          duration: 2 + Math.random(),
-          ease: 'sine.inOut',
-          repeat: -1,
-          yoyo: true,
-        });
-      }
-    });
-  }
-
-  setupRevealAnimations() {
-    // Big text reveal
-    const bigText = document.querySelector('#bigText');
-    if (bigText) {
-      const spans = bigText.querySelectorAll('span');
-      spans.forEach((span) => {
-        const split = new SplitType(span, { types: 'chars' });
-        this.splitInstances.push(split);
-
-        ScrollTrigger.create({
-          trigger: bigText,
-          start: 'top 70%',
-          end: 'bottom 30%',
-          scrub: 0.5,
-          onUpdate: (self) => {
-            const charCount = split.chars.length;
-            const revealCount = Math.floor(self.progress * charCount * 1.2);
-            split.chars.forEach((char, i) => {
-              if (i < revealCount) {
-                gsap.to(char, { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' });
-              } else {
-                gsap.to(char, { opacity: 0.15, duration: 0.3 });
-              }
-            });
-          },
-        });
-
-        // Initial state
-        gsap.set(split.chars, { opacity: 0.15 });
-      });
-    }
-
-    // Glass card entrance
-    ScrollTrigger.create({
-      trigger: '.glass-card',
-      start: 'top 80%',
-      once: true,
-      onEnter: () => {
-        gsap.from('.glass-card', {
-          scale: 0.8,
-          opacity: 0,
-          rotateY: -15,
-          duration: 1,
-          ease: 'back.out(1.4)',
-        });
-        gsap.from('.tech-item', {
-          scale: 0,
-          opacity: 0,
-          duration: 0.4,
-          ease: 'back.out(2)',
-          stagger: 0.05,
-          delay: 0.3,
-        });
-      },
-    });
-
-    // Slide cards
-    gsap.from('.slide-card', {
-      y: 60,
+    // Email link slide up
+    gsap.from('.contact__link', {
+      y: 40,
       opacity: 0,
       duration: 0.8,
       ease: 'power3.out',
-      stagger: 0.1,
-      scrollTrigger: {
-        trigger: '.slider-section',
-        start: 'top 80%',
-        once: true,
-      },
-    });
-
-    // Contact section
-    ScrollTrigger.create({
-      trigger: '.contact',
-      start: 'top 70%',
-      once: true,
-      onEnter: () => {
-        gsap.from('.contact__link', {
-          y: 30,
-          opacity: 0,
-          duration: 0.8,
-          ease: 'power3.out',
-          delay: 0.5,
-        });
-      },
+      delay: 0.4,
+      scrollTrigger: { trigger: '.contact__cta-wrap', start: 'top 80%', once: true },
     });
   }
 
-  setupParallaxText() {
-    // Section labels floating in
-    gsap.utils.toArray('.section-label').forEach((label) => {
-      gsap.from(label, {
-        x: -50,
-        opacity: 0,
-        duration: 0.8,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: label,
-          start: 'top 85%',
-          once: true,
-        },
-      });
-    });
-
-    // Stats pop-in
-    gsap.utils.toArray('.stat').forEach((stat, i) => {
-      gsap.from(stat, {
-        y: 40,
-        opacity: 0,
-        duration: 0.6,
-        ease: 'back.out(1.7)',
-        delay: i * 0.1,
-        scrollTrigger: {
-          trigger: stat,
-          start: 'top 85%',
-          once: true,
-        },
-      });
-    });
-
-    // About body text
-    ScrollTrigger.create({
-      trigger: '.about__body',
-      start: 'top 85%',
-      once: true,
-      onEnter: () => {
-        gsap.from('.about__body', {
-          y: 30,
-          opacity: 0,
-          duration: 0.8,
-          ease: 'power2.out',
-        });
-      },
+  // ---- Slider cards stagger ----
+  setupSliderCards() {
+    gsap.from('.slide-card', {
+      y: 80,
+      opacity: 0,
+      duration: 0.9,
+      ease: 'power3.out',
+      stagger: 0.12,
+      scrollTrigger: { trigger: '.slider-section', start: 'top 80%', once: true },
     });
   }
 
-  setupNavAnimation() {
-    // Nav appearance on scroll
+  // ---- Nav: hide on scroll down, show on scroll up ----
+  setupNavBehavior() {
+    let lastY = 0;
+
     ScrollTrigger.create({
       start: 'top -80',
+      end: 'bottom bottom',
       onUpdate: (self) => {
         const nav = document.querySelector('.nav');
         if (!nav) return;
-        if (self.direction === -1) {
-          gsap.to(nav, { y: 0, duration: 0.3, ease: 'power2.out' });
-        } else {
+
+        nav.classList.toggle('nav--scrolled', self.scroll() > 80);
+
+        if (self.direction === 1 && self.scroll() > 200) {
           gsap.to(nav, { y: -100, duration: 0.3, ease: 'power2.in' });
+        } else {
+          gsap.to(nav, { y: 0, duration: 0.4, ease: 'power2.out' });
         }
       },
     });
 
-    // Nav links stagger on load
     gsap.from('.nav__link', {
-      y: -20,
-      opacity: 0,
-      duration: 0.5,
-      stagger: 0.1,
-      ease: 'power2.out',
-      delay: 1.2,
+      y: -20, opacity: 0, duration: 0.5, stagger: 0.08,
+      ease: 'power2.out', delay: 1.2,
     });
 
     gsap.from('.nav__logo', {
-      x: -20,
-      opacity: 0,
-      duration: 0.6,
-      ease: 'power2.out',
-      delay: 1.0,
+      x: -20, opacity: 0, duration: 0.6, ease: 'power2.out', delay: 1.0,
     });
   }
 
+  // ---- Continuous marquee ----
+  setupMarquee() {
+    gsap.to('.marquee__track', {
+      x: '-50%',
+      duration: 22,
+      ease: 'none',
+      repeat: -1,
+    });
+  }
+
+  // ---- Custom cursor ----
   setupCursor() {
-    const cursor = document.querySelector('#cursor');
-    const follower = document.querySelector('#cursor-follower');
+    const cursor = document.getElementById('cursor');
+    const follower = document.getElementById('cursor-follower');
     if (!cursor || !follower) return;
 
-    let mouseX = 0, mouseY = 0;
-    let followerX = 0, followerY = 0;
+    let mx = 0, my = 0;
+    let fx = 0, fy = 0;
 
     document.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-
-      gsap.to(cursor, {
-        x: mouseX,
-        y: mouseY,
-        duration: 0.1,
-        ease: 'none',
-      });
+      mx = e.clientX;
+      my = e.clientY;
+      gsap.to(cursor, { x: mx, y: my, duration: 0.08, ease: 'none' });
     });
 
-    // Smooth follower
-    const updateFollower = () => {
-      followerX += (mouseX - followerX) * 0.1;
-      followerY += (mouseY - followerY) * 0.1;
-      gsap.set(follower, { x: followerX, y: followerY });
-      requestAnimationFrame(updateFollower);
+    const tick = () => {
+      fx += (mx - fx) * 0.12;
+      fy += (my - fy) * 0.12;
+      gsap.set(follower, { x: fx, y: fy });
+      requestAnimationFrame(tick);
     };
-    updateFollower();
+    tick();
 
-    // Cursor states
-    const interactables = document.querySelectorAll('a, button, .tech-item, .swiper-slide');
-    interactables.forEach((el) => {
+    document.querySelectorAll('[data-cursor-hover], a, button, .tech-item, .swiper-slide').forEach((el) => {
       el.addEventListener('mouseenter', () => {
-        gsap.to(cursor, { scale: 2.5, duration: 0.3 });
-        gsap.to(follower, { scale: 1.5, duration: 0.3 });
+        cursor.classList.add('cursor--hover');
+        follower.classList.add('cursor-follower--hover');
       });
       el.addEventListener('mouseleave', () => {
-        gsap.to(cursor, { scale: 1, duration: 0.3 });
-        gsap.to(follower, { scale: 1, duration: 0.3 });
+        cursor.classList.remove('cursor--hover');
+        follower.classList.remove('cursor-follower--hover');
       });
     });
   }
 
-  // Call this when Lenis updates to refresh ScrollTrigger
-  refresh() {
-    ScrollTrigger.refresh();
-  }
+  refresh() { ScrollTrigger.refresh(); }
 
   destroy() {
     ScrollTrigger.getAll().forEach((st) => st.kill());

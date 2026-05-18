@@ -8,6 +8,9 @@
 </head>
 <body>
 
+  <!-- SCROLL PROGRESS BAR -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
   <!-- LOADER -->
   <div id="loader" class="loader">
     <div class="loader__inner">
@@ -20,7 +23,9 @@
   </div>
 
   <!-- CURSOR -->
-  <div class="cursor" id="cursor"></div>
+  <div class="cursor" id="cursor">
+    <div class="cursor__dot"></div>
+  </div>
   <div class="cursor-follower" id="cursor-follower"></div>
 
   <!-- NAVIGATION -->
@@ -29,46 +34,61 @@
       <span class="nav__logo-text">AD<span class="accent">.</span></span>
     </div>
     <ul class="nav__links">
-      <li><a href="#hero"    class="nav__link">Accueil</a></li>
-      <li><a href="#about"   class="nav__link">Services</a></li>
-      <li><a href="#work"    class="nav__link">Projets</a></li>
-      <li><a href="#contact" class="nav__link">Contact</a></li>
+      <li><a href="#hero"    class="nav__link" data-cursor-hover>Accueil</a></li>
+      <li><a href="#about"   class="nav__link" data-cursor-hover>Services</a></li>
+      <li><a href="#work"    class="nav__link" data-cursor-hover>Projets</a></li>
+      <li><a href="#contact" class="nav__link" data-cursor-hover>Contact</a></li>
     </ul>
+    <div class="nav__indicator"></div>
   </nav>
 
-  <!-- HERO SECTION -->
+  <!-- ===================== HERO ===================== -->
   <section id="hero" class="hero">
 
-    <!-- ===== CITY PARALLAX LAYERS ===== -->
-    <div class="city-parallax">
-
-      <!-- Layer 0 — Sky -->
-      <div class="city-layer city-sky"></div>
-
-      <!-- Layer 1 — Far city silhouette -->
+    <!-- City parallax layers -->
+    <div class="city-parallax" id="cityParallax">
+      <div class="city-layer city-sky" id="citySky"></div>
       <div class="city-layer city-buildings" id="cityFar"></div>
-
-      <!-- Layer 2 — Fog 1 -->
       <div class="city-layer city-fog city-fog-1"></div>
-
-      <!-- Layer 3 — Mid city silhouette -->
       <div class="city-layer city-buildings" id="cityMid"></div>
-
-      <!-- Layer 4 — Fog 2 -->
       <div class="city-layer city-fog city-fog-2"></div>
-
-      <!-- Layer 5 — Near city silhouette (foreground) -->
       <div class="city-layer city-buildings" id="cityNear"></div>
-
     </div>
-    <!-- ===================================== -->
 
-    <!-- Three.js atmospheric overlay -->
+    <!-- Airplane SVG -->
+    <div class="hero__plane" id="heroPLane">
+      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <!-- Body -->
+        <ellipse cx="60" cy="60" rx="8" ry="30" fill="#c8d8e8" opacity="0.9"/>
+        <!-- Wings -->
+        <path d="M 60 58 L 10 78 L 25 78 L 60 65 L 95 78 L 110 78 Z" fill="#b0c4d4" opacity="0.85"/>
+        <!-- Tail -->
+        <path d="M 60 30 L 48 44 L 60 44 L 72 44 Z" fill="#b0c4d4" opacity="0.85"/>
+        <!-- Horizontal stabilizer -->
+        <path d="M 60 36 L 42 46 L 52 46 L 60 42 L 68 46 L 78 46 Z" fill="#c8d8e8" opacity="0.8"/>
+        <!-- Engine glow left -->
+        <ellipse cx="30" cy="76" rx="6" ry="3" fill="#ff6030" opacity="0.6"/>
+        <!-- Engine glow right -->
+        <ellipse cx="90" cy="76" rx="6" ry="3" fill="#ff6030" opacity="0.6"/>
+        <!-- Nose -->
+        <ellipse cx="60" cy="88" rx="4" ry="6" fill="#d8e8f4" opacity="0.9"/>
+        <!-- Windows -->
+        <rect x="56" y="55" width="3" height="2" rx="1" fill="#00d4ff" opacity="0.7"/>
+        <rect x="61" y="55" width="3" height="2" rx="1" fill="#00d4ff" opacity="0.7"/>
+        <rect x="56" y="62" width="3" height="2" rx="1" fill="#00d4ff" opacity="0.6"/>
+        <rect x="61" y="62" width="3" height="2" rx="1" fill="#00d4ff" opacity="0.6"/>
+        <!-- Landing lights -->
+        <circle cx="45" cy="78" r="2" fill="#ffffff" opacity="0.9"/>
+        <circle cx="75" cy="78" r="2" fill="#ffffff" opacity="0.9"/>
+      </svg>
+    </div>
+
+    <!-- Three.js canvas -->
     <canvas id="three-canvas" class="hero__canvas"></canvas>
 
     <!-- Hero content -->
-    <div class="hero__content">
-      <div class="hero__eyebrow" data-aos="fade-up" data-aos-delay="200">
+    <div class="hero__content" id="heroContent">
+      <div class="hero__eyebrow">
         <span class="eyebrow-text">Développeur Web Créatif</span>
       </div>
       <h1 class="hero__title">
@@ -76,34 +96,36 @@
         <span class="hero__title-line hero__title-line--accent" data-split>des sites web</span>
         <span class="hero__title-line" data-split>d'exception.</span>
       </h1>
-      <p class="hero__subtitle" data-aos="fade-up" data-aos-delay="600">
+      <p class="hero__subtitle">
         Expériences immersives, interfaces modernes et performances optimales —
         chaque projet est conçu pour laisser une impression durable.
       </p>
-      <div class="hero__cta" data-aos="fade-up" data-aos-delay="800">
-        <a href="#work" class="btn btn--primary">
+      <div class="hero__cta">
+        <a href="#work" class="btn btn--primary" data-cursor-hover>
           <span>Voir les projets</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
         </a>
-        <a href="#contact" class="btn btn--ghost">Me contacter</a>
+        <a href="#contact" class="btn btn--ghost" data-cursor-hover>Me contacter</a>
       </div>
     </div>
 
     <!-- Scroll indicator -->
-    <div class="hero__scroll-indicator">
+    <div class="hero__scroll-indicator" id="scrollIndicator">
+      <div class="scroll-mouse">
+        <div class="scroll-mouse__wheel"></div>
+      </div>
       <span>Défiler</span>
-      <div class="scroll-line"></div>
     </div>
 
-    <!-- tsParticles container -->
+    <!-- Particles -->
     <div id="tsparticles" class="particles-container"></div>
   </section>
 
-  <!-- MARQUEE STRIP -->
+  <!-- MARQUEE -->
   <div class="marquee-strip">
-    <div class="marquee__track">
+    <div class="marquee__track" id="marqueeTrack">
       <span>Three.js</span><span class="sep">✦</span>
       <span>GSAP</span><span class="sep">✦</span>
       <span>WebGL</span><span class="sep">✦</span>
@@ -111,7 +133,7 @@
       <span>Next.js</span><span class="sep">✦</span>
       <span>Vite</span><span class="sep">✦</span>
       <span>GLSL</span><span class="sep">✦</span>
-      <span>Parallax</span><span class="sep">✦</span>
+      <span>Scroll FX</span><span class="sep">✦</span>
       <span>Three.js</span><span class="sep">✦</span>
       <span>GSAP</span><span class="sep">✦</span>
       <span>WebGL</span><span class="sep">✦</span>
@@ -119,172 +141,267 @@
       <span>Next.js</span><span class="sep">✦</span>
       <span>Vite</span><span class="sep">✦</span>
       <span>GLSL</span><span class="sep">✦</span>
-      <span>Parallax</span><span class="sep">✦</span>
+      <span>Scroll FX</span><span class="sep">✦</span>
     </div>
   </div>
 
-  <!-- ABOUT / SERVICES SECTION -->
-  <section id="about" class="about parallax-section">
-    <div class="parallax-bg" data-parallax-speed="-0.3"></div>
-    <div class="parallax-mid" data-parallax-speed="-0.15"></div>
-    <div class="about__container">
-      <div class="about__text">
-        <span class="section-label" data-aos="fade-right">Services</span>
-        <h2 class="section-title" data-split data-aos="fade-up">
-          Des sites qui marquent<br>les esprits
-        </h2>
-        <p class="about__body" data-aos="fade-up" data-aos-delay="200">
-          Je conçois et développe des sites web modernes alliant design soigné,
-          animations fluides et performances optimales. Du site vitrine à l'application
-          complexe, chaque pixel est pensé avec précision.
-        </p>
-        <div class="about__stats" data-aos="fade-up" data-aos-delay="300">
-          <div class="stat">
-            <span class="stat__number" data-count="15">0</span>+
-            <span class="stat__label">Projets livrés</span>
+  <!-- ===================== ABOUT ===================== -->
+  <section id="about" class="about">
+    <div class="about__sticky-wrap">
+      <!-- Left: sticky visual -->
+      <div class="about__sticky">
+        <div class="about__sticky-inner">
+          <div class="about__orb-scene">
+            <div class="about__orb about__orb--1"></div>
+            <div class="about__orb about__orb--2"></div>
+            <div class="about__orb about__orb--3"></div>
           </div>
-          <div class="stat">
-            <span class="stat__number" data-count="60">0</span>fps
-            <span class="stat__label">Performance</span>
-          </div>
-          <div class="stat">
-            <span class="stat__number" data-count="100">0</span>%
-            <span class="stat__label">Sur mesure</span>
+          <div class="glass-card about__glass">
+            <div class="glass-card__glow"></div>
+            <div class="tech-grid">
+              <div class="tech-item" data-cursor-hover>Three.js</div>
+              <div class="tech-item" data-cursor-hover>GSAP</div>
+              <div class="tech-item" data-cursor-hover>React</div>
+              <div class="tech-item" data-cursor-hover>Next.js</div>
+              <div class="tech-item" data-cursor-hover>WebGL</div>
+              <div class="tech-item" data-cursor-hover>GLSL</div>
+              <div class="tech-item" data-cursor-hover>Figma</div>
+              <div class="tech-item" data-cursor-hover>Vite</div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="about__visual" data-aos="fade-left" data-aos-delay="400">
-        <div class="glass-card">
-          <div class="glass-card__glow"></div>
-          <div class="tech-grid">
-            <div class="tech-item">Three.js</div>
-            <div class="tech-item">GSAP</div>
-            <div class="tech-item">React</div>
-            <div class="tech-item">Next.js</div>
-            <div class="tech-item">WebGL</div>
-            <div class="tech-item">GLSL</div>
-            <div class="tech-item">Figma</div>
-            <div class="tech-item">Vite</div>
+
+      <!-- Right: scrolling text panels -->
+      <div class="about__scroll-panels">
+        <div class="about__panel" data-panel="0">
+          <span class="section-label">Services</span>
+          <h2 class="section-title" data-split>
+            Des sites qui<br>marquent les esprits
+          </h2>
+          <p class="about__body">
+            Je conçois et développe des sites web modernes alliant design soigné,
+            animations fluides et performances optimales. Du site vitrine à
+            l'application complexe, chaque pixel est pensé avec précision.
+          </p>
+        </div>
+
+        <div class="about__panel" data-panel="1">
+          <span class="section-label">Méthode</span>
+          <h2 class="section-title" data-split>
+            Craft &amp;<br>Performance
+          </h2>
+          <p class="about__body">
+            Chaque ligne de code est optimisée. WebGL pour les expériences
+            immersives, GSAP pour des animations au frame-perfect et des
+            architectures React solides pour la scalabilité.
+          </p>
+          <div class="about__stats">
+            <div class="stat">
+              <span class="stat__number" data-count="15">0</span><span class="stat__suffix">+</span>
+              <span class="stat__label">Projets livrés</span>
+            </div>
+            <div class="stat">
+              <span class="stat__number" data-count="60">0</span><span class="stat__suffix">fps</span>
+              <span class="stat__label">Performance</span>
+            </div>
+            <div class="stat">
+              <span class="stat__number" data-count="100">0</span><span class="stat__suffix">%</span>
+              <span class="stat__label">Sur mesure</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- PINNED SCROLL / WORK SECTION -->
+  <!-- ===================== WORK - HORIZONTAL SCROLL ===================== -->
   <section id="work" class="work">
-    <div class="work__pin-container" id="pinContainer">
-      <div class="work__panels">
-        <div class="work__panel work__panel--active">
-          <div class="panel__content">
-            <span class="panel__number">01</span>
-            <h3 class="panel__title">Sites Vitrines</h3>
-            <p class="panel__desc">Identité visuelle forte, animations sur-mesure et performances optimales pour valoriser votre marque.</p>
-          </div>
-          <div class="panel__visual panel__visual--1">
-            <div class="panel__orb"></div>
-          </div>
-        </div>
-        <div class="work__panel">
-          <div class="panel__content">
-            <span class="panel__number">02</span>
-            <h3 class="panel__title">Expériences 3D</h3>
-            <p class="panel__desc">Scènes Three.js interactives avec shaders GLSL personnalisés, physique et effets de post-traitement.</p>
-          </div>
-          <div class="panel__visual panel__visual--2">
-            <div class="panel__orb"></div>
-          </div>
-        </div>
-        <div class="work__panel">
-          <div class="panel__content">
-            <span class="panel__number">03</span>
-            <h3 class="panel__title">Applications Web</h3>
-            <p class="panel__desc">Développement full-stack React / Next.js avec des interfaces fluides et une architecture solide.</p>
-          </div>
-          <div class="panel__visual panel__visual--3">
-            <div class="panel__orb"></div>
+    <div class="work__header">
+      <span class="section-label">Expertises</span>
+      <h2 class="section-title work__title" data-split>Ce que je fais</h2>
+      <p class="work__subtitle">Faites défiler pour explorer</p>
+    </div>
+
+    <div class="work__pin-wrap" id="workPin">
+      <div class="work__track" id="workTrack">
+
+        <div class="work__card" data-index="0">
+          <div class="work__card-bg work__card-bg--1"></div>
+          <div class="work__card-content">
+            <span class="work__card-num">01</span>
+            <div class="work__card-icon">
+              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="4" y="8" width="40" height="32" rx="3"/>
+                <path d="M15 20l6 6-6 6M25 32h8"/>
+              </svg>
+            </div>
+            <h3 class="work__card-title">Sites Vitrines</h3>
+            <p class="work__card-desc">Identité visuelle forte, animations sur-mesure et performances optimales pour valoriser votre marque en ligne.</p>
+            <ul class="work__card-tags">
+              <li>Design UI/UX</li>
+              <li>GSAP</li>
+              <li>Responsive</li>
+            </ul>
           </div>
         </div>
-        <div class="work__panel">
-          <div class="panel__content">
-            <span class="panel__number">04</span>
-            <h3 class="panel__title">Motion & Scroll</h3>
-            <p class="panel__desc">GSAP ScrollTrigger, animations épinglées et narrations cinématiques pilotées par le scroll.</p>
+
+        <div class="work__card" data-index="1">
+          <div class="work__card-bg work__card-bg--2"></div>
+          <div class="work__card-content">
+            <span class="work__card-num">02</span>
+            <div class="work__card-icon">
+              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="24" cy="24" r="10"/>
+                <path d="M24 4v4M24 40v4M4 24h4M40 24h4"/>
+                <path d="M10 10l3 3M35 35l3 3M10 38l3-3M35 13l3-3"/>
+              </svg>
+            </div>
+            <h3 class="work__card-title">Expériences 3D</h3>
+            <p class="work__card-desc">Scènes Three.js interactives avec shaders GLSL personnalisés, physique et effets de post-traitement avancés.</p>
+            <ul class="work__card-tags">
+              <li>Three.js</li>
+              <li>WebGL</li>
+              <li>GLSL</li>
+            </ul>
           </div>
-          <div class="panel__visual panel__visual--4">
-            <div class="panel__orb"></div>
+        </div>
+
+        <div class="work__card" data-index="2">
+          <div class="work__card-bg work__card-bg--3"></div>
+          <div class="work__card-content">
+            <span class="work__card-num">03</span>
+            <div class="work__card-icon">
+              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="6" y="6" width="16" height="16" rx="2"/>
+                <rect x="26" y="6" width="16" height="16" rx="2"/>
+                <rect x="6" y="26" width="16" height="16" rx="2"/>
+                <rect x="26" y="26" width="16" height="16" rx="2"/>
+              </svg>
+            </div>
+            <h3 class="work__card-title">Applications Web</h3>
+            <p class="work__card-desc">Développement full-stack React / Next.js avec des interfaces fluides, architecture solide et DX optimale.</p>
+            <ul class="work__card-tags">
+              <li>React</li>
+              <li>Next.js</li>
+              <li>TypeScript</li>
+            </ul>
           </div>
+        </div>
+
+        <div class="work__card" data-index="3">
+          <div class="work__card-bg work__card-bg--4"></div>
+          <div class="work__card-content">
+            <span class="work__card-num">04</span>
+            <div class="work__card-icon">
+              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M8 24 C8 12 24 4 24 4 C24 4 40 12 40 24 C40 36 24 44 24 44 C24 44 8 36 8 24Z"/>
+                <path d="M24 4 L24 44M8 24 L40 24"/>
+              </svg>
+            </div>
+            <h3 class="work__card-title">Motion & Scroll</h3>
+            <p class="work__card-desc">GSAP ScrollTrigger, animations épinglées et narrations cinématiques pilotées par le scroll, comme ce site.</p>
+            <ul class="work__card-tags">
+              <li>GSAP</li>
+              <li>ScrollTrigger</li>
+              <li>Lenis</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Progress indicators -->
+      <div class="work__progress">
+        <div class="work__progress-track">
+          <div class="work__progress-fill" id="workProgressFill"></div>
+        </div>
+        <div class="work__progress-dots">
+          <span class="work__dot work__dot--active" data-dot="0"></span>
+          <span class="work__dot" data-dot="1"></span>
+          <span class="work__dot" data-dot="2"></span>
+          <span class="work__dot" data-dot="3"></span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- TEXT ANIMATION SECTION -->
+  <!-- ===================== TEXT SHOWCASE ===================== -->
   <section class="text-showcase">
     <div class="text-showcase__inner">
       <div class="reveal-text" id="bigText">
-        <span data-split>Chaque pixel</span>
-        <span data-split>raconte une histoire.</span>
+        <span class="reveal-line" data-split-scrub>Chaque pixel</span>
+        <span class="reveal-line reveal-line--accent" data-split-scrub>raconte une histoire.</span>
       </div>
     </div>
   </section>
 
-  <!-- SWIPER / PROJECTS SECTION -->
+  <!-- ===================== PROJECTS SWIPER ===================== -->
   <section class="slider-section">
     <div class="slider-section__header">
-      <span class="section-label" data-aos="fade-right">Showcase</span>
-      <h2 class="section-title" data-aos="fade-up">Projets Récents</h2>
+      <span class="section-label">Showcase</span>
+      <h2 class="section-title">Projets Récents</h2>
     </div>
-    <div class="swiper mySwiper" data-aos="fade-up" data-aos-delay="200">
+    <div class="swiper mySwiper">
       <div class="swiper-wrapper">
         <div class="swiper-slide">
-          <div class="slide-card slide-card--1">
+          <div class="slide-card slide-card--1" data-cursor-hover>
             <div class="slide-card__bg"></div>
+            <div class="slide-card__overlay"></div>
             <div class="slide-card__content">
               <span class="slide-card__tag">WebGL</span>
               <h3>Simulation Fluide</h3>
               <p>Dynamique fluide en temps réel avec shaders GLSL personnalisés</p>
             </div>
+            <div class="slide-card__arrow">→</div>
           </div>
         </div>
         <div class="swiper-slide">
-          <div class="slide-card slide-card--2">
+          <div class="slide-card slide-card--2" data-cursor-hover>
             <div class="slide-card__bg"></div>
+            <div class="slide-card__overlay"></div>
             <div class="slide-card__content">
               <span class="slide-card__tag">Three.js</span>
               <h3>Générateur de Galaxie</h3>
               <p>Galaxie spirale générée procéduralement avec 100k particules</p>
             </div>
+            <div class="slide-card__arrow">→</div>
           </div>
         </div>
         <div class="swiper-slide">
-          <div class="slide-card slide-card--3">
+          <div class="slide-card slide-card--3" data-cursor-hover>
             <div class="slide-card__bg"></div>
+            <div class="slide-card__overlay"></div>
             <div class="slide-card__content">
               <span class="slide-card__tag">GSAP</span>
               <h3>Scroll Storytelling</h3>
               <p>Expérience cinématique avec animations épinglées et scrub</p>
             </div>
+            <div class="slide-card__arrow">→</div>
           </div>
         </div>
         <div class="swiper-slide">
-          <div class="slide-card slide-card--4">
+          <div class="slide-card slide-card--4" data-cursor-hover>
             <div class="slide-card__bg"></div>
+            <div class="slide-card__overlay"></div>
             <div class="slide-card__content">
               <span class="slide-card__tag">Next.js</span>
               <h3>Application SaaS</h3>
               <p>Dashboard full-stack avec animations fluides et UX soignée</p>
             </div>
+            <div class="slide-card__arrow">→</div>
           </div>
         </div>
         <div class="swiper-slide">
-          <div class="slide-card slide-card--5">
+          <div class="slide-card slide-card--5" data-cursor-hover>
             <div class="slide-card__bg"></div>
+            <div class="slide-card__overlay"></div>
             <div class="slide-card__content">
               <span class="slide-card__tag">Particles</span>
               <h3>Univers Particules</h3>
               <p>Système de particules haute performance avec interactions souris</p>
             </div>
+            <div class="slide-card__arrow">→</div>
           </div>
         </div>
       </div>
@@ -294,18 +411,27 @@
     </div>
   </section>
 
-  <!-- CONTACT -->
+  <!-- ===================== CONTACT ===================== -->
   <section id="contact" class="contact">
-    <div class="contact__container">
-      <span class="section-label" data-aos="fade-right">Contact</span>
-      <h2 class="contact__title" data-split data-aos="fade-up">
-        Construisons<br>quelque chose
-      </h2>
-      <a href="mailto:contact@anthonydalleau.dev" class="contact__link" data-aos="fade-up" data-aos-delay="200">
-        contact@anthonydalleau.dev
-      </a>
+    <div class="contact__bg">
+      <div class="contact__bg-grid"></div>
+      <div class="contact__bg-orb contact__bg-orb--1"></div>
+      <div class="contact__bg-orb contact__bg-orb--2"></div>
     </div>
-    <div class="contact__bg-orb"></div>
+    <div class="contact__container">
+      <span class="section-label">Contact</span>
+      <h2 class="contact__title" id="contactTitle">
+        <span class="contact__title-line" data-split>Construisons</span>
+        <span class="contact__title-line" data-split>quelque chose</span>
+        <span class="contact__title-line contact__title-line--accent" data-split>d'extraordinaire.</span>
+      </h2>
+      <div class="contact__cta-wrap">
+        <a href="mailto:contact@anthonydalleau.dev" class="contact__link" data-cursor-hover>
+          <span class="contact__link-text">contact@anthonydalleau.dev</span>
+          <span class="contact__link-icon">↗</span>
+        </a>
+      </div>
+    </div>
   </section>
 
   <!-- FOOTER -->
