@@ -147,34 +147,16 @@
 
   <!-- ===================== ABOUT ===================== -->
   <section id="about" class="about">
-    <div class="about__sticky-wrap">
-      <!-- Left: sticky visual -->
-      <div class="about__sticky">
-        <div class="about__sticky-inner">
-          <div class="about__orb-scene">
-            <div class="about__orb about__orb--1"></div>
-            <div class="about__orb about__orb--2"></div>
-            <div class="about__orb about__orb--3"></div>
-          </div>
-          <div class="glass-card about__glass">
-            <div class="glass-card__glow"></div>
-            <div class="tech-grid">
-              <div class="tech-item" data-cursor-hover>Three.js</div>
-              <div class="tech-item" data-cursor-hover>GSAP</div>
-              <div class="tech-item" data-cursor-hover>React</div>
-              <div class="tech-item" data-cursor-hover>Next.js</div>
-              <div class="tech-item" data-cursor-hover>WebGL</div>
-              <div class="tech-item" data-cursor-hover>GLSL</div>
-              <div class="tech-item" data-cursor-hover>Figma</div>
-              <div class="tech-item" data-cursor-hover>Vite</div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <!-- Background orbs -->
+    <div class="about__orb-bg">
+      <div class="about__orb about__orb--1"></div>
+      <div class="about__orb about__orb--2"></div>
+    </div>
 
-      <!-- Right: scrolling text panels -->
-      <div class="about__scroll-panels">
-        <div class="about__panel" data-panel="0">
+    <div class="about__grid">
+      <!-- Left: text panels -->
+      <div class="about__text-col">
+        <div class="about__panel">
           <span class="section-label">Services</span>
           <h2 class="section-title" data-split>
             Des sites qui<br>marquent les esprits
@@ -186,15 +168,14 @@
           </p>
         </div>
 
-        <div class="about__panel" data-panel="1">
+        <div class="about__panel">
           <span class="section-label">Méthode</span>
           <h2 class="section-title" data-split>
             Craft &amp;<br>Performance
           </h2>
           <p class="about__body">
             Chaque ligne de code est optimisée. WebGL pour les expériences
-            immersives, GSAP pour des animations au frame-perfect et des
-            architectures React solides pour la scalabilité.
+            immersives, GSAP pour des animations au frame-perfect.
           </p>
           <div class="about__stats">
             <div class="stat">
@@ -208,6 +189,25 @@
             <div class="stat">
               <span class="stat__number" data-count="100">0</span><span class="stat__suffix">%</span>
               <span class="stat__label">Sur mesure</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: glass card -->
+      <div class="about__visual-col">
+        <div class="about__visual-inner" id="aboutVisual">
+          <div class="glass-card">
+            <div class="glass-card__glow"></div>
+            <div class="tech-grid">
+              <div class="tech-item" data-cursor-hover>Three.js</div>
+              <div class="tech-item" data-cursor-hover>GSAP</div>
+              <div class="tech-item" data-cursor-hover>React</div>
+              <div class="tech-item" data-cursor-hover>Next.js</div>
+              <div class="tech-item" data-cursor-hover>WebGL</div>
+              <div class="tech-item" data-cursor-hover>GLSL</div>
+              <div class="tech-item" data-cursor-hover>Figma</div>
+              <div class="tech-item" data-cursor-hover>Vite</div>
             </div>
           </div>
         </div>

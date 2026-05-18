@@ -207,11 +207,21 @@ export class ScrollAnimations {
     document.querySelectorAll('.about__panel').forEach((panel) => {
       ScrollTrigger.create({
         trigger: panel,
-        start: 'top 80%',
+        start: 'top 82%',
         once: true,
         onEnter: () => panel.classList.add('is-visible'),
       });
     });
+
+    const visual = document.getElementById('aboutVisual');
+    if (visual) {
+      ScrollTrigger.create({
+        trigger: visual,
+        start: 'top 80%',
+        once: true,
+        onEnter: () => visual.classList.add('is-visible'),
+      });
+    }
   }
 
   setupCounterAnimations() {
