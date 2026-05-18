@@ -14,8 +14,12 @@ export function initMouseBus() {
   };
 
   window.addEventListener('mousemove', (e) => update(e.clientX, e.clientY));
-  document.addEventListener('touchmove', (e) => {
-    const t = e.touches[0];
-    update(t.clientX, t.clientY);
-  }, { passive: true });
+  document.addEventListener(
+    'touchmove',
+    (e) => {
+      const t = e.touches[0];
+      update(t.clientX, t.clientY);
+    },
+    { passive: true }
+  );
 }

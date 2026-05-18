@@ -41,7 +41,7 @@ export class Loader {
     };
 
     // Animate progress bar
-    const progressTween = gsap.to(this, {
+    gsap.to(this, {
       progress: 100,
       duration: 2.5,
       ease: 'power1.inOut',

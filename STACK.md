@@ -1,122 +1,60 @@
-# Modern Web 3D Stack
+# Stack de référence
 
-Complete reference for all libraries installed in this project.
+## Build
 
-## Build Tools
-
-| Library | Version | Usage |
-|---------|---------|-------|
-| `vite` | ^5.4 | Lightning-fast dev server and bundler |
-| `vite-plugin-glsl` | ^1.3 | Import `.glsl` shader files directly in JS |
+| Paquet | Version | Usage |
+|---|---|---|
+| `vite` | ^5.4 | Serveur de dev et bundler |
+| `vite-plugin-glsl` | ^1.3 | Import de fichiers `.glsl` dans les modules JS |
 
 ## 3D / WebGL
 
-| Library | Version | Usage |
-|---------|---------|-------|
-| `three` | ^0.169 | Core 3D WebGL engine — scenes, meshes, lights, cameras |
-| `@react-three/fiber` | ^8.17 | React renderer for Three.js |
-| `@react-three/drei` | ^9.115 | Useful helpers for @react-three/fiber |
-| `ogl` | ^1.0 | Lightweight WebGL library for custom renderers |
-| `postprocessing` | ^6.36 | Post-processing effects (bloom, DOF, chromatic aberration) |
-
-## React
-
-| Library | Version | Usage |
-|---------|---------|-------|
-| `react` | ^18.3 | UI component library |
-| `react-dom` | ^18.3 | React DOM renderer |
-| `framer-motion` | ^11.11 | Declarative React animations |
+| Paquet | Version | Usage |
+|---|---|---|
+| `three` | ^0.169 | Moteur 3D WebGL — scènes, meshes, lumières, caméras |
 
 ## Animation
 
-| Library | Version | Usage |
-|---------|---------|-------|
-| `gsap` | ^3.12 | Professional-grade animation platform |
-| `animejs` | ^3.2 | Lightweight JavaScript animation library |
-| `@theatre/core` | ^0.7 | Animation timeline for complex sequences |
-| `@theatre/studio` | ^0.7 | Visual editor for Theatre.js animations |
+| Paquet | Version | Usage |
+|---|---|---|
+| `gsap` | ^3.12 | Animation platform — tweens, ScrollTrigger, context |
+| `split-type` | ^0.3 | Découpe le texte en chars/words/lines pour GSAP |
 
 ## Scroll
 
-| Library | Version | Usage |
-|---------|---------|-------|
-| `lenis` | ^1.1 | Smooth scroll with native-like feel |
-| `@studio-freight/lenis` | ^1.0 | Alternative Lenis distribution |
-| `locomotive-scroll` | ^4.1 | Scroll-based animations with parallax |
-| `aos` | ^2.3 | Animate On Scroll — simple CSS-driven scroll reveals |
-| `scrollreveal` | ^4.0 | Scroll-triggered element reveal animations |
-
-## Text
-
-| Library | Version | Usage |
-|---------|---------|-------|
-| `split-type` | ^0.3 | Split text into chars/words/lines for GSAP animation |
+| Paquet | Version | Usage |
+|---|---|---|
+| `lenis` | ^1.1 | Scroll fluide natif-like, émet vers GSAP ScrollTrigger |
 
 ## UI / Interaction
 
-| Library | Version | Usage |
-|---------|---------|-------|
-| `swiper` | ^11.1 | Touch-enabled slider / carousel |
-| `@barba/core` | ^2.10 | Smooth page transitions (SPA-like) |
+| Paquet | Version | Usage |
+|---|---|---|
+| `swiper` | ^12.1 | Slider tactile — section projets |
+| `aos` | ^2.3 | Animate On Scroll — révélations CSS simples |
 
-## Particles
+## Particules
 
-| Library | Version | Usage |
-|---------|---------|-------|
-| `tsparticles` | ^3.7 | Full-featured particle system engine |
-| `@tsparticles/slim` | ^3.7 | Slimmed-down tsParticles bundle |
+| Paquet | Version | Usage |
+|---|---|---|
+| `@tsparticles/slim` | ^3.7 | Champ de particules interactif dans le hero |
 
-## Physics
+## Qualité
 
-| Library | Version | Usage |
-|---------|---------|-------|
-| `matter-js` | ^0.19 | 2D rigid body physics engine |
-| `cannon-es` | ^0.20 | 3D physics engine (Cannon.js ES module fork) |
+| Paquet | Version | Usage |
+|---|---|---|
+| `eslint` | ^10 | Linting JS |
+| `@eslint/js` | ^10 | Config recommandée ESLint (flat config) |
+| `globals` | ^17 | Définitions globals navigateur pour ESLint |
+| `prettier` | ^3 | Formatage de code |
+| `eslint-config-prettier` | ^10 | Désactive les règles ESLint conflictuelles avec Prettier |
 
-## 2D Rendering
-
-| Library | Version | Usage |
-|---------|---------|-------|
-| `pixi.js` | ^8.5 | High-performance 2D WebGL renderer |
-
-## Quick Start
+## Commandes
 
 ```bash
-# Development server
-npm run dev
-
-# Production build
-npm run build
-
-# Preview production build
-npm run preview
+npm run dev       # Serveur de dev (port 3000)
+npm run build     # Build production → dist/
+npm run preview   # Prévisualiser le build
+npm run lint      # Vérifier le code avec ESLint
+npm run format    # Formater avec Prettier
 ```
-
-## Key File Locations
-
-```
-src/
-├── main.js                    # App entry — boots all systems
-├── style.css                  # Master stylesheet with CSS custom properties
-├── shaders/
-│   ├── vertex.glsl            # Simplex noise wave distortion shader
-│   └── fragment.glsl          # Color blend + fresnel rim light shader
-├── scenes/
-│   └── MainScene.js           # Three.js scene — animated shader sphere + particles
-├── animations/
-│   └── ScrollAnimations.js    # GSAP ScrollTrigger — split text, panels, counters
-├── effects/
-│   └── ParallaxEffect.js      # Multi-layer parallax (scroll + mouse)
-└── components/
-    └── Loader.js              # Animated entry loader with progress bar
-```
-
-## Architecture Notes
-
-- **Lenis** drives smooth scroll and emits scroll events to **GSAP ScrollTrigger**
-- **Three.js** renders to a `<canvas>` behind the HTML content
-- **GSAP ScrollTrigger** pins sections and drives scrub animations
-- **SplitType** splits headings into characters for staggered reveals
-- **tsParticles** renders an interactive particle field over the hero
-- **Swiper** handles the project showcase slider
-- **AOS** handles simple fade-in reveals on secondary elements

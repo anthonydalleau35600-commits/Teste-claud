@@ -45,13 +45,13 @@ export class MainScene {
       vertexShader,
       fragmentShader,
       uniforms: {
-        uTime:       { value: 0 },
+        uTime: { value: 0 },
         uDistortion: { value: 0 },
-        uMouse:      { value: new THREE.Vector2(0, 0) },
-        uColorA:     { value: new THREE.Color('#010812') },
-        uColorB:     { value: new THREE.Color('#0033aa') },
-        uColorC:     { value: new THREE.Color('#00d4ff') },
-        uOpacity:    { value: 0.12 },
+        uMouse: { value: new THREE.Vector2(0, 0) },
+        uColorA: { value: new THREE.Color('#010812') },
+        uColorB: { value: new THREE.Color('#0033aa') },
+        uColorC: { value: new THREE.Color('#00d4ff') },
+        uOpacity: { value: 0.12 },
       },
       transparent: true,
       side: THREE.DoubleSide,
@@ -60,10 +60,7 @@ export class MainScene {
     this.scene.add(this.mainMesh);
 
     this.floatingMeshes = [];
-    const floatGeoms = [
-      new THREE.OctahedronGeometry(0.08),
-      new THREE.TetrahedronGeometry(0.06),
-    ];
+    const floatGeoms = [new THREE.OctahedronGeometry(0.08), new THREE.TetrahedronGeometry(0.06)];
     const floatColors = [0x00d4ff, 0x6633ff, 0xffa040, 0xffffff];
     for (let i = 0; i < 8; i++) {
       const mat = new THREE.MeshBasicMaterial({
@@ -104,27 +101,30 @@ export class MainScene {
     ];
 
     for (let i = 0; i < count; i++) {
-      positions[i * 3]     = (Math.random() - 0.5) * 24;
+      positions[i * 3] = (Math.random() - 0.5) * 24;
       positions[i * 3 + 1] = -4 + Math.random() * 2;
       positions[i * 3 + 2] = (Math.random() - 0.5) * 24 - 2;
 
       const c = colorOptions[Math.floor(Math.random() * colorOptions.length)];
-      colors[i * 3]     = c.r;
+      colors[i * 3] = c.r;
       colors[i * 3 + 1] = c.g;
       colors[i * 3 + 2] = c.b;
     }
 
     const geo = new THREE.BufferGeometry();
     geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geo.setAttribute('color',    new THREE.BufferAttribute(colors, 3));
+    geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-    this.particles = new THREE.Points(geo, new THREE.PointsMaterial({
-      size: 0.025,
-      vertexColors: true,
-      transparent: true,
-      opacity: 0.55,
-      sizeAttenuation: true,
-    }));
+    this.particles = new THREE.Points(
+      geo,
+      new THREE.PointsMaterial({
+        size: 0.025,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.55,
+        sizeAttenuation: true,
+      })
+    );
     this.scene.add(this.particles);
   }
 
@@ -179,7 +179,8 @@ export class MainScene {
       const r = mesh.userData.radius;
       mesh.position.x = Math.cos(angle) * r;
       mesh.position.z = Math.sin(angle) * r - 2;
-      mesh.position.y += Math.sin(elapsed * mesh.userData.bobSpeed + mesh.userData.bobOffset) * 0.002;
+      mesh.position.y +=
+        Math.sin(elapsed * mesh.userData.bobSpeed + mesh.userData.bobOffset) * 0.002;
       mesh.rotation.x += 0.01;
       mesh.rotation.y += 0.015;
     });

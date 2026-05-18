@@ -53,7 +53,11 @@ export class ScrollAnimations {
     tl.from('.hero__eyebrow', { y: 30, opacity: 0, duration: 0.8, ease: 'power3.out' })
       .from('.hero__subtitle', { y: 20, opacity: 0, duration: 0.7, ease: 'power3.out' }, '-=0.3')
       .from('.hero__cta', { y: 20, opacity: 0, duration: 0.7, ease: 'power3.out' }, '-=0.3')
-      .from('.hero__scroll-indicator', { y: -20, opacity: 0, duration: 0.6, ease: 'power2.out' }, '-=0.2');
+      .from(
+        '.hero__scroll-indicator',
+        { y: -20, opacity: 0, duration: 0.6, ease: 'power2.out' },
+        '-=0.2'
+      );
 
     gsap.to('.scroll-line', {
       scaleY: 0,
@@ -123,7 +127,12 @@ export class ScrollAnimations {
           if (i === panelIndex) {
             gsap.to(panel, { opacity: 1, x: 0, duration: 0.4, ease: 'power2.out' });
           } else {
-            gsap.to(panel, { opacity: 0, x: i < panelIndex ? -100 : 100, duration: 0.4, ease: 'power2.in' });
+            gsap.to(panel, {
+              opacity: 0,
+              x: i < panelIndex ? -100 : 100,
+              duration: 0.4,
+              ease: 'power2.in',
+            });
           }
         });
       },
@@ -132,7 +141,13 @@ export class ScrollAnimations {
     panels.forEach((panel) => {
       const orb = panel.querySelector('.panel__orb');
       if (orb) {
-        gsap.to(orb, { scale: 1.1, duration: 2 + Math.random(), ease: 'sine.inOut', repeat: -1, yoyo: true });
+        gsap.to(orb, {
+          scale: 1.1,
+          duration: 2 + Math.random(),
+          ease: 'sine.inOut',
+          repeat: -1,
+          yoyo: true,
+        });
       }
     });
   }
@@ -169,8 +184,21 @@ export class ScrollAnimations {
       start: 'top 80%',
       once: true,
       onEnter: () => {
-        gsap.from('.glass-card', { scale: 0.8, opacity: 0, rotateY: -15, duration: 1, ease: 'back.out(1.4)' });
-        gsap.from('.tech-item', { scale: 0, opacity: 0, duration: 0.4, ease: 'back.out(2)', stagger: 0.05, delay: 0.3 });
+        gsap.from('.glass-card', {
+          scale: 0.8,
+          opacity: 0,
+          rotateY: -15,
+          duration: 1,
+          ease: 'back.out(1.4)',
+        });
+        gsap.from('.tech-item', {
+          scale: 0,
+          opacity: 0,
+          duration: 0.4,
+          ease: 'back.out(2)',
+          stagger: 0.05,
+          delay: 0.3,
+        });
       },
     });
 
@@ -188,7 +216,13 @@ export class ScrollAnimations {
       start: 'top 70%',
       once: true,
       onEnter: () => {
-        gsap.from('.contact__link', { y: 30, opacity: 0, duration: 0.8, ease: 'power3.out', delay: 0.5 });
+        gsap.from('.contact__link', {
+          y: 30,
+          opacity: 0,
+          duration: 0.8,
+          ease: 'power3.out',
+          delay: 0.5,
+        });
       },
     });
   }
@@ -239,8 +273,15 @@ export class ScrollAnimations {
       },
     });
 
-    gsap.from('.nav__link', { y: -20, opacity: 0, duration: 0.5, stagger: 0.1, ease: 'power2.out', delay: 1.2 });
-    gsap.from('.nav__logo',  { x: -20, opacity: 0, duration: 0.6, ease: 'power2.out', delay: 1.0 });
+    gsap.from('.nav__link', {
+      y: -20,
+      opacity: 0,
+      duration: 0.5,
+      stagger: 0.1,
+      ease: 'power2.out',
+      delay: 1.2,
+    });
+    gsap.from('.nav__logo', { x: -20, opacity: 0, duration: 0.6, ease: 'power2.out', delay: 1.0 });
   }
 
   setupCursor() {
@@ -261,11 +302,11 @@ export class ScrollAnimations {
 
     document.querySelectorAll('a, button, .tech-item, .swiper-slide').forEach((el) => {
       el.addEventListener('mouseenter', () => {
-        gsap.to(cursor,   { scale: 2.5, duration: 0.3 });
+        gsap.to(cursor, { scale: 2.5, duration: 0.3 });
         gsap.to(follower, { scale: 1.5, duration: 0.3 });
       });
       el.addEventListener('mouseleave', () => {
-        gsap.to(cursor,   { scale: 1, duration: 0.3 });
+        gsap.to(cursor, { scale: 1, duration: 0.3 });
         gsap.to(follower, { scale: 1, duration: 0.3 });
       });
     });
