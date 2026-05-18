@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modern 3D Web Experience</title>
+  <link rel="stylesheet" href="src/style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+</head>
+<body>
+
+  <!-- LOADER -->
+  <div id="loader" class="loader">
+    <div class="loader__inner">
+      <div class="loader__bar"></div>
+      <span class="loader__text">Loading Experience</span>
+      <div class="loader__progress">
+        <div class="loader__progress-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CURSOR -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursor-follower"></div>
+
+  <!-- NAVIGATION -->
+  <nav class="nav" id="nav">
+    <div class="nav__logo">
+      <span class="nav__logo-text">3D<span class="accent">WEB</span></span>
+    </div>
+    <ul class="nav__links">
+      <li><a href="#hero" class="nav__link">Home</a></li>
+      <li><a href="#about" class="nav__link">About</a></li>
+      <li><a href="#work" class="nav__link">Work</a></li>
+      <li><a href="#contact" class="nav__link">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section id="hero" class="hero">
+    <canvas id="three-canvas" class="hero__canvas"></canvas>
+    <div class="hero__content">
+      <div class="hero__eyebrow" data-aos="fade-up" data-aos-delay="200">
+        <span class="eyebrow-text">Immersive Web Experience</span>
+      </div>
+      <h1 class="hero__title">
+        <span class="hero__title-line" data-split>The Future</span>
+        <span class="hero__title-line hero__title-line--accent" data-split>Of Web</span>
+        <span class="hero__title-line" data-split>Is Now</span>
+      </h1>
+      <p class="hero__subtitle" data-aos="fade-up" data-aos-delay="600">
+        Crafting immersive digital experiences with cutting-edge 3D, physics, and motion.
+      </p>
+      <div class="hero__cta" data-aos="fade-up" data-aos-delay="800">
+        <a href="#work" class="btn btn--primary">
+          <span>Explore Work</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+        <a href="#about" class="btn btn--ghost">Learn More</a>
+      </div>
+    </div>
+    <div class="hero__scroll-indicator">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+    <!-- Particles container -->
+    <div id="tsparticles" class="particles-container"></div>
+  </section>
+
+  <!-- MARQUEE STRIP -->
+  <div class="marquee-strip">
+    <div class="marquee__track">
+      <span>Three.js</span><span class="sep">✦</span>
+      <span>GSAP</span><span class="sep">✦</span>
+      <span>WebGL</span><span class="sep">✦</span>
+      <span>Particles</span><span class="sep">✦</span>
+      <span>Parallax</span><span class="sep">✦</span>
+      <span>Physics</span><span class="sep">✦</span>
+      <span>Shaders</span><span class="sep">✦</span>
+      <span>GLSL</span><span class="sep">✦</span>
+      <span>Three.js</span><span class="sep">✦</span>
+      <span>GSAP</span><span class="sep">✦</span>
+      <span>WebGL</span><span class="sep">✦</span>
+      <span>Particles</span><span class="sep">✦</span>
+      <span>Parallax</span><span class="sep">✦</span>
+      <span>Physics</span><span class="sep">✦</span>
+      <span>Shaders</span><span class="sep">✦</span>
+      <span>GLSL</span><span class="sep">✦</span>
+    </div>
+  </div>
+
+  <!-- ABOUT / PARALLAX SECTION -->
+  <section id="about" class="about parallax-section">
+    <div class="parallax-bg" data-parallax-speed="-0.3"></div>
+    <div class="parallax-mid" data-parallax-speed="-0.15"></div>
+    <div class="about__container">
+      <div class="about__text">
+        <span class="section-label" data-aos="fade-right">About</span>
+        <h2 class="section-title" data-split data-aos="fade-up">
+          Pushing the boundaries<br>of creative code
+        </h2>
+        <p class="about__body" data-aos="fade-up" data-aos-delay="200">
+          This stack combines the most powerful tools in modern web development.
+          From 3D WebGL scenes to physics simulations, every pixel is crafted
+          with precision and performance in mind.
+        </p>
+        <div class="about__stats" data-aos="fade-up" data-aos-delay="300">
+          <div class="stat">
+            <span class="stat__number" data-count="20">0</span>+
+            <span class="stat__label">Libraries</span>
+          </div>
+          <div class="stat">
+            <span class="stat__number" data-count="60">0</span>fps
+            <span class="stat__label">Performance</span>
+          </div>
+          <div class="stat">
+            <span class="stat__number" data-count="100">0</span>%
+            <span class="stat__label">Custom Shaders</span>
+          </div>
+        </div>
+      </div>
+      <div class="about__visual" data-aos="fade-left" data-aos-delay="400">
+        <div class="glass-card">
+          <div class="glass-card__glow"></div>
+          <div class="tech-grid">
+            <div class="tech-item">Three.js</div>
+            <div class="tech-item">GSAP</div>
+            <div class="tech-item">Lenis</div>
+            <div class="tech-item">WebGL</div>
+            <div class="tech-item">GLSL</div>
+            <div class="tech-item">React</div>
+            <div class="tech-item">Physics</div>
+            <div class="tech-item">Canvas</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PINNED SCROLL SECTION -->
+  <section id="work" class="work">
+    <div class="work__pin-container" id="pinContainer">
+      <div class="work__panels">
+        <div class="work__panel work__panel--active">
+          <div class="panel__content">
+            <span class="panel__number">01</span>
+            <h3 class="panel__title">3D Scenes</h3>
+            <p class="panel__desc">Interactive Three.js environments with custom GLSL shaders, lighting, and post-processing effects.</p>
+          </div>
+          <div class="panel__visual panel__visual--1">
+            <div class="panel__orb"></div>
+          </div>
+        </div>
+        <div class="work__panel">
+          <div class="panel__content">
+            <span class="panel__number">02</span>
+            <h3 class="panel__title">Scroll Magic</h3>
+            <p class="panel__desc">GSAP ScrollTrigger with pinning, scrub animations, and timeline-driven storytelling.</p>
+          </div>
+          <div class="panel__visual panel__visual--2">
+            <div class="panel__orb"></div>
+          </div>
+        </div>
+        <div class="work__panel">
+          <div class="panel__content">
+            <span class="panel__number">03</span>
+            <h3 class="panel__title">Physics World</h3>
+            <p class="panel__desc">Matter.js 2D and Cannon-es 3D physics for interactive simulations and dynamic layouts.</p>
+          </div>
+          <div class="panel__visual panel__visual--3">
+            <div class="panel__orb"></div>
+          </div>
+        </div>
+        <div class="work__panel">
+          <div class="panel__content">
+            <span class="panel__number">04</span>
+            <h3 class="panel__title">Particle Systems</h3>
+            <p class="panel__desc">tsParticles and Three.js particle systems creating stunning visual effects and atmospheres.</p>
+          </div>
+          <div class="panel__visual panel__visual--4">
+            <div class="panel__orb"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEXT ANIMATION SECTION -->
+  <section class="text-showcase">
+    <div class="text-showcase__inner">
+      <div class="reveal-text" id="bigText">
+        <span data-split>Every pixel</span>
+        <span data-split>tells a story.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SWIPER SECTION -->
+  <section class="slider-section">
+    <div class="slider-section__header">
+      <span class="section-label" data-aos="fade-right">Showcase</span>
+      <h2 class="section-title" data-aos="fade-up">Featured Projects</h2>
+    </div>
+    <div class="swiper mySwiper" data-aos="fade-up" data-aos-delay="200">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <div class="slide-card slide-card--1">
+            <div class="slide-card__bg"></div>
+            <div class="slide-card__content">
+              <span class="slide-card__tag">WebGL</span>
+              <h3>Fluid Simulation</h3>
+              <p>Real-time fluid dynamics with custom GLSL shaders</p>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="slide-card slide-card--2">
+            <div class="slide-card__bg"></div>
+            <div class="slide-card__content">
+              <span class="slide-card__tag">Three.js</span>
+              <h3>Galaxy Generator</h3>
+              <p>Procedurally generated spiral galaxy with 100k particles</p>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="slide-card slide-card--3">
+            <div class="slide-card__bg"></div>
+            <div class="slide-card__content">
+              <span class="slide-card__tag">Physics</span>
+              <h3>Physics Playground</h3>
+              <p>Interactive 3D physics with Cannon-es and Three.js</p>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="slide-card slide-card--4">
+            <div class="slide-card__bg"></div>
+            <div class="slide-card__content">
+              <span class="slide-card__tag">GSAP</span>
+              <h3>Scroll Storytelling</h3>
+              <p>Cinematic scroll experience with pinned animations</p>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="slide-card slide-card--5">
+            <div class="slide-card__bg"></div>
+            <div class="slide-card__content">
+              <span class="slide-card__tag">PixiJS</span>
+              <h3>2D Canvas Magic</h3>
+              <p>High-performance 2D rendering with PixiJS filters</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="swiper-pagination"></div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact">
+    <div class="contact__container">
+      <span class="section-label" data-aos="fade-right">Contact</span>
+      <h2 class="contact__title" data-split data-aos="fade-up">
+        Let's create<br>something amazing
+      </h2>
+      <a href="mailto:hello@modern3d.dev" class="contact__link" data-aos="fade-up" data-aos-delay="200">
+        hello@modern3d.dev
+      </a>
+    </div>
+    <div class="contact__bg-orb"></div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <span class="footer__copy">© 2024 Modern 3D Web</span>
+      <span class="footer__stack">Built with Three.js · GSAP · Vite</span>
+    </div>
+  </footer>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
