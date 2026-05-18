@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - claude/build-website-showcase-eb7s3
+      - claude/add-scroll-effects-5To66
       - main
 
 permissions:
