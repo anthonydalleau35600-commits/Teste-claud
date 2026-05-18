@@ -23,6 +23,7 @@ import { Loader } from './components/Loader.js';
 import { MainScene } from './scenes/MainScene.js';
 import { ScrollAnimations } from './animations/ScrollAnimations.js';
 import { ParallaxEffect } from './effects/ParallaxEffect.js';
+import { CityParallax } from './effects/CityParallax.js';
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
@@ -37,16 +38,17 @@ class App {
     this.mainScene = null;
     this.scrollAnimations = null;
     this.parallaxEffect = null;
+    this.cityParallax = null;
     this.swiper = null;
 
     this.init();
   }
 
   init() {
-    // Start loader then initialize everything
     const loader = new Loader();
     loader.start(() => {
       this.initLenis();
+      this.initCityParallax();
       this.initThreeScene();
       this.initScrollAnimations();
       this.initParallaxEffect();
@@ -55,6 +57,11 @@ class App {
       this.initAOS();
       this.initBarba();
     });
+  }
+
+  // ---- City Parallax ----
+  initCityParallax() {
+    this.cityParallax = new CityParallax();
   }
 
   // ---- Lenis Smooth Scroll ----

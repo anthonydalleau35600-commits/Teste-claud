@@ -17,12 +17,12 @@ export class Loader {
 
   simulateProgress() {
     const messages = [
-      'Initializing WebGL...',
-      'Loading shaders...',
-      'Building scene...',
-      'Setting up physics...',
-      'Almost ready...',
-      'Welcome.',
+      'Initialisation WebGL...',
+      'Chargement des shaders...',
+      'Construction de la scène...',
+      'Génération de la ville...',
+      'Presque prêt...',
+      'Bienvenue.',
     ];
 
     let messageIndex = 0;

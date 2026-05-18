@@ -43,86 +43,52 @@ export class MainScene {
   }
 
   createObjects() {
-    // Main shader sphere
-    const geometry = new THREE.SphereGeometry(1.8, 128, 128);
-
+    // Subtle central glow sphere (very transparent — atmospheric haze effect)
+    const geometry = new THREE.SphereGeometry(2.2, 64, 64);
     this.shaderMaterial = new THREE.ShaderMaterial({
       vertexShader,
       fragmentShader,
       uniforms: {
-        uTime: { value: 0 },
+        uTime:       { value: 0 },
         uDistortion: { value: 0 },
-        uMouse: { value: new THREE.Vector2(0, 0) },
-        uColorA: { value: new THREE.Color('#0a0a1a') },
-        uColorB: { value: new THREE.Color('#7b2fff') },
-        uColorC: { value: new THREE.Color('#00ffcc') },
-        uOpacity: { value: 0.95 },
+        uMouse:      { value: new THREE.Vector2(0, 0) },
+        uColorA:     { value: new THREE.Color('#010812') },
+        uColorB:     { value: new THREE.Color('#0033aa') },
+        uColorC:     { value: new THREE.Color('#00d4ff') },
+        uOpacity:    { value: 0.12 },
       },
       transparent: true,
       side: THREE.DoubleSide,
     });
-
     this.mainMesh = new THREE.Mesh(geometry, this.shaderMaterial);
     this.scene.add(this.mainMesh);
 
-    // Wireframe overlay
-    const wireMat = new THREE.MeshBasicMaterial({
-      color: 0x7b2fff,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.08,
-    });
-    const wireMesh = new THREE.Mesh(new THREE.SphereGeometry(1.82, 32, 32), wireMat);
-    this.scene.add(wireMesh);
-    this.wireMesh = wireMesh;
-
-    // Outer glow ring
-    const ringGeo = new THREE.TorusGeometry(2.4, 0.04, 16, 120);
-    const ringMat = new THREE.MeshBasicMaterial({
-      color: 0x00ffcc,
-      transparent: true,
-      opacity: 0.5,
-    });
-    this.ring1 = new THREE.Mesh(ringGeo, ringMat);
-    this.ring1.rotation.x = Math.PI / 2;
-    this.scene.add(this.ring1);
-
-    // Second ring - tilted
-    const ring2Mat = new THREE.MeshBasicMaterial({
-      color: 0xff2fff,
-      transparent: true,
-      opacity: 0.3,
-    });
-    this.ring2 = new THREE.Mesh(new THREE.TorusGeometry(2.7, 0.02, 16, 120), ring2Mat);
-    this.ring2.rotation.x = Math.PI / 4;
-    this.ring2.rotation.y = Math.PI / 6;
-    this.scene.add(this.ring2);
-
-    // Floating geometry pieces
+    // Sparse floating geometric pieces — like distant lit structures
     this.floatingMeshes = [];
     const floatGeoms = [
-      new THREE.OctahedronGeometry(0.15),
-      new THREE.TetrahedronGeometry(0.12),
-      new THREE.IcosahedronGeometry(0.1),
+      new THREE.OctahedronGeometry(0.08),
+      new THREE.TetrahedronGeometry(0.06),
     ];
-    const floatMat = new THREE.MeshBasicMaterial({ color: 0x00ffcc, wireframe: true });
-
-    for (let i = 0; i < 12; i++) {
-      const mesh = new THREE.Mesh(
-        floatGeoms[i % floatGeoms.length],
-        floatMat.clone()
-      );
-      const angle = (i / 12) * Math.PI * 2;
-      const radius = 3.2 + Math.random() * 1.0;
+    const floatColors = [0x00d4ff, 0x6633ff, 0xffa040, 0xffffff];
+    for (let i = 0; i < 8; i++) {
+      const mat = new THREE.MeshBasicMaterial({
+        color: floatColors[i % floatColors.length],
+        wireframe: true,
+        transparent: true,
+        opacity: 0.35,
+      });
+      const mesh = new THREE.Mesh(floatGeoms[i % floatGeoms.length], mat);
+      const angle = (i / 8) * Math.PI * 2;
+      const radius = 3.8 + Math.random() * 1.5;
       mesh.position.set(
         Math.cos(angle) * radius,
-        (Math.random() - 0.5) * 3,
-        Math.sin(angle) * radius - 2
+        (Math.random() - 0.5) * 2.5,
+        Math.sin(angle) * radius - 1
       );
       mesh.userData.angle = angle;
       mesh.userData.radius = radius;
-      mesh.userData.speed = 0.2 + Math.random() * 0.3;
-      mesh.userData.bobSpeed = 0.5 + Math.random() * 0.5;
+      mesh.userData.speed = 0.12 + Math.random() * 0.15;
+      mesh.userData.bobSpeed = 0.4 + Math.random() * 0.4;
       mesh.userData.bobOffset = Math.random() * Math.PI * 2;
       this.floatingMeshes.push(mesh);
       this.scene.add(mesh);
@@ -130,45 +96,44 @@ export class MainScene {
   }
 
   createParticles() {
-    const count = 2000;
+    const count = 1800;
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
-    const sizes = new Float32Array(count);
 
+    // City-lights warm/cool palette: yellow-white, blue-white, orange
     const colorOptions = [
-      new THREE.Color('#7b2fff'),
-      new THREE.Color('#00ffcc'),
-      new THREE.Color('#ff2fff'),
-      new THREE.Color('#ffffff'),
+      new THREE.Color('#ffe8a0'), // warm sodium light
+      new THREE.Color('#a8d4ff'), // cool blue-white
+      new THREE.Color('#ffc060'), // orange city glow
+      new THREE.Color('#ffffff'), // white
+      new THREE.Color('#80c8ff'), // cyan blue
     ];
 
     for (let i = 0; i < count; i++) {
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.acos(2 * Math.random() - 1);
-      const r = 4 + Math.random() * 6;
+      // Spread particles widely — seen from above (flat X/Z plane)
+      const x = (Math.random() - 0.5) * 24;
+      const z = (Math.random() - 0.5) * 24 - 2;
+      const y = -4 + Math.random() * 2; // below camera, like city below
 
-      positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-      positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-      positions[i * 3 + 2] = r * Math.cos(phi) - 2;
+      positions[i * 3]     = x;
+      positions[i * 3 + 1] = y;
+      positions[i * 3 + 2] = z;
 
       const c = colorOptions[Math.floor(Math.random() * colorOptions.length)];
-      colors[i * 3] = c.r;
+      colors[i * 3]     = c.r;
       colors[i * 3 + 1] = c.g;
       colors[i * 3 + 2] = c.b;
-
-      sizes[i] = Math.random() * 3 + 1;
     }
 
     const geo = new THREE.BufferGeometry();
     geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-    geo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+    geo.setAttribute('color',    new THREE.BufferAttribute(colors, 3));
 
     const mat = new THREE.PointsMaterial({
-      size: 0.03,
+      size: 0.025,
       vertexColors: true,
       transparent: true,
-      opacity: 0.7,
+      opacity: 0.55,
       sizeAttenuation: true,
     });
 
@@ -177,21 +142,21 @@ export class MainScene {
   }
 
   setupLights() {
-    const ambientLight = new THREE.AmbientLight(0x111111, 1);
+    const ambientLight = new THREE.AmbientLight(0x050f1c, 1);
     this.scene.add(ambientLight);
 
-    // Point lights for neon effect
-    const light1 = new THREE.PointLight(0x7b2fff, 3, 10);
+    // City-at-night light palette
+    const light1 = new THREE.PointLight(0x0044cc, 1.5, 10);
     light1.position.set(3, 3, 3);
     this.scene.add(light1);
     this.light1 = light1;
 
-    const light2 = new THREE.PointLight(0x00ffcc, 2, 10);
+    const light2 = new THREE.PointLight(0x00aaff, 1.0, 10);
     light2.position.set(-3, -2, 2);
     this.scene.add(light2);
     this.light2 = light2;
 
-    const light3 = new THREE.PointLight(0xff2fff, 1.5, 8);
+    const light3 = new THREE.PointLight(0xff8c42, 0.6, 8);
     light3.position.set(0, -3, -2);
     this.scene.add(light3);
     this.light3 = light3;
@@ -224,23 +189,14 @@ export class MainScene {
     // Update shader uniforms
     this.shaderMaterial.uniforms.uTime.value = elapsed;
     this.shaderMaterial.uniforms.uMouse.value.set(
-      this.mouse.x * 1.5,
-      this.mouse.y * 1.5
+      this.mouse.x * 0.8,
+      this.mouse.y * 0.8
     );
-    this.shaderMaterial.uniforms.uDistortion.value = 0.8 + Math.sin(elapsed * 0.5) * 0.2;
+    this.shaderMaterial.uniforms.uDistortion.value = 0.5 + Math.sin(elapsed * 0.3) * 0.15;
 
-    // Rotate main mesh with mouse influence
-    this.mainMesh.rotation.y = elapsed * 0.15 + this.mouse.x * 0.3;
-    this.mainMesh.rotation.x = Math.sin(elapsed * 0.1) * 0.2 + this.mouse.y * 0.2;
-
-    // Wireframe rotation
-    this.wireMesh.rotation.y = elapsed * 0.1;
-    this.wireMesh.rotation.x = elapsed * 0.08;
-
-    // Ring animations
-    this.ring1.rotation.z = elapsed * 0.3;
-    this.ring2.rotation.z = -elapsed * 0.2;
-    this.ring2.rotation.y = elapsed * 0.15;
+    // Very slow rotation — atmospheric
+    this.mainMesh.rotation.y = elapsed * 0.05 + this.mouse.x * 0.1;
+    this.mainMesh.rotation.x = Math.sin(elapsed * 0.06) * 0.08 + this.mouse.y * 0.08;
 
     // Floating meshes orbit
     this.floatingMeshes.forEach((mesh) => {
@@ -254,9 +210,9 @@ export class MainScene {
       mesh.rotation.y += 0.015;
     });
 
-    // Pulsing lights
-    this.light1.intensity = 3 + Math.sin(elapsed * 2.0) * 1.0;
-    this.light2.intensity = 2 + Math.cos(elapsed * 1.5) * 0.8;
+    // Subtle pulsing lights
+    this.light1.intensity = 1.5 + Math.sin(elapsed * 1.5) * 0.5;
+    this.light2.intensity = 1.0 + Math.cos(elapsed * 1.0) * 0.4;
 
     // Orbit lights
     this.light1.position.x = Math.cos(elapsed * 0.5) * 4;
@@ -264,13 +220,13 @@ export class MainScene {
     this.light2.position.x = Math.cos(elapsed * 0.5 + Math.PI) * 3;
     this.light2.position.z = Math.sin(elapsed * 0.5 + Math.PI) * 3;
 
-    // Particle drift
-    this.particles.rotation.y = elapsed * 0.04;
-    this.particles.rotation.x = Math.sin(elapsed * 0.02) * 0.1;
+    // Very slow particle drift — city lights passing below
+    this.particles.rotation.y = elapsed * 0.015;
+    this.particles.rotation.z = elapsed * 0.008;
 
     // Camera subtle movement following mouse
-    this.camera.position.x += (this.mouse.x * 0.5 - this.camera.position.x) * 0.03;
-    this.camera.position.y += (this.mouse.y * 0.3 - this.camera.position.y) * 0.03;
+    this.camera.position.x += (this.mouse.x * 0.3 - this.camera.position.x) * 0.025;
+    this.camera.position.y += (this.mouse.y * 0.2 - this.camera.position.y) * 0.025;
     this.camera.lookAt(this.scene.position);
 
     this.renderer.render(this.scene, this.camera);
