@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Studio — Créez avec l'Intelligence</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="logo">AI<span>Studio</span></div>
+    <ul>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#gallery">Galerie</a></li>
+      <li><a href="#video">Vidéo</a></li>
+      <li><a href="#contact" class="btn-nav">Commencer</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <span class="badge">Pipeline Canva × Claude × Replicate</span>
+      <h1>Créez avec<br /><span class="gradient-text">l'Intelligence</span></h1>
+      <p>Visuels générés automatiquement par IA, intégrés directement dans votre projet par Claude.</p>
+      <div class="hero-btns">
+        <a href="#features" class="btn-primary">Voir les features</a>
+        <a href="#video" class="btn-ghost">Voir la démo vidéo</a>
+      </div>
+    </div>
+    <div class="hero-image">
+      <img src="assets/images/hero.png" alt="Hero visuel généré par Canva AI" />
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <div class="section-header">
+      <h2>Le Pipeline Automatique</h2>
+      <p>De la demande au code en quelques secondes</p>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-icon">🎨</div>
+        <h3>Canva MCP</h3>
+        <p>Claude génère les visuels directement dans ton compte Canva — logos, banners, posters — et les exporte automatiquement.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🎬</div>
+        <h3>Replicate API</h3>
+        <p>Génération vidéo IA (Stable Video, Wan 2.1, etc.) via API. Claude envoie le prompt, récupère la vidéo, l'intègre.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">⚡</div>
+        <h3>Intégration Directe</h3>
+        <p>Tous les assets sont téléchargés, organisés dans le projet et référencés dans le code automatiquement.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery" id="gallery">
+    <div class="section-header">
+      <h2>Galerie des Visuels</h2>
+      <p>Générés par IA — Canva MCP en temps réel</p>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item main">
+        <img src="assets/images/hero.png" alt="Hero Banner — Canva AI" />
+        <div class="gallery-label">Hero Banner · Canva AI · 1920px</div>
+      </div>
+      <div class="gallery-item placeholder">
+        <div class="placeholder-content">
+          <span>🎨</span>
+          <p>Prochain visuel<br />généré à la demande</p>
+        </div>
+      </div>
+      <div class="gallery-item placeholder">
+        <div class="placeholder-content">
+          <span>🎬</span>
+          <p>Vidéo générée<br />via Replicate</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIDEO SECTION -->
+  <section class="video-section" id="video">
+    <div class="section-header">
+      <h2>Génération Vidéo IA</h2>
+      <p>Via Replicate API — ajoute ta clé API pour activer</p>
+    </div>
+    <div class="video-placeholder">
+      <div class="video-inner">
+        <span class="play-icon">▶</span>
+        <p>Vidéo générée automatiquement avec Replicate</p>
+        <code>REPLICATE_API_TOKEN=your_token npm run generate-video</code>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-content">
+      <div class="logo">AI<span>Studio</span></div>
+      <p>Pipeline : Claude Code + Canva MCP + Replicate API</p>
+      <p class="small">Visuels générés automatiquement par IA · 2026</p>
+    </div>
+  </footer>
+
+</body>
+</html>

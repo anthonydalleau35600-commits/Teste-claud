@@ -1,0 +1,12 @@
+{
+  "name": "ai-studio-pipeline",
+  "version": "1.0.0",
+  "description": "Pipeline automatique Canva MCP + Replicate API + Claude Code",
+  "scripts": {
+    "dev": "npx serve site",
+    "generate-video": "node scripts/generate-visuals.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
