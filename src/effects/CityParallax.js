@@ -1,9 +1,6 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-gsap.registerPlugin(ScrollTrigger);
-
-// Deterministic LCG pseudo-random for reproducible skylines
 function makeRng(seed) {
   let s = seed >>> 0;
   return () => {
@@ -28,7 +25,6 @@ function generateCityPath(svgW, svgH, opts) {
 
     d += ` L ${x} ${bTop}`;
 
-    // Antenna or spire
     if (rand() < spireChance) {
       const sx = x + bw * (0.35 + rand() * 0.3);
       const spH = spireH * (0.6 + rand() * 0.8);
@@ -63,6 +59,9 @@ export class CityParallax {
     this.injectCities();
     this.setupParallax();
     this.setupEntryAnimation();
+
+    // Single resize listener registered once
+    window.addEventListener('resize', () => this.injectCities(), { passive: true });
   }
 
   injectCities() {
@@ -73,7 +72,7 @@ export class CityParallax {
       far.innerHTML = makeSVG(w, 280, {
         minH: 0.22, maxH: 0.55, minW: 18, maxW: 55,
         maxGap: 12, streetFrac: 0.88,
-        spireChance: 0.45, spireH: 20, seed: 0x2f4a
+        spireChance: 0.45, spireH: 20, seed: 0x2f4a,
       }, '#071522');
     }
 
@@ -82,7 +81,7 @@ export class CityParallax {
       mid.innerHTML = makeSVG(w, 400, {
         minH: 0.32, maxH: 0.70, minW: 38, maxW: 95,
         maxGap: 18, streetFrac: 0.84,
-        spireChance: 0.35, spireH: 30, seed: 0x9b12
+        spireChance: 0.35, spireH: 30, seed: 0x9b12,
       }, '#041018');
     }
 
@@ -91,44 +90,28 @@ export class CityParallax {
       near.innerHTML = makeSVG(w, 520, {
         minH: 0.45, maxH: 0.88, minW: 75, maxW: 190,
         maxGap: 22, streetFrac: 0.92,
-        spireChance: 0.18, spireH: 40, seed: 0xc371
+        spireChance: 0.18, spireH: 40, seed: 0xc371,
       }, '#020b14');
     }
-
-    // Regen on resize
-    window.addEventListener('resize', () => this.injectCities(), { passive: true });
   }
 
   setupParallax() {
     const hero = document.querySelector('.hero');
     if (!hero) return;
 
-    const scrollOpts = (el, yPct) => ({
-      targets: el,
-      yPercent: yPct,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: hero,
-        start: 'top top',
-        end: 'bottom top',
-        scrub: true,
-      },
-    });
+    const trigger = { trigger: hero, start: 'top top', end: 'bottom top', scrub: true };
 
-    // Each layer moves at a different rate — creates depth
-    gsap.to('.city-sky', { yPercent: -8, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
-    gsap.to('#cityFar',  { yPercent: -22, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
-    gsap.to('.city-fog-1', { yPercent: -28, opacity: 0.4, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
-    gsap.to('#cityMid',  { yPercent: -42, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
-    gsap.to('.city-fog-2', { yPercent: -50, opacity: 0.3, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
-    gsap.to('#cityNear', { yPercent: -65, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
+    gsap.to('.city-sky',    { yPercent: -8,  ease: 'none', scrollTrigger: trigger });
+    gsap.to('#cityFar',     { yPercent: -22, ease: 'none', scrollTrigger: trigger });
+    gsap.to('.city-fog-1',  { yPercent: -28, opacity: 0.4, ease: 'none', scrollTrigger: trigger });
+    gsap.to('#cityMid',     { yPercent: -42, ease: 'none', scrollTrigger: trigger });
+    gsap.to('.city-fog-2',  { yPercent: -50, opacity: 0.3, ease: 'none', scrollTrigger: trigger });
+    gsap.to('#cityNear',    { yPercent: -65, ease: 'none', scrollTrigger: trigger });
   }
 
   setupEntryAnimation() {
-    // Entry: descending from above — city rises into view
-    const layers = document.querySelectorAll('.city-layer');
     const delays = [0.3, 0.5, 0.65, 0.8, 0.9, 1.0];
-    layers.forEach((el, i) => {
+    document.querySelectorAll('.city-layer').forEach((el, i) => {
       gsap.fromTo(el,
         { y: '40vh', opacity: 0 },
         { y: '0vh', opacity: 1, duration: 2.2, ease: 'power4.out', delay: delays[i] || 0.5 }
